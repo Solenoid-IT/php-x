@@ -20,20 +20,21 @@ class Command
         if ( count( $argv ) < 2 )
         {// (There are not enough arguments)
             // (Closing the process)
-            die( "Usage: php {file_path} {class.method} [...args]\n" );
+            die( "Usage: php {file_path} {class|class.method} [...args]\n" );
         }
 
 
 
         // (Getting the values)
         $this->file_path       = $argv[0];
-        [ $cp, $this->method ] = explode( '.', $argv[1], 2 );
+        [ $class, $method ]    = explode( '.', $argv[1], 2 );
         $this->args            = array_slice( $argv, 2 );
 
 
 
-        // (Getting the value)
-        $this->class  = str_replace( '/', '\\', $prefix . '/' . $cp );
+        // (Getting the values)
+        $this->class  = str_replace( '/', '\\', $prefix . '/' . $class );
+        $this->method = $method ?? 'run';
     }
 
 
