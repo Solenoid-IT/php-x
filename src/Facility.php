@@ -16,8 +16,8 @@ class Facility
     {
         if ( !isset( self::$values[ $name ] ) )
         {// Value not found
-            // Throwing an exception
-            throw new \Exception( "Facility '{$name}' does not exist" );
+            // Returning the value
+            return false;
         }
 
 

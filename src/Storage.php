@@ -8,8 +8,8 @@ namespace Solenoid\X;
 
 class Storage
 {
-    const MODE_APPEND = 'a';
     const MODE_WRITE  = 'w';
+    const MODE_APPEND = 'a';
 
 
 

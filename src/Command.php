@@ -20,7 +20,7 @@ class Command
         if ( count( $argv ) < 2 )
         {// (There are not enough arguments)
             // (Closing the process)
-            exit( "Usage: php {file_path} {class.method} [...args]\n" );
+            die( "Usage: php {file_path} {class.method} [...args]\n" );
         }
 
 
@@ -33,7 +33,7 @@ class Command
 
 
         // (Getting the value)
-        $this->class  = $prefix . '/' . str_replace(  '/', '\\', $cp );
+        $this->class  = str_replace( '/', '\\', $prefix . '/' . $cp );
     }
 
 
@@ -41,7 +41,7 @@ class Command
     public function run () : mixed
     {
         // (Calling the function)
-        return call_user_func_array( [ $this->class, $this->method ], $this->args );
+        return call_user_func_array( [ new ($this->class)(), $this->method ], $this->args );
     }
 
 
