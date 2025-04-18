@@ -252,7 +252,7 @@ class Route
     public function __toString () : string
     {
         // Returning the value
-        return self::$fallback_target ? '@fallback' : "{$this->method} {$this->path}";
+        return $this->method === '' && $this->path === '' ? '@fallback' : "{$this->method} {$this->path}";
     }
 }
 
