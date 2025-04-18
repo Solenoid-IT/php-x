@@ -11,6 +11,8 @@ class Route
     private static array $targets = [];
     private static $fallback_target;
 
+
+
     private array $middlewares = [];
 
 
@@ -167,6 +169,17 @@ class Route
 
 
 
+        if ( !$route )
+        {// Value not found
+            if ( self::$fallback_target )
+            {// Value found
+                // (Getting the value)
+                $route = new self( '', '' );
+            }
+        }
+
+
+
         // Returning the value
         return $route;
     }
@@ -192,15 +205,40 @@ class Route
         // (Getting the value)
         $target = self::$targets[ $this->method ][ $this->path ];
 
-        if ( is_array( $target ) )
-        {// (Target is an array)
-            // (Getting the value)
-            call_user_func_array( [ new $target[0], $target[1] ], $this->params );
+        if ( !$target )
+        {// Value not found
+            if ( self::$fallback_target )
+            {// Value found
+                // (Getting the value)
+                $target = self::$fallback_target;
+            }
         }
-        else
-        {// (Target is a function)
-            // (Calling the function)
-            $target();
+
+
+
+        if ( $target )
+        {// Value found
+            if ( is_array( $target ) )
+            {// (Target is an array)
+                // (Getting the value)
+                $response = call_user_func_array( [ new $target[0](), $target[1] ], $this->params );
+            }
+            else
+            {// (Target is a function)
+                // (Getting the value)
+                $response = $target();
+            }
+        }
+
+
+
+        if ( $response !== null )
+        {// Value found
+            // (Setting the header)
+            header( 'Content-Type: application/json' );
+
+            // Printing the value
+            echo json_encode( $response );
         }
 
 
@@ -214,7 +252,7 @@ class Route
     public function __toString () : string
     {
         // Returning the value
-        return "{$this->method} {$this->path}";
+        return self::$fallback_target ? '@fallback' : "{$this->method} {$this->path}";
     }
 }
 
