@@ -226,7 +226,7 @@ class Route
             else
             {// (Target is a function)
                 // (Getting the value)
-                $response = $target();
+                $response = call_user_func_array( $target, $this->params );
             }
         }
 
