@@ -100,7 +100,7 @@ class Route
             {// Value found
                 foreach ( self::$targets[ $method ] as $defined_path => $defined_target )
                 {// Processing each entry
-                    if ( $defined_path[0] === '/' && $defined_path[ strlen( $defined_path ) - 1 ] === '/' )
+                    if ( strlen( $defined_path ) >= 2 && $defined_path[0] === '/' && $defined_path[ strlen( $defined_path ) - 1 ] === '/' )
                     {// (Path is a regex)
                         if ( preg_match( $defined_path, $path, $matches ) === 1 )
                         {// Match OK
@@ -147,7 +147,7 @@ class Route
                                 else
                                 {// Match failed
                                     // Breaking the iteration
-                                    break 2;
+                                    break;
                                 }
                             }
                         }
