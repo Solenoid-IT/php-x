@@ -105,7 +105,7 @@ class Route
                         if ( preg_match( $defined_path, $path, $matches ) === 1 )
                         {// Match OK
                             // (Getting the value)
-                            $route = new self( $method, $defined_path, $params );
+                            $route = new self( $method, $defined_path, $matches );
 
                             // Breaking the iteration
                             break;
