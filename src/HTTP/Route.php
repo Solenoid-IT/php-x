@@ -6,10 +6,14 @@ namespace Solenoid\X\HTTP;
 
 
 
+use \Solenoid\X\Target;
+
+
+
 class Route
 {
-    private static array $targets = [];
-    private static $fallback_target;
+    private static array $routes = [];
+    private static $fallback_route;
 
 
 
@@ -20,16 +24,18 @@ class Route
     public readonly string $method;
     public readonly string $path;
 
+    public readonly Target $target;
+
     public readonly array $params;
 
 
 
-    public function __construct (string $method, string $path, array $params = [])
+    public function __construct (string $method, string $path, Target $target)
     {
         // (Getting the values)
         $this->method = $method;
         $this->path   = $path;
-        $this->params = $params;
+        $this->target = $target;
     }
 
 
@@ -42,12 +48,12 @@ class Route
 
 
         // (Getting the value)
-        $route = new self( $method, $path );
+        $route = new self( $method, $path, is_array( $target ) ? Target::link( $target[0], $target[1] ) : Target::define( $target ) );
 
 
 
         // (Getting the value)
-        self::$targets[ $route->method ][ $route->path ] = $target;
+        self::$routes[ $route->method ][ $route->path ] = $route;
 
 
 
@@ -58,7 +64,7 @@ class Route
     public static function fallback (callable|array $target) : void
     {
         // (Getting the value)
-        self::$fallback_target = $target;
+        self::$fallback_route = new self( '', '', is_array( $target ) ? Target::link( $target[0], $target[1] ) : Target::define( $target ) );
     }
 
 
@@ -89,23 +95,26 @@ class Route
         // (Setting the value)
         $route = false;
 
-        if ( isset( self::$targets[ $method ][ $path ] ) )
+        if ( isset( self::$routes[ $method ][ $path ] ) )
         {// Value found
             // (Getting the value)
-            $route = new self( $method, $path );
+            $route = self::$routes[ $method ][ $path ];
         }
         else
         {// Value not found
-            if ( self::$targets[ $method ] )
+            if ( self::$routes[ $method ] )
             {// Value found
-                foreach ( self::$targets[ $method ] as $defined_path => $defined_target )
+                foreach ( self::$routes[ $method ] as $defined_path => $defined_route )
                 {// Processing each entry
                     if ( strlen( $defined_path ) >= 2 && $defined_path[0] === '/' && $defined_path[ strlen( $defined_path ) - 1 ] === '/' )
                     {// (Path is a regex)
                         if ( preg_match( $defined_path, $path, $matches ) === 1 )
                         {// Match OK
                             // (Getting the value)
-                            $route = new self( $method, $defined_path, $matches );
+                            $route = $defined_route;
+
+                            // (Getting the value)
+                            $route->params = $matches;
 
                             // Breaking the iteration
                             break;
@@ -127,7 +136,7 @@ class Route
                         if ( !$diff )
                         {// (Parts are equals)
                             // (Getting the value)
-                            $route = new self( $method, $defined_path );
+                            $route = $defined_route;
 
                             // Breaking the iteration
                             break;
@@ -157,7 +166,10 @@ class Route
                         if ( $params )
                         {// Value found
                             // (Getting the value)
-                            $route = new self( $method, $defined_path, $params );
+                            $route = $defined_route;
+
+                            // (Getting the value)
+                            $route->params = $params;
 
                             // Breaking the iteration
                             break;
@@ -171,10 +183,10 @@ class Route
 
         if ( !$route )
         {// Value not found
-            if ( self::$fallback_target )
+            if ( self::$fallback_route )
             {// Value found
                 // (Getting the value)
-                $route = new self( '', '' );
+                $route = self::$fallback_route;
             }
         }
 
@@ -194,7 +206,7 @@ class Route
             $middleware = new $middleware();
 
             if ( $middleware->run() === false )
-            {// (Middleware lock received)
+            {// (Middleware has not been passed)
                 // Returning the value
                 return $this;
             }
@@ -202,31 +214,18 @@ class Route
 
 
 
-        // (Getting the value)
-        $target = self::$targets[ $this->method ][ $this->path ];
-
-        if ( !$target )
-        {// Value not found
-            if ( self::$fallback_target )
-            {// Value found
-                // (Getting the value)
-                $target = self::$fallback_target;
-            }
-        }
-
-
-
-        if ( $target )
+        if ( $this->target )
         {// Value found
-            if ( is_array( $target ) )
-            {// (Target is an array)
-                // (Getting the value)
-                $response = call_user_func_array( [ new $target[0](), $target[1] ], $this->params );
-            }
-            else
+            if ( isset( $this->target->function ) )
             {// (Target is a function)
                 // (Getting the value)
-                $response = call_user_func_array( $target, $this->params );
+                $response = call_user_func_array( $this->target->function, $this->params );
+            }
+            else
+            if ( isset( $this->target->class ) && isset( $this->target->fn ) )
+            {// (Target is a class method)
+                // (Getting the value)
+                $response = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
             }
         }
 
