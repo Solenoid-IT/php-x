@@ -192,6 +192,17 @@ class Route
 
 
 
+        if ( $route )
+        {// Value found
+            if ( !isset( $route->params ) )
+            {// Value not found
+                // (Setting the value)
+                $route->params = [];
+            }
+        }
+
+
+
         // Returning the value
         return $route;
     }
