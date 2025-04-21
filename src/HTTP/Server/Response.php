@@ -48,6 +48,30 @@ class Response
         return $this;
     }
 
+
+
+    public function text (int $code = 200, string $content) : self
+    {
+        // (Getting the value)
+        $this->code = $code;
+
+
+
+        // (Appending the values)
+        $this->headers[] = 'Content-Type: text/plain';
+        $this->headers[] = 'Content-Length: ' . strlen( $content );
+
+
+
+        // (Getting the value)
+        $this->body = function () use (&$content) { echo $content; };
+
+
+
+        // Returning the value
+        return $this;
+    }
+
     public function json (int $code = 200, mixed $content) : self
     {
         // (Getting the value)
