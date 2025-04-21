@@ -55,6 +55,11 @@ class Response
 
 
 
+        // (Getting the value)
+        $content = json_encode( $content );
+
+
+
         // (Appending the values)
         $this->headers[] = 'Content-Type: application/json';
         $this->headers[] = 'Content-Length: ' . strlen( $content );
@@ -62,7 +67,7 @@ class Response
 
 
         // (Getting the value)
-        $this->body = function () use (&$content) { echo json_encode( $content ); };
+        $this->body = function () use (&$content) { echo $content; };
 
 
 
