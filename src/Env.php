@@ -31,7 +31,7 @@ class Env
 
             // (Getting the value)
             $key   = trim( $key );
-            $value = trim( $value );
+            $value = trim( $value, " \n\r\t\v\0\'\"" );
 
 
 
