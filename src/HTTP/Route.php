@@ -28,6 +28,8 @@ class Route
 
     public readonly array $params;
 
+    public readonly mixed $stop;
+
 
 
     public function __construct (string $method, string $path, Target $target)
@@ -218,6 +220,9 @@ class Route
 
             if ( $middleware->run() === false )
             {// (Middleware has not been passed)
+                // (Getting the value)
+                $this->stop = $middleware;
+
                 // Returning the value
                 return false;
             }
