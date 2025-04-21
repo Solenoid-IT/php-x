@@ -101,6 +101,17 @@ class Response
 
 
 
+    public function set_code (int $code) : self
+    {
+        // (Getting the value)
+        $this->code = $code;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
     public function add_header (string $value) : self
     {
         // (Appending the value)
