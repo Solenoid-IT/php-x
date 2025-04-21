@@ -209,7 +209,7 @@ class Route
 
 
 
-    public function run () : self
+    public function run () : mixed
     {
         foreach ( $this->middlewares as $middleware )
         {// Processing each entry
@@ -219,7 +219,7 @@ class Route
             if ( $middleware->run() === false )
             {// (Middleware has not been passed)
                 // Returning the value
-                return $this;
+                return false;
             }
         }
 
@@ -230,31 +230,20 @@ class Route
             if ( isset( $this->target->function ) )
             {// (Target is a function)
                 // (Getting the value)
-                $response = call_user_func_array( $this->target->function, $this->params );
+                $result = call_user_func_array( $this->target->function, $this->params );
             }
             else
             if ( isset( $this->target->class ) && isset( $this->target->fn ) )
             {// (Target is a class method)
                 // (Getting the value)
-                $response = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
+                $result = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
             }
         }
 
 
 
-        if ( $response !== null )
-        {// Value found
-            // (Setting the header)
-            header( 'Content-Type: application/json' );
-
-            // Printing the value
-            echo json_encode( $response );
-        }
-
-
-
         // Returning the value
-        return $this;
+        return $result;
     }
 
 
