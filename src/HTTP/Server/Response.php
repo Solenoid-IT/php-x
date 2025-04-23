@@ -125,6 +125,24 @@ class Response
 
 
 
+    public function redirect (int $code = 303, string $location) : self
+    {
+        // (Getting the value)
+        $this->code = $code;
+
+
+
+        // (Appending the value)
+        $this->headers[] = "Location: $location";
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     public function send () : self
     {
         // (Setting the code)
