@@ -13,6 +13,8 @@ class Action
     public readonly string $class;
     public readonly string $method;
 
+    public readonly string $class_path;
+
 
 
     public function __construct (string $prefix, string $id)
@@ -37,9 +39,9 @@ class Action
 
 
         // (Getting the value)
-        $class = str_replace( '/', '\\', "$prefix/$class" );
+        $this->class_path = str_replace( '/', '\\', "$prefix/$class" );
 
-        if ( !class_exists( $class ) )
+        if ( !class_exists( $this->class_path ) )
         {// (Class not found)
             // (Getting the value)
             $this->error = 'RPC :: Action-Class not found';
@@ -50,7 +52,7 @@ class Action
 
 
 
-        if ( !method_exists( $class, $method ) )
+        if ( !method_exists( $this->class_path, $method ) )
         {// (Method not found)
             // (Getting the value)
             $this->error = 'RPC :: Action-Method not found';
@@ -70,7 +72,7 @@ class Action
     public function run () : mixed
     {
         // Returning the value
-        return call_user_func_array( [ new $this->class(), $this->method ], [] );
+        return call_user_func_array( [ new $this->class_path(), $this->method ], [] );
     }
 
 
