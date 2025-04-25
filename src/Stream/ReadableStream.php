@@ -8,31 +8,73 @@ namespace Solenoid\X\Stream;
 
 class ReadableStream
 {
+    const TYPE_FILE   = 'file';
+    const TYPE_STRING = 'string';
+
+
+
     private $stream;
 
 
 
-    public readonly string $file_path;
+    public readonly string $src_type;
+    public readonly string $value;
 
 
 
-    public function __construct (string $file_path)
+    public function __construct (string $src_type = self::TYPE_FILE, string &$value)
     {
-        // (Getting the value)
-        $this->file_path = $file_path;
+        // (Getting the values)
+        $this->src_type = $src_type;
+        $this->value    = &$value;
     }
 
 
 
     public function open () : self|false
     {
-        // (Opening the stream)
-        $stream = fopen( $this->file_path, 'r' );
+        switch ( $this->src_type )
+        {
+            case self::TYPE_FILE:
+                // (Opening the stream)
+                $stream = fopen( $this->value, 'r' );
+            break;
+
+            case self::TYPE_STRING:
+                // (Opening the stream)
+                $stream = fopen( 'php://temp', 'r+' );
+            break;
+        }
+
+
 
         if ( $stream === false )
         {// (Unable to open the stream)
             // Returning the value
             return false;
+        }
+
+
+
+        switch ( $this->src_type )
+        {
+            case self::TYPE_FILE:
+                // (Doing nothing)
+            break;
+
+            case self::TYPE_STRING:
+                if ( fwrite( $stream, $this->value ) === false )
+                {// (Unable to write to the stream)
+                    // Returning the value
+                    return false;
+                }
+
+                if ( !rewind( $stream ) )
+                {// (Unable to rewind the stream)
+                    // Returning the value
+                    return false;
+                }
+            break;
         }
 
 
