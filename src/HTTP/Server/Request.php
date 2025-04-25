@@ -20,7 +20,7 @@ class Request
 
 
 
-    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], ReadableStream|string $body)
+    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], string|ReadableStream $body)
     {
         // (Getting the values)
         $this->method   = $method;
@@ -92,6 +92,39 @@ class Request
 
         // Returning the value
         return $results;
+    }
+
+
+
+    public function get_cookies () : array|false
+    {
+        // (Getting the value)
+        $value = $this->get_header( 'Cookie' );
+
+        if ( $value === false )
+        {// (Header not found)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // (Setting the value)
+        $cookies = [];
+
+        foreach ( explode( ';', $value ) as $cookie )
+        {// Processing each entry
+            // (Getting the values)
+            [ $name, $value ] = explode( '=', $cookie, 2 );
+
+            // (Getting the value)
+            $cookies[ urldecode( $name ) ] = urldecode( $value );
+        }
+
+
+
+        // Returning the value
+        return $cookies;
     }
 
 
