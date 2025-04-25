@@ -97,6 +97,14 @@ class Storage
         // Returning the value
         return $this;
     }
+
+
+
+    public function __toString ()
+    {
+        // Returning the value
+        return $this->basedir;
+    }
 }
 
 
