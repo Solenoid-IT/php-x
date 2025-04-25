@@ -18,15 +18,48 @@ class ReadableStream
 
 
     public readonly string $src_type;
-    public readonly string $value;
+
+    public readonly string $file_path;
+    public readonly string $content;
 
 
 
-    public function __construct (string $src_type = self::TYPE_FILE, string &$value)
+    public function __construct (string $src_type = self::TYPE_FILE)
     {
-        // (Getting the values)
+        // (Getting the value)
         $this->src_type = $src_type;
-        $this->value    = &$value;
+    }
+
+
+
+    public function set_file (string $file_path) : self|false
+    {
+        if ( $this->src_type !== self::TYPE_FILE ) return false;
+
+
+
+        // (Getting the value)
+        $this->file_path = $file_path;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    public function set_content (string &$content) : self|false
+    {
+        if ( $this->src_type !== self::TYPE_STRING ) return false;
+
+
+
+        // (Getting the value)
+        $this->content = &$content;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
@@ -37,7 +70,7 @@ class ReadableStream
         {
             case self::TYPE_FILE:
                 // (Opening the stream)
-                $stream = fopen( $this->value, 'r' );
+                $stream = fopen( $this->file_path, 'r' );
             break;
 
             case self::TYPE_STRING:
@@ -63,7 +96,7 @@ class ReadableStream
             break;
 
             case self::TYPE_STRING:
-                if ( fwrite( $stream, $this->value ) === false )
+                if ( fwrite( $stream, $this->content ) === false )
                 {// (Unable to write to the stream)
                     // Returning the value
                     return false;

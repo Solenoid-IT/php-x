@@ -46,7 +46,7 @@ class Request
 
 
         // Returning the value
-        return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], $headers, new ReadableStream( ReadableStream::TYPE_FILE, 'php://input' ) );
+        return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], $headers, ( new ReadableStream( ReadableStream::TYPE_FILE ) )->set_file( 'php://input' ) );
     }
 
 
