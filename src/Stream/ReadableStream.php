@@ -98,6 +98,37 @@ class ReadableStream
         // Returning the value
         return $buffer;
     }
+
+
+
+    public function __toString () : string
+    {
+        // (Opening the stream)
+        $this->open();
+
+
+
+        // (Getting the value)
+        $buffer = $this->read();
+
+
+
+        // (Closing the stream)
+        $this->close();
+
+
+
+        if ( $buffer === false )
+        {// (Unable to read the stream)
+            // Returning the value
+            return '';
+        }
+
+
+
+        // Returning the value
+        return $buffer;
+    }
 }
 
 
