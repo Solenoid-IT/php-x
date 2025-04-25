@@ -20,14 +20,14 @@ class Request
 
 
 
-    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], ReadableStream $body)
+    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], ReadableStream|string $body)
     {
         // (Getting the values)
         $this->method   = $method;
         $this->path     = $path;
         $this->protocol = $protocol;
         $this->headers  = $headers;
-        $this->body     = $body;
+        $this->body     = is_string( $body ) ? ( new ReadableStream( ReadableStream::TYPE_STRING ) )->set_content( $body ) : $body;
     }
 
 
