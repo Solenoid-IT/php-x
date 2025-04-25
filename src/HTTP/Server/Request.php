@@ -99,7 +99,7 @@ class Request
     public function __toString () : string
     {
         // Returning the value
-        return implode( "\r\n", [ "$this->method $this->path $this->protocol", implode( "\r\n", $this->headers ), "\r\n", (string) $this->body ] );        
+        return "$this->method $this->path $this->protocol" . "\r\n" . implode( "\r\n", $this->headers ) . "\r\n\r\n" . $this->body;
     }
 }
 
