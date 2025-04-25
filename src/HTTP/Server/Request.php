@@ -6,17 +6,21 @@ namespace Solenoid\X\HTTP\Server;
 
 
 
+use Solenoid\X\Stream\ReadableStream;
+
+
+
 class Request
 {
-    public readonly string $method;
-    public readonly string $path;
-    public readonly string $protocol;
-    public readonly array  $headers;
-    public readonly string $body;
+    public readonly string         $method;
+    public readonly string         $path;
+    public readonly string         $protocol;
+    public readonly array          $headers;
+    public readonly ReadableStream $body;
 
 
 
-    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], string $body = '')
+    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], ReadableStream $body)
     {
         // (Getting the values)
         $this->method   = $method;
@@ -31,7 +35,7 @@ class Request
     public static function fetch () : self
     {
         // Returning the value
-        return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], getallheaders(), file_get_contents( 'php://input' ) );
+        return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], getallheaders(), new ReadableStream( 'php://input' ) );
     }
 
 
