@@ -73,19 +73,15 @@ class ReadableStream
         if ( $length === null )
         {// Value not found
             // (Getting the value)
-            $length = filesize( $this->file_path );
-
-            if ( $length === false )
-            {// (Unable to get the file size)
-                // Returning the value
-                return false;
-            }
+            $buffer = stream_get_contents( $this->stream );
+        }
+        else
+        {// Value found
+            // (Getting the value)
+            $buffer = fread( $this->stream, $length );
         }
 
 
-
-        // (Getting the value)
-        $buffer = fread( $this->stream, $length );
 
         if ( $buffer === false )
         {// (Unable to read the stream)
