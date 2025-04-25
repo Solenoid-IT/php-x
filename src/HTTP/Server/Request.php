@@ -96,6 +96,14 @@ class Request
 
 
 
+    public function json (bool $associative = false) : mixed
+    {
+        // Returning the value
+        return json_decode( $this->body, $associative );
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
