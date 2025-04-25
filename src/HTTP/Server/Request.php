@@ -34,8 +34,19 @@ class Request
 
     public static function fetch () : self
     {
+        // (Setting the value)
+        $headers = [];
+
+        foreach ( getallheaders() as $name => $value )
+        {// Processing each entry
+            // (Appending the value)
+            $headers[] = "$name: $value";
+        }
+
+
+
         // Returning the value
-        return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], getallheaders(), new ReadableStream( 'php://input' ) );
+        return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], $headers, new ReadableStream( 'php://input' ) );
     }
 
 
@@ -88,7 +99,7 @@ class Request
     public function __toString () : string
     {
         // Returning the value
-        return implode( "\r\n", [ "$this->method $this->path $this->protocol", implode( "\r\n", $this->headers ), "\r\n", $this->body ] );        
+        return implode( "\r\n", [ "$this->method $this->path $this->protocol", implode( "\r\n", $this->headers ), "\r\n", (string) $this->body ] );        
     }
 }
 
