@@ -51,7 +51,7 @@ class Request
 
 
 
-    public function get_header (string $name) : string|false
+    public function get_header (string $name) : string|null
     {
         foreach ( $this->headers as $header )
         {// Processing each entry
@@ -68,7 +68,7 @@ class Request
 
 
         // Returning the value
-        return false;
+        return null;
     }
 
     public function list_header (string $name) : array
