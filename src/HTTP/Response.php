@@ -2,7 +2,7 @@
 
 
 
-namespace Solenoid\X\HTTP\Server;
+namespace Solenoid\X\HTTP;
 
 
 

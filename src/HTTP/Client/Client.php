@@ -6,10 +6,19 @@ namespace Solenoid\X\HTTP\Client;
 
 
 
+use \Solenoid\X\HTTP\Request;
+
+
+
 class Client
 {
-    /*public static function send (string $request, string $host)
+    /*public static function send (string $request, string $host, bool $secure = true, int $conn_timeout = 60, int $exec_timeout = 60, int $max_redirs = 10) : mixed
     {
+        // (Getting the value)
+        $request = Request::parse( $request );
+
+
+
         // (Initializing the curl)
         $curl = curl_init();
 
@@ -24,10 +33,10 @@ class Client
         // (Getting the value)
         $options =
         [
-            CURLOPT_URL            => $url,
-            CURLOPT_CUSTOMREQUEST  => $method,
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_POSTFIELDS     => is_string($body) ? $body : json_encode($body),
+            CURLOPT_URL            => ( $secure ? 'https' : 'http' ) . '://' . $host . $request->path,
+            CURLOPT_CUSTOMREQUEST  => $request->method,
+            CURLOPT_HTTPHEADER     => $request->headers,
+            CURLOPT_POSTFIELDS     => $request->body,
 
             CURLOPT_HEADER         => 1,
 
@@ -86,7 +95,7 @@ class Client
 
 
             // (Getting the value)
-            $first_parts = explode( " ", $head_parts[0], 3 );
+            $first_parts = explode( ' ', $head_parts[0], 3 );
 
 
 
