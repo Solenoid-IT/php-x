@@ -49,6 +49,39 @@ class Request
         return new self( $_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI'], $_SERVER['SERVER_PROTOCOL'], $headers, ( new ReadableStream( ReadableStream::TYPE_FILE ) )->set_file( 'php://input' ) );
     }
 
+    public static function parse (string $request) : self
+    {
+        // (Setting the value)
+        $line_separator = "\r\n";
+
+
+
+        // (Getting the values)
+        [ $head, $body ] = explode( $line_separator . $line_separator, $request, 2 );
+
+        // (Getting the value)
+        $headers = explode( $line_separator, $head );
+
+        // (Getting the values)
+        [ $method, $path, $protocol ] = explode( ' ', $headers[0], 3 );
+
+
+
+        // (Setting the value)
+        $real_headers = [];
+
+        for ( $i = 1; $i < count( $headers ); $i++ )
+        {// Iterating each index
+            // (Appending the value)
+            $real_headers[] = $headers[$i];
+        }
+
+
+
+        // Returning the value
+        return new self( $method, $path, $protocol, $real_headers, $body );
+    }
+
 
 
     public function get_header (string $name) : string|null
