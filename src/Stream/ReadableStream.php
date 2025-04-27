@@ -54,7 +54,7 @@ class ReadableStream
 
 
         // (Getting the value)
-        $this->content = &$content;
+        $this->content = $content;
 
 
 
