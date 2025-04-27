@@ -8,18 +8,18 @@ namespace Solenoid\X\HTTP;
 
 class Response
 {
-    private int    $code;
-    private array  $headers;
-    private        $body;
+    private int   $code;
+    private array $headers;
+    private       $body;
 
 
 
-    public function __construct (int $code = 200, array $headers = [], string $body = '')
+    public function __construct (int $code = 200, array $headers = [], string|callable $body = '')
     {
         // (Getting the values)
         $this->code    = $code;
         $this->headers = $headers;
-        $this->body    = function () use (&$body) { echo $body; };        
+        $this->body    = is_string( $body ) ? $body : function () use (&$body) { echo $body; };        
     }
 
 
@@ -158,13 +158,82 @@ class Response
 
 
 
-        // (Calling the function)
-        ( $this->body )();
+        if ( is_string( $this->body ) )
+        {// Match OK
+            // (Printing the value)
+            echo $this->body;
+        }
+        else
+        {// Match failed
+            // (Calling the function)
+            ( $this->body )();
+        }
 
 
 
         // Returning the value
         return $this;
+    }
+
+
+
+    public function get_code () : int
+    {
+        // Returning the value
+        return $this->code;
+    }
+
+
+
+    public function get_header (string $name) : string|null
+    {
+        foreach ( $this->headers as $header )
+        {// Processing each entry
+            // (Getting the values)
+            [ $n, $v ] = explode( ': ', $header, 2 );
+
+            if ( strtolower( $n ) === strtolower( $name ) )
+            {// Match OK
+                // Returning the value
+                return $v;
+            }
+        }
+
+
+
+        // Returning the value
+        return null;
+    }
+
+    public function list_header (string $name) : array
+    {
+        // (Setting the value)
+        $results = [];
+
+        foreach ( $this->headers as $header )
+        {// Processing each entry
+            // (Getting the values)
+            [ $n, $v ] = explode( ': ', $header, 2 );
+
+            if ( strtolower( $n ) === strtolower( $name ) )
+            {// Match OK
+                // (Appending the value)
+                $results[] = $v;
+            }
+        }
+
+
+
+        // Returning the value
+        return $results;
+    }
+
+
+
+    public function get_body () : string|callable
+    {
+        // Returning the value
+        return $this->body;
     }
 }
 
