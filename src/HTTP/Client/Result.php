@@ -16,7 +16,7 @@ class Result
 
 
 
-    public readonly array    $hops;
+    public          array    $hops;
     public readonly Response $response;
 
 
