@@ -4,8 +4,7 @@
 
 namespace Solenoid\X\HTTP\Client;
 
-
-
+use Solenoid\Core\MVC\Model;
 use \Solenoid\X\HTTP\Request;
 use \Solenoid\X\HTTP\Response;
 use \Solenoid\X\HTTP\Status;
@@ -17,9 +16,29 @@ use \Solenoid\X\HTTP\Client\Hop;
 
 class Sender
 {
+    private array $events = [];
+
+
+
     public readonly int $conn_timeout;
     public readonly int $exec_timeout;
     public readonly int $max_redirs;
+
+
+
+    private function trigger_event (string $event_type, mixed $data) : self
+    {
+        foreach ( $this->events[ $event_type ] as $callback )
+        {// (Iterating each entry)
+            // (Calling the function)
+            $callback( $data );
+        }
+
+
+
+        // Returning the value
+        return $this;
+    }
 
 
 
@@ -33,7 +52,7 @@ class Sender
 
 
 
-    public function send (string|Request $request, string|Target $target) : Result|false
+    public function send (string|Request $request, string|Target $target, bool $stream_response = false) : Result|false
     {
         if ( is_string( $request ) )
         {// (Request is a string)
@@ -70,7 +89,7 @@ class Sender
 
             CURLOPT_HEADER         => 1,
 
-            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_RETURNTRANSFER => !$stream_response,
             CURLOPT_FOLLOWLOCATION => true,
 
             CURLOPT_CONNECTTIMEOUT => $this->conn_timeout,
@@ -85,6 +104,40 @@ class Sender
         ]
         ;
 
+        if ( $stream_response )
+        {// Value is true
+            // (Setting the value)
+            $response_headers = [];
+
+
+
+            // (Getting the values)
+            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$response_headers)
+            {
+                // (Appending the value)
+                $response_headers[] = $header;
+
+
+
+                // Returning the value
+                return strlen( $header );
+            }
+            ;
+            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data)
+            {
+                // (Triggering the event)
+                $this->trigger_event( 'data', $data );
+
+
+
+                // (Returning the value)
+                return strlen( $data );
+            }
+            ;
+        }
+
+
+
         if ( !curl_setopt_array( $curl, $options ) )
         {// (Unable to set the options)
             // Returning the value
@@ -93,13 +146,21 @@ class Sender
 
 
 
-        // (Executing the curl)
-        $content = curl_exec( $curl );
+        if ( $stream_response )
+        {// Value is true
+            // (Executing the curl)
+            curl_exec( $curl );
+        }
+        else
+        {// Value is false
+            // (Executing the curl)
+            $content = curl_exec( $curl );
 
-        if ( $content === false )
-        {// (Unable to executing the cURL)
-            // Returning the value
-            return false;
+            if ( $content === false )
+            {// (Unable to executing the cURL)
+                // Returning the value
+                return false;
+            }
         }
 
 
@@ -114,44 +175,65 @@ class Sender
 
 
 
-        // (Getting the value)
-        $parts = explode( "\r\n\r\n", $content );
-
-        for ( $i = 0; $i < count($parts) - 1; $i++ )
-        {// Iterating each index
-            // (Getting the value)
-            $head_parts = explode( "\r\n", $parts[$i] );
-
-
-
-            // (Getting the value)
-            $first_parts = explode( ' ', $head_parts[0], 3 );
-
-
-
-            // (Adding the hop)
-            $result->add_hop( new Hop( $first_parts[0], new Status( $first_parts[1], $first_parts[2] ), array_splice( $head_parts, 1 ) ) );
+        if ( $stream_response )
+        {// Value is true
+            // (Setting the response)
+            $result->set_response( new Response( curl_getinfo( $curl, CURLINFO_HTTP_CODE), $response_headers, '' ) );
         }
+        else
+        {// Value is false
+            // (Getting the value)
+            $parts = explode( "\r\n\r\n", $content );
+
+            for ( $i = 0; $i < count($parts) - 1; $i++ )
+            {// Iterating each index
+                // (Getting the value)
+                $head_parts = explode( "\r\n", $parts[$i] );
 
 
 
-        // (Getting the value)
-        $last_hop = $result->hops[ count( $result->hops ) - 1 ];
+                // (Getting the value)
+                $first_parts = explode( ' ', $head_parts[0], 3 );
 
 
 
-        // (Getting the value)
-        $body = $parts[ count($parts) - 1 ];
+                // (Adding the hop)
+                $result->add_hop( new Hop( $first_parts[0], new Status( $first_parts[1], $first_parts[2] ), array_splice( $head_parts, 1 ) ) );
+            }
 
 
 
-        // (Setting the response)
-        $result->set_response( new Response( $last_hop->status->code, $last_hop->headers, $body ) );
+            // (Getting the value)
+            $last_hop = $result->hops[ count( $result->hops ) - 1 ];
+
+
+
+            // (Getting the value)
+            $body = $parts[ count($parts) - 1 ];
+
+
+
+            // (Setting the response)
+            $result->set_response( new Response( $last_hop->status->code, $last_hop->headers, $body ) );
+        }
 
 
 
         // Returning the value
         return $result;
+    }
+
+
+
+    public function on (string $event_type, callable $callback) : self
+    {
+        // (Appending the value)
+        $this->events[ $event_type ][] = $callback;
+
+
+
+        // Returning the value
+        return $this;
     }
 }
 
