@@ -145,8 +145,11 @@ class Sender
             // (Setting the value)
             $window = [ null, null ];
 
+            // (Setting the value)
+            $body_started = false;
+
             // (Getting the value)
-            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$window)
+            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$window, &$body_started)
             {
                 // (Appending the value)
                 $window[] = $data === "\r\n" ? 'head_separator' : ( strpos( $data, 'HTTP/' ) === 0 ? 'next_hop' : null );
@@ -159,7 +162,10 @@ class Sender
 
 
 
-                if ( $window[0] === 'head_separator' && $window[1] !== 'next_hop' )
+                // (Getting the value)
+                $body_started = $body_started || ( $window[0] === 'head_separator' && $window[1] !== 'next_hop' );
+
+                if ( $body_started )
                 {// Match OK
                     // (Triggering the event)
                     $this->trigger_event( 'data', $data );
