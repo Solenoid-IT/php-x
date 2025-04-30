@@ -154,9 +154,9 @@ class Sender
             $data_size = 0;
 
             // (Getting the value)
-            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$data_size)
+            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$data_size, $headers_size)
             {
-                if ( $data_size >= curl_getinfo( $curl, CURLINFO_HEADER_SIZE ) )
+                if ( $data_size >= /*curl_getinfo( $curl, CURLINFO_HEADER_SIZE )*/$headers_size )
                 {// (Headers are ended)
                     // (Triggering the event)
                     $this->trigger_event( 'data', $data );
