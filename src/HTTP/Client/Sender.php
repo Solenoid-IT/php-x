@@ -135,6 +135,14 @@ class Sender
 
 
 
+                if ( $header === "\r\n" )
+                {// Match OK
+                    // (Triggering the event)
+                    $this->trigger_event( 'hop', $hops[ count($hops) - 1 ] );
+                }
+
+
+
                 // Returning the value
                 return strlen( $header );
             }
