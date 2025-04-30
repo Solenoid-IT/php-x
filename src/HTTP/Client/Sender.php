@@ -120,7 +120,7 @@ class Sender
 
                 if ( $h !== '' )
                 {// Match OK
-                    if ( strpos( $h, 'HTTP\/' ) === 0 )
+                    if ( strpos( $h, 'HTTP/' ) === 0 )
                     {// Match OK
                         // (Getting the values)
                         [ $protocol, $code, $message ] = explode( ' ', $h, 3 );
