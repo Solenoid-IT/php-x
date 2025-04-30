@@ -153,11 +153,11 @@ class Sender
                     // (Triggering the event)
                     $this->trigger_event( 'data', $data );
                 }
-
-
-
-                // (Incrementing the value)
-                $header_size += strlen( $data );
+                else
+                {// Match failed
+                    // (Incrementing the value)
+                    $header_size += strlen( $data );
+                }
 
 
 
