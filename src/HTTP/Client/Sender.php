@@ -143,22 +143,25 @@ class Sender
 
 
             // (Setting the value)
-            $header_size = 0;
+            $headers_end = false;
 
             // (Getting the value)
-            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$header_size)
+            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$headers_end)
             {
-                if ( $header_size === curl_getinfo( $curl, CURLINFO_HEADER_SIZE ) )
-                {// Match OK
+                if ( $headers_end )
+                {// (Headers are ended)
                     // (Triggering the event)
                     $this->trigger_event( 'data', $data );
                 }
                 else
-                {// Match failed
-                    // (Incrementing the value)
-                    $header_size += strlen( $data );
+                {// (Headers are not ended yet)
+                    if ( strpos( $data, "\r\n\r\n" ) !== false )
+                    {// Match OK
+                        // (Setting the value)
+                        $headers_end = true;
+                    }
                 }
-
+            
 
 
                 // (Returning the value)
