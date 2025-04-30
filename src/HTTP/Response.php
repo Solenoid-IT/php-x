@@ -125,6 +125,14 @@ class Response
 
 
 
+    public function get_headers () : array
+    {
+        // Returning the value
+        return $this->headers;
+    }
+
+
+
     public function redirect (int $code = 303, string $location) : self
     {
         // (Getting the value)
