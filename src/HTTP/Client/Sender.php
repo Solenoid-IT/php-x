@@ -110,11 +110,8 @@ class Sender
             // (Setting the value)
             $hops = [];
 
-            // (Setting the value)
-            $headers_size = 0;
-
             // (Getting the value)
-            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$hops, &$headers_size)
+            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$hops)
             {
                 // (Getting the value)
                 $h = trim( $header );
@@ -138,11 +135,6 @@ class Sender
 
 
 
-                // (Incrementing the value)
-                $headers_size += strlen( $header );
-
-
-
                 // Returning the value
                 return strlen( $header );
             }
@@ -151,21 +143,27 @@ class Sender
 
 
             // (Setting the value)
-            $data_size = 0;
+            $window = [ null, null ];
 
             // (Getting the value)
-            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$data_size, $headers_size)
+            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$window)
             {
-                if ( $data_size >= /*curl_getinfo( $curl, CURLINFO_HEADER_SIZE )*/$headers_size )
-                {// (Headers are ended)
+                // (Appending the value)
+                $window[] = $data === "\r\n" ? 'head_separator' : ( strpos( $data, 'HTTP/' ) === 0 ? 'next_hop' : null );
+
+                if ( count( $window ) > 2 )
+                {// Match OK
+                    // (Removing the value)
+                    array_shift( $window );
+                }
+
+
+
+                if ( $window[0] === 'head_separator' && $window[1] !== 'next_hop' )
+                {// Match OK
                     // (Triggering the event)
                     $this->trigger_event( 'data', $data );
                 }
-            
-
-
-                // (Incrementing the value)
-                $data_size += strlen( $data );
 
 
 
