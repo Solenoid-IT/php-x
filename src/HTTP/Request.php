@@ -20,7 +20,7 @@ class Request
 
 
 
-    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], string|ReadableStream $body)
+    public function __construct (string $method, string $path, string $protocol = 'HTTP/1.1', array $headers = [], string|ReadableStream $body = '')
     {
         // (Getting the values)
         $this->method   = $method;
