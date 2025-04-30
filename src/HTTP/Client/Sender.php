@@ -108,15 +108,32 @@ class Sender
         if ( $stream_response )
         {// Value is true
             // (Setting the value)
-            $response_headers = [];
+            $hops = [];
 
 
 
             // (Getting the values)
-            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$response_headers)
+            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$hops)
             {
-                // (Appending the value)
-                $response_headers[] = trim( $header );
+                // (Getting the value)
+                $h = trim( $header );
+
+                if ( $h !== '' )
+                {// Match OK
+                    if ( strpos( $h, 'HTTP\/' ) === 0 )
+                    {// Match OK
+                        // (Getting the values)
+                        [ $protocol, $code, $message ] = explode( ' ', $h, 3 );
+
+                        // (Appending the value)
+                        $hops[] = new Hop( $protocol, new Status( $code, $message ?? '' ), [] );
+                    }
+                    else
+                    {// Match failed
+                        // (Appending the value)
+                        $hops[ count($hops) - 1 ]->headers[] = $h;
+                    }
+                }
 
 
 
@@ -178,8 +195,21 @@ class Sender
 
         if ( $stream_response )
         {// Value is true
+            foreach ( $hops as $hop )
+            {// Processing each entry
+                // (Adding the hop)
+                $result->add_hop( $hop );
+            }
+
+
+
+            // (Getting the value)
+            $last_hop = $result->hops[ count( $result->hops ) - 1 ];
+
+
+
             // (Setting the response)
-            $result->set_response( new Response( curl_getinfo( $curl, CURLINFO_HTTP_CODE), $response_headers, '' ) );
+            $result->set_response( new Response( $last_hop->status->code, $last_hop->headers, '' ) );
         }
         else
         {// Value is false

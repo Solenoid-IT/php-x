@@ -14,7 +14,7 @@ class Hop
 {
     public readonly string $protocol;
     public readonly Status $status;
-    public readonly array  $headers;
+    public          array  $headers;
 
 
 
