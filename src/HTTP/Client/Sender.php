@@ -116,7 +116,7 @@ class Sender
             $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$response_headers)
             {
                 // (Appending the value)
-                $response_headers[] = $header;
+                $response_headers[] = trim( $header );
 
 
 
