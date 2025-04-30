@@ -17,7 +17,7 @@ use \Solenoid\X\HTTP\Client\Hop;
 
 class Sender
 {
-    private array $events = [];
+    private array $callbacks = [];
 
 
 
@@ -29,7 +29,7 @@ class Sender
 
     private function trigger_event (string $event_type, mixed $data) : self
     {
-        foreach ( $this->events[ $event_type ] as $callback )
+        foreach ( $this->callbacks[ $event_type ] as $callback )
         {// (Iterating each entry)
             // (Calling the function)
             $callback( $data );
@@ -229,7 +229,7 @@ class Sender
     public function on (string $event_type, callable $callback) : self
     {
         // (Appending the value)
-        $this->events[ $event_type ][] = $callback;
+        $this->callbacks[ $event_type ][] = $callback;
 
 
 
