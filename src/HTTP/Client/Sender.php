@@ -110,15 +110,8 @@ class Sender
             // (Setting the value)
             $hops = [];
 
-
-
-            // (Setting the value)
-            $header_size = 0;
-
-
-
-            // (Getting the values)
-            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$hops, &$header_size)
+            // (Getting the value)
+            $options[ CURLOPT_HEADERFUNCTION ] = function ($curl, $header) use (&$hops)
             {
                 // (Getting the value)
                 $h = trim( $header );
@@ -142,22 +135,29 @@ class Sender
 
 
 
-                // (Incrementing the value)
-                $header_size += strlen( $header );
-
-
-
                 // Returning the value
                 return strlen( $header );
             }
             ;
-            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use ($header_size)
+
+
+
+            // (Setting the value)
+            $header_size = 0;
+
+            // (Getting the value)
+            $options[ CURLOPT_WRITEFUNCTION ] = function ($curl, $data) use (&$header_size)
             {
                 if ( $header_size === curl_getinfo( $curl, CURLINFO_HEADER_SIZE ) )
                 {// Match OK
                     // (Triggering the event)
                     $this->trigger_event( 'data', $data );
                 }
+
+
+
+                // (Incrementing the value)
+                $header_size += strlen( $data );
 
 
 
