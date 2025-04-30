@@ -4,7 +4,8 @@
 
 namespace Solenoid\X\HTTP\Client;
 
-use Solenoid\Core\MVC\Model;
+
+
 use \Solenoid\X\HTTP\Request;
 use \Solenoid\X\HTTP\Response;
 use \Solenoid\X\HTTP\Status;
