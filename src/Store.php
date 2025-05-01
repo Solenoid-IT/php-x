@@ -12,6 +12,18 @@ class Store
 
 
 
+    public readonly string $name;
+
+
+
+    public function __construct (string $name)
+    {
+        // (Getting the value)
+        $this->name = $name;
+    }
+
+
+
     public function get (string $key) : mixed
     {
         // (Getting the value)
