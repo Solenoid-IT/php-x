@@ -100,6 +100,18 @@ class Storage
 
 
 
+    public function file_exists (string $file_path) : bool
+    {
+        if ( strpos( $file_path, '..' ) !== false ) return false;
+
+
+
+        // Returning the value
+        return file_exists( $this->basedir . $file_path );
+    }
+
+
+
     public function __toString ()
     {
         // Returning the value
