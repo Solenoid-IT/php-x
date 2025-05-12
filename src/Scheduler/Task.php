@@ -9,7 +9,6 @@ namespace Solenoid\X\Scheduler;
 class Task
 {
     public readonly string $class;
-    public readonly string $method;
     public readonly array  $args;
 
     public bool  $enabled = false;
@@ -19,12 +18,11 @@ class Task
 
 
 
-    public function __construct (string $class, string $method = 'run', array $args = [])
+    public function __construct (string $class, array $args = [])
     {
         // (Getting the values)
-        $this->class  = $class;
-        $this->method = $method;
-        $this->args   = $args;
+        $this->class = $class;
+        $this->args  = $args;
     }
 
 
@@ -45,7 +43,7 @@ class Task
     public function __toString ()
     {
         // Returning the value
-        return implode( ' ', [ $this->class . '.' . $this->method, implode( ' ', $this->args ) ] );
+        return implode( ' ', [ $this->class, implode( ' ', $this->args ) ] );
     }
 }
 
