@@ -43,7 +43,7 @@ class Task
     public function __toString ()
     {
         // Returning the value
-        return implode( ' ', [ $this->class, implode( ' ', $this->args ) ] );
+        return $this->class . ( $this->args ? ' ' . implode( ' ', $this->args ) : '' );
     }
 }
 
