@@ -45,7 +45,7 @@ class Task
     public function __toString ()
     {
         // Returning the value
-        return implode( ' ', [ $this->id . ':' . $this->fn, $this->args ] );
+        return implode( ' ', [ $this->id . ':' . $this->fn, implode( ' ', $this->args ) ] );
     }
 }
 
