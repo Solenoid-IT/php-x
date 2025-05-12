@@ -20,7 +20,7 @@ class Command
         if ( count( $argv ) < 2 )
         {// (There are not enough arguments)
             // (Closing the process)
-            die( "Usage: php {file_path} {class} ...{args}\n" );
+            die( "Usage: php {$argv[0]} {class} ...{args}\n" );
         }
 
 
