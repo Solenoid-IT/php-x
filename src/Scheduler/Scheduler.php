@@ -162,18 +162,17 @@ class Scheduler
         {// Processing each entry
             if ( !$task->enabled ) continue;
 
-            foreach ( $task->rules as $rule )
-            {// Processing each entry
-                // (Getting the value)
-                $matches = self::match_rules( $rule, $timestamp );
-
-                if ( !$matches ) continue;
 
 
+            // (Getting the value)
+            $matches = self::match_rules( $task->rules, $timestamp );
 
-                // (Appending the value)
-                $tasks[] = $task;
-            }
+            if ( !$matches ) continue;
+
+
+
+            // (Appending the value)
+            $tasks[] = $task;
         }
 
 
