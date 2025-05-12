@@ -12,8 +12,10 @@ class Task
     public readonly string $fn;
     public readonly array  $args;
 
-    public  bool $enabled = false;
+    public bool  $enabled = false;
     public array $rules   = [];
+
+    public int   $max_num_concurrencies = 1;
 
 
 
