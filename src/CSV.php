@@ -43,6 +43,10 @@ class CSV
 
         foreach ( $lines as $line )
         {// Processing each entry
+            if ( $line === '' ) continue;
+
+
+
             if ( $header )
             {// Value is true
                 if ( $columns )
