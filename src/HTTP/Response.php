@@ -108,35 +108,29 @@ class Response
 
         if ( !is_string( $content ) )
         {// Match failed
-            // (Setting the value)
-            $line_separator   = "\n";
+            // (Getting the value)
+            $stream = fopen( 'php://temp', 'r+' );
+
+
+
+            // (Setting the values)
             $column_separator = ';';
             $enclosure        = '"';
+            $escape           = "\\";
+            $eol              = "\n";
 
 
-
-            // Returns [string]
-            function transform_value (string $value, string $enclosure) : string
-            {
-                // Returning the value
-                return preg_match( '/\s/', $value ) === 1 ? "{$enclosure}{$value}{$enclosure}" : $value;
-            }
-
-
-
-            // (Setting the value)
-            $content_s = '';
 
             switch ( gettype( array_keys( $content[0] )[0] ) )
             {
                 case 'string':
-                    // (Appending the value)
-                    $content_s .= implode( $column_separator, array_map( function ($value) use ($enclosure) { return transform_value( $value, $enclosure ); }, array_keys( $content[0] ) ) ) . $line_separator;
+                    // (Appending the content)
+                    fputcsv( $stream, array_keys( $content[0] ), $column_separator, $enclosure, $escape, $eol );
 
                     foreach ( $content as $record )
                     {// Processing each entry
                         // (Appending the value)
-                        $content_s .= implode( $column_separator, array_map( function ($value) use ($enclosure) { return transform_value( $value, $enclosure ); }, array_values( $record ) ) ) . $line_separator;
+                        fputcsv( $stream, array_values( $record ), $column_separator, $enclosure, $escape, $eol );
                     }
                 break;
 
@@ -144,15 +138,25 @@ class Response
                     foreach ( $content as $row )
                     {// Processing each entry
                         // (Appending the value)
-                        $content_s .= implode( $column_separator, array_map( function ($value) use ($enclosure) { return transform_value( $value, $enclosure ); }, array_values( $row ) ) ) . $line_separator;
+                        fputcsv( $stream, array_values( $row ), $column_separator, $enclosure, $escape, $eol );
                     }
                 break;
             }
 
 
 
+            // (Rewinding the stream)
+            rewind( $stream );
+
+
+
             // (Getting the value)
-            $content = &$content_s;
+            $content = stream_get_contents( $stream );
+
+
+
+            // (Closing the stream)
+            fclose( $stream );
         }
 
 
