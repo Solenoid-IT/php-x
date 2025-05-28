@@ -99,6 +99,79 @@ class Response
         return $this;
     }
 
+    public function csv (int $code = 200, mixed $content) : self
+    {
+        // (Getting the value)
+        $this->code = $code;
+
+
+
+        if ( !is_string( $content ) )
+        {// Match failed
+            // (Setting the value)
+            $line_separator   = "\n";
+            $column_separator = ';';
+            $enclosure        = '"';
+
+
+
+            // Returns [string]
+            function transform_value (string $value, string $enclosure) : string
+            {
+                // Returning the value
+                return preg_match( '/\s/', $value ) === 1 ? "{$enclosure}{$value}{$enclosure}" : $value;
+            }
+
+
+
+            // (Setting the value)
+            $content_s = '';
+
+            switch ( gettype( array_keys( $content[0] )[0] ) )
+            {
+                case 'string':
+                    // (Appending the value)
+                    $content_s .= implode( $column_separator, array_map( function ($value) use ($enclosure) { return transform_value( $value, $enclosure ); }, array_keys( $content[0] ) ) ) . $line_separator;
+
+                    foreach ( $content as $record )
+                    {// Processing each entry
+                        // (Appending the value)
+                        $content_s .= implode( $column_separator, array_map( function ($value) use ($enclosure) { return transform_value( $value, $enclosure ); }, array_values( $record ) ) ) . $line_separator;
+                    }
+                break;
+
+                case 'integer':
+                    foreach ( $content as $row )
+                    {// Processing each entry
+                        // (Appending the value)
+                        $content_s .= implode( $column_separator, array_map( function ($value) use ($enclosure) { return transform_value( $value, $enclosure ); }, array_values( $row ) ) ) . $line_separator;
+                    }
+                break;
+            }
+
+
+
+            // (Getting the value)
+            $content = &$content_s;
+        }
+
+
+
+        // (Appending the value)
+        $this->headers[] = 'Content-Type: text/csv';
+        $this->headers[] = 'Content-Length: ' . strlen( $content );
+
+
+
+        // (Getting the value)
+        $this->body = function () use (&$content) { echo $content; };
+
+
+
+        // Returning the value
+        return $this;
+    }
+
 
 
     public function set_code (int $code) : self
