@@ -6,6 +6,10 @@ namespace Solenoid\X\HTTP;
 
 
 
+use Solenoid\X\CSV;
+
+
+
 class Response
 {
     private int   $code;
@@ -109,54 +113,7 @@ class Response
         if ( !is_string( $content ) )
         {// Match failed
             // (Getting the value)
-            $stream = fopen( 'php://temp', 'r+' );
-
-
-
-            // (Setting the values)
-            $column_separator = ';';
-            $enclosure        = '"';
-            $escape           = "\\";
-            $eol              = "\n";
-
-
-
-            switch ( gettype( array_keys( $content[0] )[0] ) )
-            {
-                case 'string':
-                    // (Appending the content)
-                    fputcsv( $stream, array_keys( $content[0] ), $column_separator, $enclosure, $escape, $eol );
-
-                    foreach ( $content as $record )
-                    {// Processing each entry
-                        // (Appending the value)
-                        fputcsv( $stream, array_values( $record ), $column_separator, $enclosure, $escape, $eol );
-                    }
-                break;
-
-                case 'integer':
-                    foreach ( $content as $row )
-                    {// Processing each entry
-                        // (Appending the value)
-                        fputcsv( $stream, array_values( $row ), $column_separator, $enclosure, $escape, $eol );
-                    }
-                break;
-            }
-
-
-
-            // (Rewinding the stream)
-            rewind( $stream );
-
-
-
-            // (Getting the value)
-            $content = stream_get_contents( $stream );
-
-
-
-            // (Closing the stream)
-            fclose( $stream );
+            $content = ( new CSV() )->build( $content );
         }
 
 
