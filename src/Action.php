@@ -8,6 +8,10 @@ namespace Solenoid\X;
 
 class Action
 {
+    private bool $stopped = false;
+
+
+
     public readonly string $error;
 
     public readonly string $class;
@@ -71,8 +75,26 @@ class Action
 
     public function run () : mixed
     {
+        // (Getting the value)
+        $instance = new $this->class_path();
+
+
+
         // Returning the value
-        return call_user_func_array( [ new $this->class_path(), $this->method ], [] );
+        return $this->stopped ? null : $instance->{ $this->method }();
+    }
+
+
+
+    public function stop () : self
+    {
+        // (Setting the value)
+        $this->stopped = true;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
