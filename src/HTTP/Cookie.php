@@ -85,7 +85,7 @@ class Cookie
 
 
 
-    public static function fetch (string $name) : string|null
+    public static function get (string $name) : string|null
     {
         // Returning the value
         return $_COOKIE[ $name ] ?? null;
