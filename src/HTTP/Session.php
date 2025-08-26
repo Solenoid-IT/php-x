@@ -210,7 +210,7 @@ class Session
 
 
         // (Getting the value)
-        $expiration_timestamp = $this->handlers[ 'set_duration' ]( $this, $duration );
+        $expiration_timestamp = $this->handlers[ 'set_duration' ]( $this, $duration ?? $this->duration );
 
         if ( $expiration_timestamp === false )
         {// (Unable to set the duration)
