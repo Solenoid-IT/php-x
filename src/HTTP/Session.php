@@ -103,7 +103,12 @@ class Session
             if ( $object )
             {// (Resource found)
                 // (Getting the values)
-                [ $this->creation_timestamp, $this->last_update_timestamp, $this->expiration_timestamp, $this->data ] = $object;
+                $this->creation_timestamp    = $object['creation_timestamp'];
+                $this->last_update_timestamp = $object['last_update_timestamp'];
+                $this->expiration_timestamp  = $object['expiration_timestamp'];
+                $this->data                  = $object['data'];
+
+
 
                 if ( $this->expiration_timestamp <= time() )
                 {// (Resource is expired)
