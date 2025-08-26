@@ -103,6 +103,14 @@ class Test
 
 
 
+            if ( file_put_contents( $file_path, json_encode( $object ) ) === false )
+            {// (Unable to write to the file)
+                // Returning the value
+                return false;
+            }
+
+
+
             // Returning the value
             return $object['expiration_timestamp'];
         });
