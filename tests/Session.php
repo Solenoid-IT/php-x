@@ -144,11 +144,6 @@ class Test
             // (Getting the value)
             $file_path = self::BASEDIR . '/' . $session->id;
 
-            if ( !file_exists( $file_path ) )
-            {// (File not found)
-                return false;
-            }
-
 
 
             // (Getting the value)
