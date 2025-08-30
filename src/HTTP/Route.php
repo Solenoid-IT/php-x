@@ -7,6 +7,7 @@ namespace Solenoid\X\HTTP;
 
 
 use \Solenoid\X\Target;
+use \Solenoid\X\Container;
 
 
 
@@ -211,7 +212,7 @@ class Route
 
 
 
-    public function run () : mixed
+    public function run (Container $container) : mixed
     {
         foreach ( $this->middlewares as $middleware )
         {// Processing each entry
@@ -234,8 +235,47 @@ class Route
         {// Value found
             if ( isset( $this->target->function ) )
             {// (Target is a function)
+                // (Setting the value)
+                $params = [];
+
+
+
+                // (Setting the value)
+                $i = -1;
+
+                foreach ( ( new \ReflectionFunction( $this->target->function ) )->getParameters() as $param )
+                {// Processing each entry
+                    // (Incrementing the value)
+                    $i += 1;
+
+
+
+                    // (Getting the value)
+                    $type = $param->getType();
+
+                    if ( $type && !$type->isBuiltin() )
+                    {// (Param is an instance of a class)
+                        // (Getting the value)
+                        $param = $container->make( $type->getName() );
+                    }
+                    else
+                    if ( in_array( $param->getName(), $this->params ) )
+                    {// (Param is a parameter)
+                        // (Getting the value)
+                        $param = $this->params[ $i ];
+                    }
+
+
+
+                    // (Appending the value)
+                    $params[] = $param;
+                }
+
+
+
                 // (Getting the value)
-                $result = call_user_func_array( $this->target->function, $this->params );
+                #$result = call_user_func_array( $this->target->function, $this->params );
+                $result = call_user_func_array( $this->target->function, $params );
             }
             else
             if ( isset( $this->target->class ) && isset( $this->target->fn ) )
