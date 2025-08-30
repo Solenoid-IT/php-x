@@ -235,52 +235,16 @@ class Route
         {// Value found
             if ( isset( $this->target->function ) )
             {// (Target is a function)
-                // (Setting the value)
-                $params = [];
-
-
-
-                // (Setting the value)
-                $i = -1;
-
-                foreach ( ( new \ReflectionFunction( $this->target->function ) )->getParameters() as $param )
-                {// Processing each entry
-                    // (Incrementing the value)
-                    $i += 1;
-
-
-
-                    // (Getting the value)
-                    $type = $param->getType();
-
-                    if ( $type->isBuiltin() )
-                    {// (Param is a primitive type)
-                        // (Getting the value)
-                        $param = $this->params[ $this->params ? ( $this->params[0] ? $i : $param->getName() ) : null ] ?? null;
-                    }
-                    else
-                    {// (Param is an instance of a class)
-                        // (Getting the value)
-                        $param = $container->make( $type->getName() );
-                    }
-
-
-
-                    // (Appending the value)
-                    $params[] = $param;
-                }
-
-
-
                 // (Getting the value)
                 #$result = call_user_func_array( $this->target->function, $this->params );
-                $result = call_user_func_array( $this->target->function, $params );
+                $result = $container->run_function( $this->target->function, $this->params );
             }
             else
             if ( isset( $this->target->class ) && isset( $this->target->fn ) )
             {// (Target is a class method)
                 // (Getting the value)
-                $result = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
+                #$result = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
+                $result = $container->run_class_fn( $this->target->class, $this->target->fn, $this->params );
             }
         }
 

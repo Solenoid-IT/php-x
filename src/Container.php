@@ -125,6 +125,178 @@ class Container
         // Returning the value
         return $reflection->newInstanceArgs( $dependencies );
     }
+
+
+
+    protected function resolve_params_by_function (callable $function, array $params = []) : array
+    {
+        // (Setting the value)
+        $args = [];
+
+
+
+        // (Setting the value)
+        $i = -1;
+
+        foreach ( ( new \ReflectionFunction( $function ) )->getParameters() as $param )
+        {// Processing each entry
+            // (Incrementing the value)
+            $i += 1;
+
+
+
+            // (Getting the value)
+            $type = $param->getType();
+
+            if ( $type->isBuiltin() )
+            {// (Param is a primitive type)
+                // (Getting the value)
+                $param = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+            }
+            else
+            {// (Param is an instance of a class)
+                // (Getting the value)
+                $param = $this->make( $type->getName() );
+            }
+
+
+
+            // (Appending the value)
+            $args[] = $param;
+        }
+
+
+
+        // Returning the value
+        return $args;
+    }
+
+    protected function resolve_params_by_class (string $class, array $params = []) : array
+    {
+        // (Setting the value)
+        $args = [];
+
+
+
+        // (Getting the value)
+        $constructor = ( new \ReflectionClass( $class ) )->getConstructor();
+
+        if ( !$constructor )
+        {// Value not found
+            // Returning the value
+            return [];
+        }
+
+
+
+        // (Setting the value)
+        $i = -1;
+
+        foreach ( $constructor->getParameters() as $param )
+        {// Processing each entry
+            // (Incrementing the value)
+            $i += 1;
+
+
+
+            // (Getting the value)
+            $type = $param->getType();
+
+            if ( $type->isBuiltin() )
+            {// (Param is a primitive type)
+                // (Getting the value)
+                $param = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+            }
+            else
+            {// (Param is an instance of a class)
+                // (Getting the value)
+                $param = $this->make( $type->getName() );
+            }
+
+
+
+            // (Appending the value)
+            $args[] = $param;
+        }
+
+
+
+        // Returning the value
+        return $args;
+    }
+
+    protected function resolve_params_by_class_fn (string $class, string $fn, array $params = []) : array
+    {
+        // (Setting the value)
+        $args = [];
+
+
+
+        // (Getting the value)
+        $method = ( new \ReflectionMethod( $class, $fn ) );
+
+        if ( !$method )
+        {// Value not found
+            // Returning the value
+            return [];
+        }
+
+
+
+        // (Setting the value)
+        $i = -1;
+
+        foreach ( $method->getParameters() as $param )
+        {// Processing each entry
+            // (Incrementing the value)
+            $i += 1;
+
+
+
+            // (Getting the value)
+            $type = $param->getType();
+
+            if ( $type->isBuiltin() )
+            {// (Param is a primitive type)
+                // (Getting the value)
+                $param = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+            }
+            else
+            {// (Param is an instance of a class)
+                // (Getting the value)
+                $param = $this->make( $type->getName() );
+            }
+
+
+
+            // (Appending the value)
+            $args[] = $param;
+        }
+
+
+
+        // Returning the value
+        return $args;
+    }
+
+
+
+    public function run_function (callable $function, array $params = []) : mixed
+    {
+        // Returning the value
+        return call_user_func_array( $function, $this->resolve_params_by_function( $function, $params ) );
+    }
+
+    public function run_class_fn (string $class, string $fn, array $params = []) : mixed
+    {
+        // (Getting the instance)
+        $instance = ( new \ReflectionClass( $class ) )->newInstanceArgs( $this->resolve_params_by_class( $class, $params ) );
+
+
+
+        // (Getting the value)
+        return call_user_func_array( [ $instance, $fn ], $this->resolve_params_by_class_fn( $class, $fn, $params ) );
+    }
 }
 
 
