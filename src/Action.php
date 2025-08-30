@@ -6,6 +6,10 @@ namespace Solenoid\X;
 
 
 
+use \Solenoid\X\Container;
+
+
+
 class Action
 {
     private bool $stopped = false;
@@ -73,15 +77,17 @@ class Action
 
 
 
-    public function run () : mixed
+    public function run (Container $container) : mixed
     {
         // (Getting the value)
-        $instance = new $this->class_path();
+        #$instance = new $this->class_path();
+        $instance = $container->make_instance( $this->class_path );
 
 
 
         // Returning the value
-        return $this->stopped ? null : $instance->{ $this->method }();
+        #return $this->stopped ? null : $instance->{ $this->method }();
+        return $this->stopped ? null : $container->run_instance_method( $instance, $this->method );
     }
 
 

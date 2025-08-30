@@ -297,6 +297,20 @@ class Container
         // (Getting the value)
         return call_user_func_array( [ $instance, $fn ], $this->resolve_params_by_class_fn( $class, $fn, $params ) );
     }
+
+
+
+    public function make_instance (string $class, array $params = []) : mixed
+    {
+        // (Getting the instance)
+        return ( new \ReflectionClass( $class ) )->newInstanceArgs( $this->resolve_params_by_class( $class, $params ) );
+    }
+
+    public function run_instance_method (mixed $instance, string $method, array $params = []) : mixed
+    {
+        // (Getting the value)
+        return call_user_func_array( [ $instance, $method ], $this->resolve_params_by_class_fn( get_class( $instance ), $method, $params ) );
+    }
 }
 
 
