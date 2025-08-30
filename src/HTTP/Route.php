@@ -256,7 +256,7 @@ class Route
                     if ( $type->isBuiltin() )
                     {// (Param is a primitive type)
                         // (Getting the value)
-                        $param = $this->params[ $this->params ? ( is_string( $this->params[0] ) ? $param->getName() : $i ) : null ] ?? null;
+                        $param = $this->params[ $this->params ? ( $this->params[0] ? $i : $param->getName() ) : null ] ?? null;
                     }
                     else
                     {// (Param is an instance of a class)
