@@ -6,6 +6,10 @@ namespace Solenoid\X\CLI;
 
 
 
+use \Solenoid\X\Container;
+
+
+
 class Command
 {
     public readonly string $file_path;
@@ -43,10 +47,11 @@ class Command
 
 
 
-    public function run () : mixed
+    public function run (Container $container) : mixed
     {
         // (Calling the function)
-        return call_user_func_array( [ new ($this->class)(), $this->method ], $this->args );
+        #return call_user_func_array( [ new ($this->class)(), $this->method ], $this->args );
+        return $container->run_class_fn( $this->class, $this->method, $this->args );
     }
 
 
