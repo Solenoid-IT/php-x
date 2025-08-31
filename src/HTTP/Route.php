@@ -217,9 +217,9 @@ class Route
         foreach ( $this->middlewares as $middleware )
         {// Processing each entry
             // (Getting the value)
-            $middleware = new $middleware();
+            $middleware = $container->make_instance( $middleware );
 
-            if ( $middleware->run() === false )
+            if ( $container->run_instance_method( $middleware, 'run' ) === false )
             {// (Middleware has not been passed)
                 // (Getting the value)
                 $this->stop = $middleware;
