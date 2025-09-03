@@ -49,10 +49,33 @@ class App
 
 
 
-    public function register_error (Error $error) : self
+    public function register_errors (array $errors) : self
     {
-        // (Getting the value)
-        $this->errors[ $error->code ] = $error;
+        // (Setting the value)
+        $this->errors = [];
+
+        foreach ( $errors as $record )
+        {// Processing each entry
+            // (Getting the value)
+            $error = new Error( $record['code'] );
+
+            if ( isset( $record['name'] ) )
+            {// Value found
+                // (Setting the name)
+                $error->set_name( $record['name'] );
+            }
+
+            if ( isset( $record['http_code'] ) )
+            {// Value found
+                // (Setting the HTTP code)
+                $error->set_http_code( $record['http_code'] );
+            }
+
+
+
+            // (Getting the value)
+            $this->errors[ $error->code ] = $error;
+        }
 
 
 
@@ -68,17 +91,23 @@ class App
         if ( !$error )
         {// Value not found
             // Throwing an exception
-            throw new \Exception( "Error code $code is not registered" );
+            throw new \Exception( "Error code {$code} not found" );
         }
 
 
 
         // (Getting the value)
-        $new_error = new Error( $error->code, $error->name, $description );
+        $new_error = new Error( $code, $description );
 
-        if ( $error->http_code )
+        if ( isset( $error->name ) )
         {// Value found
-            // (Getting the value)
+            // (Setting the name)
+            $new_error->set_name( $error->name );
+        }
+
+        if ( isset( $error->http_code ) )
+        {// Value found
+            // (Setting the HTTP code)
             $new_error->set_http_code( $error->http_code );
         }
 

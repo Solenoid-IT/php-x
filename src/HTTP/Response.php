@@ -6,7 +6,9 @@ namespace Solenoid\X\HTTP;
 
 
 
-use Solenoid\X\CSV;
+use \Solenoid\X\CSV;
+use \Solenoid\X\App;
+use \Solenoid\X\Error;
 
 
 
@@ -16,6 +18,9 @@ class Response
     private array $headers;
     private       $body;
 
+    private App   $app;
+    private Error $error;
+
 
 
     public function __construct (int $code = 200, array $headers = [], string|callable $body = '')
@@ -24,6 +29,19 @@ class Response
         $this->code    = $code;
         $this->headers = $headers;
         $this->body    = is_string( $body ) ? $body : function () use (&$body) { echo $body; };        
+    }
+
+
+
+    public function set_app (App $app) : self
+    {
+        // (Getting the value)
+        $this->app = $app;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
@@ -135,6 +153,19 @@ class Response
 
 
 
+    public function error (int $code, string $description = '') : self
+    {
+        // (Getting the value)
+        $this->error = $this->app->spawn_error( $code, $description );
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     public function set_code (int $code) : self
     {
         // (Getting the value)
@@ -187,6 +218,25 @@ class Response
 
     public function send () : self
     {
+        if ( isset( $this->error ) )
+        {// Value found
+            // (Getting the value)
+            $new_error = new Error( $this->error->code, $this->error->description );
+
+            if ( isset( $this->error->name ) )
+            {// Value found
+                // (Setting the name)
+                $new_error->set_name( $this->error->name );
+            }
+
+
+
+            // (Preparing the response)
+            $this->json( isset( $new_error->http_code ) ? $new_error->http_code : 200, $new_error );
+        }
+
+
+
         // (Setting the code)
         http_response_code( $this->code );
 
