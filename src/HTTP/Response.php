@@ -232,7 +232,7 @@ class Response
 
 
             // (Preparing the response)
-            $this->json( isset( $new_error->http_code ) ? $new_error->http_code : 200, $new_error );
+            $this->json( isset( $this->error->http_code ) ? $this->error->http_code : 200, $new_error );
         }
 
 
