@@ -30,7 +30,7 @@ class App
 
 
 
-    public function ip (string $fqdn)
+    public function ip (string $fqdn) : string|null
     {
         // (Getting the value)
         $ip = dns_get_record( $fqdn, DNS_A );
@@ -60,21 +60,26 @@ class App
         return $this;
     }
 
-    public function error (int $code, string $description = '') : Error|null
+    public function spawn_error (int $code, string $description = '') : Error
     {
         // (Getting the value)
         $error = $this->errors[ $code ] ?? null;
 
-        if ( $error )
+        if ( !$error )
+        {// Value not found
+            // Throwing an exception
+            throw new \Exception( "Error code $code is not registered" );
+        }
+
+
+
+        // (Getting the value)
+        $new_error = new Error( $error->code, $error->name, $description );
+
+        if ( $error->http_code )
         {// Value found
             // (Getting the value)
-            $new_error = new Error( $error->code, $error->name, $description );
-
-            if ( $error->http_code )
-            {// Value found
-                // (Getting the value)
-                $new_error->set_http_code( $error->http_code );
-            }
+            $new_error->set_http_code( $error->http_code );
         }
 
 
