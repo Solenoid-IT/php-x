@@ -6,8 +6,16 @@ namespace Solenoid\X;
 
 
 
+use \Solenoid\X\Error;
+
+
+
 class App
 {
+    private array $errors = [];
+
+
+
     public readonly string $mode;
     public readonly string $basedir;
 
@@ -37,6 +45,42 @@ class App
 
         // Returning the value
         return $ip[0]['ip'];
+    }
+
+
+
+    public function register_error (Error $error) : self
+    {
+        // (Getting the value)
+        $this->errors[ $error->code ] = $error;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    public function error (int $code, string $description = '') : Error|null
+    {
+        // (Getting the value)
+        $error = $this->errors[ $code ] ?? null;
+
+        if ( $error )
+        {// Value found
+            // (Getting the value)
+            $new_error = new Error( $error->code, $error->name, $description );
+
+            if ( $error->http_code )
+            {// Value found
+                // (Getting the value)
+                $new_error->set_http_code( $error->http_code );
+            }
+        }
+
+
+
+        // Returning the value
+        return $new_error;
     }
 }
 

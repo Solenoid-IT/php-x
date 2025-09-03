@@ -8,13 +8,11 @@ namespace Solenoid\X;
 
 class Error
 {
-    private static array $map = [];
-
-
-
     public readonly int    $code;
     public readonly string $name;
     public readonly string $description;
+
+    public readonly int    $http_code;
 
 
 
@@ -28,16 +26,15 @@ class Error
 
 
 
-    public static function get (int $code) : self|null
-    {
-        // Returning the value
-        return self::$map[ $code ] ?? null;
-    }
-
-    public static function register (self $error) : void
+    public function set_http_code (int $code) : self
     {
         // (Getting the value)
-        self::$map[ $error->code ] = $error;
+        $this->http_code = $code;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
