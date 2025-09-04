@@ -168,6 +168,38 @@ class Request
         return json_decode( $this->body, $associative );
     }
 
+    public function multipart () : array
+    {
+        // (Setting the value)
+        $results = [];
+
+
+
+        // (Getting the value)
+        $results['object'] = $_POST;
+
+
+
+        foreach ( $_FILES['files']['name'] as $index => $file_name )
+        {
+            // (Getting the value)
+            $results['files'][ $index ] =
+            [
+                'name'          => $file_name,
+                'type'          => $_FILES['files']['type'][ $index ],
+                'tmp_file_path' => $_FILES['files']['tmp_name'][ $index ],
+                'size'          => $_FILES['files']['size'][ $index ],
+                'error'         => $_FILES['files']['error'][ $index ]
+            ]
+            ;
+        }
+
+
+
+        // Returning the value
+        return $results;
+    }
+
 
 
     public function __toString () : string
