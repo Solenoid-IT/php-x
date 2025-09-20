@@ -15,18 +15,7 @@ class TempFile
     public function __construct (?string $folder_path = null, string $prefix = 'tmp_')
     {
         // (Getting the value)
-        $path = tempnam( $folder_path ?? sys_get_temp_dir(), $prefix );
-
-        if ( !$path )
-        {// (Unable to create the temp file)
-            // Throwing an exception
-            throw new \Exception( 'Unable to create the temp file' );
-        }
-
-
-
-        // (Getting the value)
-        $this->path = $path;
+        $this->path = $folder_path ?? sys_get_temp_dir() . '/' . $prefix . bin2hex( random_bytes( 32 / 2 ) );
     }
 
 
@@ -110,12 +99,26 @@ class TempFile
         return $this;
     }
 
+    public function delete () : self|false
+    {
+        if ( !unlink( $this->path ) )
+        {// (Unable to remove the file)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // Returning the value
+        return $this;
+    }
+
 
 
     public function __destruct ()
     {
-        // (Removing the file)
-        unlink( $this->path );
+        // (Deleting the file)
+        $this->delete();
     }
 
 
