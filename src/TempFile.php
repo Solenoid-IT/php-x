@@ -8,14 +8,27 @@ namespace Solenoid\X;
 
 class TempFile
 {
+    private bool $auto_remove;
+
+
+
     public readonly string $path;
 
 
 
-    public function __construct (?string $folder_path = null, string $prefix = 'tmp_')
+    public function __construct (?string $folder_path = null, string $prefix = 'tmp_', bool $auto_remove = true)
     {
-        // (Getting the value)
-        $this->path = $folder_path ?? sys_get_temp_dir() . '/' . $prefix . bin2hex( random_bytes( 32 / 2 ) );
+        // (Getting the values)
+        $this->path        = $folder_path ?? sys_get_temp_dir() . '/' . $prefix . bin2hex( random_bytes( 32 / 2 ) );
+        $this->auto_remove = $auto_remove;
+
+
+
+        if ( !touch( $this->path ) )
+        {// (Unable to create the file)
+            // Throwing an exception
+            throw new \Exception( "Unable to create the file '$this->path'" );
+        }
     }
 
 
@@ -99,7 +112,7 @@ class TempFile
         return $this;
     }
 
-    public function delete () : self|false
+    public function remove () : self|false
     {
         if ( !unlink( $this->path ) )
         {// (Unable to remove the file)
@@ -117,8 +130,11 @@ class TempFile
 
     public function __destruct ()
     {
-        // (Deleting the file)
-        $this->delete();
+        if ( $this->auto_remove )
+        {// Value is true
+            // (Removing the file)
+            $this->remove();
+        }
     }
 
 
