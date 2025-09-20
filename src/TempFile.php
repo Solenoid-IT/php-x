@@ -31,7 +31,7 @@ class TempFile
 
 
 
-    public function put (string $src_path = 'php://input') : bool
+    public function put (string $src_path = 'php://input') : self|false
     {
         // (Opening the input stream)
         $input_stream = fopen( $src_path, 'rb' );
@@ -40,6 +40,9 @@ class TempFile
         {// (Unable to open the input stream)
             // Throwing an exception
             throw new \Exception( 'Unable to open the input stream' );
+
+            // Returning the value
+            return false;
         }
 
 
@@ -54,6 +57,9 @@ class TempFile
 
             // Throwing an exception
             throw new \Exception( 'Unable to open the output stream' );
+
+            // Returning the value
+            return false;
         }
 
 
@@ -68,6 +74,9 @@ class TempFile
 
             // Throwing an exception
             throw new \Exception( 'Unable to copy the content' );
+
+            // Returning the value
+            return false;
         }
 
 
@@ -79,6 +88,9 @@ class TempFile
 
             // Throwing an exception
             throw new \Exception( 'Unable to close the input stream' );
+
+            // Returning the value
+            return false;
         }
 
 
@@ -87,12 +99,15 @@ class TempFile
         {// (Unable to close the output stream)
             // Throwing an exception
             throw new \Exception( 'Unable to close the output stream' );
+
+            // Returning the value
+            return false;
         }
 
 
 
         // Returning the value
-        return true;
+        return $this;
     }
 
 
