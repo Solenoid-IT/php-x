@@ -24,6 +24,15 @@ class TempFile
 
 
 
+        // (Getting the value)
+        $dir = dirname( $this->path );
+
+        if ( !mkdir( $dir, 0777, true ) )
+        {// (Unable to create the folder)
+            // Throwing an exception
+            throw new \Exception( "Unable to create the folder '$dir'" );
+        }
+
         if ( !touch( $this->path ) )
         {// (Unable to create the file)
             // Throwing an exception
