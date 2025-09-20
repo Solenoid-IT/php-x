@@ -19,7 +19,7 @@ class TempFile
     public function __construct (?string $folder_path = null, string $prefix = 'tmp_', bool $auto_remove = true)
     {
         // (Getting the values)
-        $this->path        = $folder_path ?? sys_get_temp_dir() . '/' . $prefix . bin2hex( random_bytes( 32 / 2 ) );
+        $this->path        = ( $folder_path ?? sys_get_temp_dir() ) . '/' . $prefix . bin2hex( random_bytes( 32 / 2 ) );
         $this->auto_remove = $auto_remove;
 
 
