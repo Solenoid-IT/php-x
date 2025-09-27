@@ -80,7 +80,7 @@ class TempFile
 
 
 
-        if ( !stream_copy_to_stream( $input_stream, $output_stream ) )
+        if ( stream_copy_to_stream( $input_stream, $output_stream ) === false )
         {// (Unable to copy the content)
             // (Closing the input stream)
             fclose( $input_stream );
