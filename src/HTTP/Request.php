@@ -199,11 +199,11 @@ class Request
                 // (Getting the value)
                 $r =
                 [
-                    'local_path' => $v['full_path'],
-                    'tmp_path'   => $v['tmp_name'],
-                    'size'       => $v['size'],
-                    'type'       => $v['type'],
-                    'error'      => $v['error']
+                    'remote_path' => $object['full_path'][ $i ],
+                    'tmp_path'    => $object['tmp_name'][ $i ],
+                    'size'        => $object['size'][ $i ],
+                    'type'        => $object['type'][ $i ],
+                    'error'       => $object['error'][ $i ]
                 ]
                 ;
 
