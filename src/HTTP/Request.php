@@ -170,8 +170,52 @@ class Request
 
     public function multipart (?array $options = null) : array
     {
+        /*
+
         // Returning the value
         return request_parse_body( $options );
+
+        */
+
+
+
+        // (Setting the value)
+        $result = [];
+
+
+
+        // (Getting the value)
+        $result[0] = $_POST;
+
+
+
+        // (Setting the value)
+        $result[1] = [];
+
+        foreach ( $_FILES as $id => $object )
+        {// Processing each entry
+            foreach ( $object['tmp_name'] as $i => $v )
+            {// Processing each entry
+                // (Getting the value)
+                $r =
+                [
+                    'local_path' => $v['full_path'],
+                    'tmp_path'   => $v['tmp_name'],
+                    'size'       => $v['size'],
+                    'type'       => $v['type'],
+                    'error'      => $v['error']
+                ]
+                ;
+
+                // (Appending the value)
+                $result[1][ $id ][] = $r;
+            }
+        }
+
+
+
+        // Returning the value
+        return $result;
     }
 
 
