@@ -109,6 +109,14 @@ class URL
 
 
 
+    public function get_fullpath () : string
+    {
+        // Returning the value
+        return $this->path . ( $this->query ? ( '?' . $this->query ) : '' );
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
