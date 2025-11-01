@@ -72,6 +72,19 @@ class Response
 
 
 
+    public function stream_body (callable $function) : self
+    {
+        // (Getting the value)
+        $this->body = $function;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     public function text (int $code = 200, string $content) : self
     {
         // (Getting the value)
