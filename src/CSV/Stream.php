@@ -16,7 +16,8 @@ class Stream
 
 
 
-    public int $length = 0;
+    public int  $length = 0;
+    public bool $closed = false;
 
 
 
@@ -84,10 +85,18 @@ class Stream
 
 
 
-    public function close () : self
+    public function close () : self|false
     {
-        // (Closing the stream)
-        fclose( $this->output_stream );
+        if ( !fclose( $this->output_stream ) )
+        {// (Unable to close the stream)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // (Setting the value)
+        $this->closed = true;
 
 
 
@@ -99,6 +108,10 @@ class Stream
 
     public function __destruct ()
     {
+        if ( $this->closed ) return;
+
+
+
         // (Closing the stream)
         $this->close();
     }
