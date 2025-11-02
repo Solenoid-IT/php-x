@@ -16,6 +16,10 @@ class Stream
 
 
 
+    public int $length = 0;
+
+
+
     public readonly CSV    $csv;
 
     public readonly string $filename;
@@ -58,11 +62,19 @@ class Stream
 
     public function send (array $line = []) : self|false
     {
-        if ( fputcsv( $this->output_stream, $line, $this->csv->separator, $this->csv->enclosure, $this->csv->escape, $this->csv->eol ) === false )
+        // (Getting the value)
+        $length = fputcsv( $this->output_stream, $line, $this->csv->separator, $this->csv->enclosure, $this->csv->escape, $this->csv->eol );
+
+        if ( $length === false )
         {// (Unable to write to the stream)
             // Returning the value
             return false;
         }
+
+
+
+        // (Incrementing the value)
+        $this->length += $length;
 
 
 
