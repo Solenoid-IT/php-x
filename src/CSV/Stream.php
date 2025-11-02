@@ -100,7 +100,7 @@ class Stream
     public function __destruct ()
     {
         // (Closing the stream)
-        fclose( $this->output_stream );
+        $this->close();
     }
 }
 
