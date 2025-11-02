@@ -172,6 +172,14 @@ class ReadableStream
 
 
 
+    public function get_resource ()
+    {
+        // Returning the value
+        return $this->stream;
+    }
+
+
+
     public function __toString () : string
     {
         // (Opening the stream)
