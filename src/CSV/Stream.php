@@ -79,6 +79,11 @@ class Stream
 
 
 
+        // (Flushing the output)
+        flush();
+
+
+
         // Returning the value
         return $this;
     }
