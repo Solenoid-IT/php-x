@@ -2,7 +2,7 @@
 
 
 
-namespace Solenoid\X;
+namespace Solenoid\X\CSV;
 
 
 

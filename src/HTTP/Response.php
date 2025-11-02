@@ -6,7 +6,7 @@ namespace Solenoid\X\HTTP;
 
 
 
-use \Solenoid\X\CSV;
+use \Solenoid\X\CSV\CSV;
 use \Solenoid\X\App;
 use \Solenoid\X\Error;
 
