@@ -6,6 +6,10 @@ namespace Solenoid\X;
 
 
 
+use Solenoid\X\Stream\ReadableStream;
+
+
+
 class TempFile
 {
     private bool $auto_remove;
@@ -125,6 +129,14 @@ class TempFile
         // Returning the value
         return $this;
     }
+
+    public function put_stream (ReadableStream $stream) : self|false
+    {
+        // Returning the value
+        return stream_copy_to_stream( $stream->get_resource(), $this->path );
+    }
+
+
 
     public function remove () : self|false
     {
