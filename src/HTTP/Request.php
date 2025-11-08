@@ -162,6 +162,12 @@ class Request
 
 
 
+    public function text () : string
+    {
+        // Returning the value
+        return $this->body->read();
+    }
+
     public function json (bool $associative = false) : mixed
     {
         // Returning the value
