@@ -6,6 +6,7 @@ namespace Solenoid\X\HTTP;
 
 
 
+use Solenoid\X\JBIN;
 use Solenoid\X\Stream\ReadableStream;
 
 
@@ -187,6 +188,12 @@ class Request
     {
         // Returning the value
         return json_decode( $this->body, $associative );
+    }
+
+    public function jbin () : JBIN
+    {
+        // Returning the value
+        return JBIN::get();
     }
 
     public function multipart (?array $options = null) : array

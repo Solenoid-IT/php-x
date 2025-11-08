@@ -64,6 +64,19 @@ class ReadableStream
 
 
 
+    public function set_stream ($stream) : self
+    {
+        // (Getting the value)
+        $this->stream = $stream;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     public function open () : self|false
     {
         switch ( $this->src_type )
