@@ -132,8 +132,35 @@ class TempFile
 
     public function put_stream (ReadableStream $stream) : self|false
     {
+        // (Getting the value)
+        $output_stream = fopen( $this->path, 'wb' );
+
+        if ( !$output_stream )
+        {// (Unable to open the stream)
+            // Returning the value
+            return false;
+        }
+
+
+
+        if ( stream_copy_to_stream( $stream->get_resource(), $output_stream ) === false )
+        {// (Unable to copy the content)
+            // Returning the value
+            return false;
+        }
+
+
+
+        if ( !fclose( $output_stream ) )
+        {// (Unable to close the stream)
+            // Returning the value
+            return false;
+        }
+
+
+
         // Returning the value
-        return stream_copy_to_stream( $stream->get_resource(), $this->path );
+        return $this;
     }
 
 
