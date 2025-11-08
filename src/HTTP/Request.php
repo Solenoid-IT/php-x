@@ -164,8 +164,23 @@ class Request
 
     public function text () : string
     {
+        // (Opening the stream)
+        $this->body->open();
+
+
+
+        // (Getting the value)
+        $buffer = $this->body->read();
+
+
+
+        // (Closing the stream)
+        $this->body->close();
+
+
+
         // Returning the value
-        return $this->body->read();
+        return $buffer;
     }
 
     public function json (bool $associative = false) : mixed
