@@ -111,13 +111,31 @@ class JBIN
 
 
 
-        // (Closing the stream)
-        fclose( $input_stream );
+        if ( !fclose( $input_stream ) )
+        {// (Unable to close the stream)
+            // (Unable to close the stream)
+            return false;
+        }
 
 
 
         // Returning the value
         return false;
+    }
+
+
+
+    public function __destruct ()
+    {
+        try
+        {
+            // (Closing the stream)
+            $this->binary->close();
+        }
+        catch (\Throwable $e)
+        {
+            // (Doing nothing)
+        }
     }
 }
 
