@@ -40,6 +40,14 @@ class Time
 
 
 
+    public function format (string $format) : string
+    {
+        // (Getting the value)
+        return ( new \DateTime( $this->value, new \DateTimeZone( $this->timezone ) ) )->format( $format );
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
