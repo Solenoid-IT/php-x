@@ -42,6 +42,13 @@ class Time
 
     public function format (string $format) : string
     {
+        if ( $format === ':iso-8601' ) $format = 'c';
+        if ( $format === ':mysql' ) $format = 'Y-m-d H:i:s';
+        if ( $format === ':date' ) $format = 'Y-m-d';
+        if ( $format === ':time' ) $format = 'H:i:s';
+
+
+
         // (Getting the value)
         return ( new \DateTime( $this->value, new \DateTimeZone( $this->timezone ) ) )->format( $format );
     }
