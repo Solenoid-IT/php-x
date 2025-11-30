@@ -120,7 +120,7 @@ class App
 
 
 
-    public function get_conn_profile (string $type, string $id) : ?array
+    public function get_conn_profile (string $type, string $id) : array|null
     {
         // Returning the value
         return $this->conn_profiles[ $type ][ $id ];
