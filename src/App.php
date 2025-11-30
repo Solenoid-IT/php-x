@@ -12,7 +12,8 @@ use \Solenoid\X\Error;
 
 class App
 {
-    private array $errors = [];
+    private array $errors        = [];
+    private array $conn_profiles = [];
 
 
 
@@ -119,9 +120,21 @@ class App
 
 
 
-    public function register_gate ()
+    public function get_conn_profile (string $type, string $id) : ?array
     {
-        
+        // Returning the value
+        return $this->conn_profiles[ $type ][ $id ];
+    }
+
+    public function set_conn_profiles (string $type, array $profiles) : self
+    {
+        // (Getting the value)
+        $this->conn_profiles[ $type ] = $profiles;
+
+
+
+        // Returning the value
+        return $this;
     }
 }
 
