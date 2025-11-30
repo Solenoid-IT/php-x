@@ -6,8 +6,11 @@ namespace Solenoid\X\HTTP;
 
 
 
-use Solenoid\X\JBIN;
-use Solenoid\X\Stream\ReadableStream;
+use \Solenoid\X\JBIN;
+use \Solenoid\X\Stream\ReadableStream;
+
+use \Solenoid\X\HTTP\Client\Sender;
+use \Solenoid\X\HTTP\Client\Result;
 
 
 
@@ -244,6 +247,14 @@ class Request
 
         // Returning the value
         return $result;
+    }
+
+
+
+    public function send (string $url, int $conn_timeout = 60, int $exec_timeout = 60, int $max_redirs = 10) : Result|false
+    {
+        // Returning the value
+        return ( new Sender( $conn_timeout, $exec_timeout, $max_redirs ) )->send( $this, $url );
     }
 
 
