@@ -35,6 +35,10 @@ class URLSearchParams
 
 
 
+        if ( $this->query === '' ) return [];
+
+
+
         foreach ( explode( '&', preg_replace( '/^\?/', '', $this->query ) ) as $param )
         {
             // (Getting the values)

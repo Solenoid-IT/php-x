@@ -116,6 +116,13 @@ class App
         // Returning the value
         return $new_error;
     }
+
+
+
+    public function register_gate ()
+    {
+        
+    }
 }
 
 
