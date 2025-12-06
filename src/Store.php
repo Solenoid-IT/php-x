@@ -8,7 +8,7 @@ namespace Solenoid\X;
 
 class Store
 {
-    private static array $items = [];
+    private array $items = [];
 
 
 
@@ -27,13 +27,13 @@ class Store
     public function get (string $key) : mixed
     {
         // (Getting the value)
-        return self::$items[ $this->name ][ $key ] ?? null;
+        return $this->items[ $this->name ][ $key ] ?? null;
     }
 
     public function set (string $key, mixed $value) : self
     {
         // (Getting the value)
-        self::$items[ $this->name ][ $key ] = $value;
+        $this->items[ $this->name ][ $key ] = $value;
 
 
 
