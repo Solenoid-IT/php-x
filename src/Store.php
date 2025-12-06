@@ -12,28 +12,16 @@ class Store
 
 
 
-    public readonly string $name;
-
-
-
-    public function __construct (string $name)
-    {
-        // (Getting the value)
-        $this->name = $name;
-    }
-
-
-
     public function get (string $key) : mixed
     {
         // (Getting the value)
-        return $this->items[ $this->name ][ $key ] ?? null;
+        return $this->items[ $key ] ?? null;
     }
 
     public function set (string $key, mixed $value) : self
     {
         // (Getting the value)
-        $this->items[ $this->name ][ $key ] = $value;
+        $this->items[ $key ] = $value;
 
 
 
