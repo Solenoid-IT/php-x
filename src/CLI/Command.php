@@ -7,6 +7,7 @@ namespace Solenoid\X\CLI;
 
 
 use \Solenoid\X\Container;
+use \Solenoid\X\Stream\ReadableStream;
 
 
 
@@ -50,8 +51,59 @@ class Command
     public function run (Container $container) : mixed
     {
         // (Calling the function)
-        #return call_user_func_array( [ new ($this->class)(), $this->method ], $this->args );
         return $container->run_class_fn( $this->class, $this->method, $this->args );
+    }
+
+
+
+    public function stdin () : ReadableStream
+    {
+        // Returning the value
+        return ( new ReadableStream( ReadableStream::TYPE_FILE ) )->set_file( 'php://stdin' );
+    }
+
+
+
+    public function buffer () : string|false
+    {
+        // (Getting the value)
+        $stream = $this->stdin();
+
+        if ( $stream->open() === false )
+        {// (Unable to open the stream)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // (Getting the value)
+        $buffer = $stream->read();
+
+        if ( $buffer === false )
+        {// (Unable to read the stream)
+            // Returning the value
+            return false;
+        }
+
+
+
+        if ( $stream->close() === false )
+        {// (Unable to close the stream)
+            // Returning the value
+            return false;
+        }
+
+
+
+        // Returning the value
+        return $buffer;
+    }
+
+    public function json (bool $associative = false) : array|false
+    {
+        // Returning the value
+        return json_decode( $this->buffer(), $associative );
     }
 
 
