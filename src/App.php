@@ -12,6 +12,8 @@ use \Solenoid\X\Error;
 
 class App
 {
+    private Container $container;
+
     private array $errors        = [];
     private array $conn_profiles = [];
 
@@ -27,6 +29,25 @@ class App
         // (Getting the values)
         $this->mode    = isset( $_SERVER['REQUEST_METHOD'] ) ? 'http' : 'cli';
         $this->basedir = $basedir;
+    }
+
+
+
+    public function get_container () : Container
+    {
+        // Returning the value
+        return $this->container;
+    }
+
+    public function set_container (Container $container) : self
+    {
+        // (Getting the value)
+        $this->container = $container;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
