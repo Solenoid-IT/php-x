@@ -259,18 +259,24 @@ class Container
             if ( $type->isBuiltin() )
             {// (Param is a primitive type)
                 // (Getting the value)
-                $param = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+                $param_value = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+
+                if ( $param_value === null && $param->isDefaultValueAvailable() )
+                {// (Default value is available)
+                    // (Getting the value)
+                    $param_value = $param->getDefaultValue();
+                }
             }
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param = $this->make( $type->getName() );
+                $param_value = $this->make( $type->getName() );
             }
 
 
 
             // (Appending the value)
-            $args[] = $param;
+            $args[] = $param_value;
         }
 
 
