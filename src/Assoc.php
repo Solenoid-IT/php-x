@@ -8,7 +8,7 @@ namespace Solenoid\X;
 
 class Assoc
 {
-    private array  $assoc;
+    private array  $value;
     private string $separator;
 
 
@@ -46,10 +46,10 @@ class Assoc
 
 
 
-    public function __construct (array $assoc = [], string $separator = '.')
+    public function __construct (array $value = [], string $separator = '.')
     {
         // (Getting the values)
-        $this->assoc     = $assoc;
+        $this->value     = $value;
         $this->separator = $separator;
     }
 
@@ -58,7 +58,7 @@ class Assoc
     public function expand () : array
     {
         // Returning the value
-        return self::_expand( $this->assoc, $this->separator );
+        return self::_expand( $this->value, $this->separator );
     }
 
     public function compress () : array
@@ -69,7 +69,7 @@ class Assoc
         
 
         // (Getting the value)
-        $rii = new \RecursiveIteratorIterator( new \RecursiveArrayIterator( $this->assoc ) );
+        $rii = new \RecursiveIteratorIterator( new \RecursiveArrayIterator( $this->value ) );
 
         foreach ( $rii as $leaf_value )
         {// Processing each entry
