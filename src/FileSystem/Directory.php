@@ -40,6 +40,8 @@ class Directory
             // (Getting the value)
             $path = substr( $file->getPathname(), strlen( $this->path ) );
 
+            if ( in_array( basename( $path ), [ '.', '..' ] ) ) continue;
+
             if ( $file->isDir() )
             {// (Entry is a Directory)
                 // (Appending the value)
