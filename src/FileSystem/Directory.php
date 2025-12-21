@@ -38,7 +38,7 @@ class Directory
         foreach ( $rii as $file )
         {// Processing each entry
             // (Getting the value)
-            $path = $file->getPathname();
+            $path = substr( $file->getPathname(), strlen( $this->path ) );
 
             if ( $file->isDir() )
             {// (Entry is a Directory)
