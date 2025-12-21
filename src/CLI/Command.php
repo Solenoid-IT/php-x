@@ -25,14 +25,14 @@ class Command
         if ( count( $argv ) < 2 )
         {// (There are not enough arguments)
             // (Closing the process)
-            die( "Usage: php {$argv[0]} {class} ...{args}\n" );
+            die( "Usage: php {$argv[0]} {classpath.method} ...{args}\n" );
         }
 
 
 
         // (Getting the values)
         $this->file_path       = $argv[0];
-        $class                 = $argv[1];
+        [ $class, $method ]    = explode( '.', $argv[1], 2 );
         $this->args            = array_slice( $argv, 2 );
 
 
@@ -42,8 +42,8 @@ class Command
 
 
 
-        // (Setting the value)
-        $this->method = 'run';
+        // (Getting the value)
+        $this->method = $method ?? 'run';
     }
 
 
