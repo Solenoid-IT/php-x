@@ -9,6 +9,8 @@ namespace Solenoid\X\HTTP;
 use \Solenoid\X\Target;
 use \Solenoid\X\Container;
 
+use \Solenoid\X\Validation\Validator;
+
 
 
 class Route
@@ -242,6 +244,35 @@ class Route
             else
             if ( isset( $this->target->class ) && isset( $this->target->fn ) )
             {// (Target is a class method)
+                /* ahcid to implementt
+
+                // (Getting the value)
+                $validator = new Validator( $this->target->class, $this->target->fn );
+
+
+
+                // (Getting the value)
+                $error = $validator->check_input( 'ahcid' );
+
+                if ( $error )
+                {// (Validation failed)
+                    // ahcid
+                }
+
+
+
+                // (Getting the value)
+                $errors = $validator->check_input_params( [ 'a' => 0, 'b' => false ] );
+
+                if ( $errors )
+                {// (Validation failed)
+                    // ahcid
+                }
+
+                */
+
+
+
                 // (Getting the value)
                 #$result = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
                 $result = $container->run_class_fn( $this->target->class, $this->target->fn, $this->params );
