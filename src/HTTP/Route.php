@@ -9,7 +9,7 @@ namespace Solenoid\X\HTTP;
 use \Solenoid\X\Target;
 use \Solenoid\X\Container;
 
-use \Solenoid\X\Validation\Validator;
+use \Solenoid\X\Input\Validator;
 
 
 
@@ -244,37 +244,35 @@ class Route
             else
             if ( isset( $this->target->class ) && isset( $this->target->fn ) )
             {// (Target is a class method)
-                /* ahcid to implementt
-
                 // (Getting the value)
                 $validator = new Validator( $this->target->class, $this->target->fn );
 
+                if ( $validator->available() )
+                {// Value is true
+                    // (Getting the value)
+                    $request = $container->make( 'request' );
 
 
-                // (Getting the value)
-                $error = $validator->check_input( 'ahcid' );
 
-                if ( $error )
-                {// (Validation failed)
-                    // ahcid
+                    // (Getting the value)
+                    $response = $container->make( 'response' );
+
+
+
+                    // (Getting the value)
+                    $error = $validator->check( $request->buffer() );
+
+                    if ( $error )
+                    {// (Check failed)
+                        // Returning the value
+                        return $response->text( 400, $error );
+                    }
+                    else
+                    {// (Check passed)
+                        // Returning the value
+                        #return $response->text( 200, $validator->get_value() );
+                    }
                 }
-
-
-
-                // (Getting the value)
-                $errors = $validator->check_input_params( [ 'a' => 0, 'b' => false ] );
-
-                if ( $errors )
-                {// (Validation failed)
-                    // ahcid
-                }
-
-                */
-
-
-
-                // (Getting the value)
-                #$request = $container->make( 'request' );
 
 
 
