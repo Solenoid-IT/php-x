@@ -17,15 +17,17 @@ class Input
 
 
 
+    public readonly string $name;
     public readonly string $type;
     public readonly bool   $required;
     public readonly string $description;
 
 
 
-    public function __construct (string $type, bool $required = true, string $description = '')
+    public function __construct (string $name, string $type, bool $required = true, string $description = '')
     {
         // (Getting the values)
+        $this->name        = $name;
         $this->type        = $type;
         $this->required    = $required;
         $this->description = $description;
@@ -65,7 +67,7 @@ class Input
                 break;
 
                 case 'bool':
-                    if ( !is_bool( $value ) /*&& !in_array( $value, [ 0, 1, '0', '1', 'true', 'false' ] )*/ )
+                    if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
                     {// (Validation failed)
                         // (Setting the value)
                         $this->error = 'Input must be a boolean';

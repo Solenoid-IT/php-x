@@ -274,6 +274,11 @@ class Route
 
 
                 // (Getting the value)
+                #$request = $container->make( 'request' );
+
+
+
+                // (Getting the value)
                 #$result = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
                 $result = $container->run_class_fn( $this->target->class, $this->target->fn, $this->params );
             }

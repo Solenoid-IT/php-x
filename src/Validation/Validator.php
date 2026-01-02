@@ -8,7 +8,7 @@ namespace Solenoid\X\Validation;
 
 class Validator
 {
-    private \ReflectionMethod $reflection;
+    private Input $input;
 
 
 
@@ -25,60 +25,30 @@ class Validator
 
 
 
-        // (Getting the value)
-        $this->reflection = new \ReflectionMethod( $this->class, $this->method );
+        foreach ( ( new \ReflectionMethod( $this->class, $this->method ) )->getAttributes( Input::class ) as $attribute )
+        {// Processing each entry
+            // (Getting the value)
+            $this->input = $attribute->newInstance();
+
+            // Breaking the iteration
+            break;
+        }
     }
 
 
 
-    public function check_input (mixed $input) : string|null
+    public function check (mixed $value) : string|null
     {
-        foreach ( $this->reflection->getAttributes( Input::class ) as $attribute )
-        {// Processing each entry
-            // (Getting the value)
-            $param = $attribute->newInstance();
-
-            if ( !$param->validate( $input ) )
-            {// (Validation failed)
-                // Returning the value
-                return $param->get_error();
-            }
+        if ( !$this->input->validate( $value ) )
+        {// (Validation failed)
+            // Returning the value
+            return $this->input->get_error();
         }
 
 
 
         // Returning the value
         return null;
-    }
-
-    public function check_input_params (mixed $input) : array
-    {
-        // (Setting the value)
-        $errors = [];
-
-        foreach ( $this->reflection->getAttributes( InputParam::class ) as $attribute )
-        {// Processing each entry
-            // (Getting the value)
-            $param = $attribute->newInstance();
-
-
-
-            // (Getting the value)
-            $value = $input[ $param->name ] ?? null;
-
-
-
-            if ( !$param->validate( $value ) )
-            {// (Validation failed)
-                // (Getting the value)
-                $errors[ $param->name ] = $param->get_error();
-            }
-        }
-
-
-
-        // Returning the value
-        return $errors;
     }
 }
 
