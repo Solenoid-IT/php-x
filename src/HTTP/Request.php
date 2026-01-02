@@ -166,7 +166,7 @@ class Request
 
 
 
-    public function text () : string
+    public function buffer () : string
     {
         // (Opening the stream)
         $this->body->open();
@@ -185,6 +185,12 @@ class Request
 
         // Returning the value
         return $buffer;
+    }
+
+    public function text () : string
+    {
+        // Returning the value
+        return $this->buffer();
     }
 
     public function json (bool $associative = false) : mixed

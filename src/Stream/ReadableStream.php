@@ -193,7 +193,7 @@ class ReadableStream
 
 
 
-    public function __toString () : string
+    public function buffer () : string|false
     {
         // (Opening the stream)
         $this->open();
@@ -209,6 +209,17 @@ class ReadableStream
         $this->close();
 
 
+
+        // Returning the value
+        return $buffer;
+    }
+
+
+
+    public function __toString () : string
+    {
+        // (Getting the value)
+        $buffer = $this->buffer();
 
         if ( $buffer === false )
         {// (Unable to read the stream)
