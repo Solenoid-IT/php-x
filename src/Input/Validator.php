@@ -2,7 +2,7 @@
 
 
 
-namespace Solenoid\X\Validation;
+namespace Solenoid\X\Input;
 
 
 
