@@ -168,23 +168,8 @@ class Request
 
     public function buffer () : string
     {
-        // (Opening the stream)
-        $this->body->open();
-
-
-
-        // (Getting the value)
-        $buffer = $this->body->read();
-
-
-
-        // (Closing the stream)
-        $this->body->close();
-
-
-
         // Returning the value
-        return $buffer;
+        return $this->body->buffer();
     }
 
     public function text () : string

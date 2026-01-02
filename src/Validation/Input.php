@@ -21,16 +21,20 @@ class Input
     public readonly string $type;
     public readonly bool   $required;
     public readonly string $description;
+    public readonly ?int   $min;
+    public readonly ?int   $max;
 
 
 
-    public function __construct (string $name, string $type, bool $required = true, string $description = '')
+    public function __construct (string $name, string $type, bool $required = true, string $description = '', ?int $min = null, ?int $max = null)
     {
         // (Getting the values)
         $this->name        = $name;
         $this->type        = $type;
         $this->required    = $required;
         $this->description = $description;
+        $this->min         = $min;
+        $this->max         = $max;
     }
 
 
@@ -63,7 +67,30 @@ class Input
 
                         // Returning the value
                         return false;
-                    }  
+                    }
+
+
+
+                    // (Getting the value)
+                    $int_value = (int) $value;
+
+                    if ( $this->min !== null && $int_value < $this->min )
+                    {// (Validation failed)
+                        // (Setting the value)
+                        $this->error = 'Input must be a number >= ' . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
+
+                        // Returning the value
+                        return false;
+                    }
+
+                    if ( $this->max !== null && $int_value > $this->max )
+                    {// (Validation failed)
+                        // (Setting the value)
+                        $this->error = 'Input must be a number ' . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
+
+                        // Returning the value
+                        return false;
+                    }
                 break;
 
                 case 'bool':
