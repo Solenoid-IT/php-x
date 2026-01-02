@@ -2,16 +2,11 @@
 
 
 
-namespace Solenoid\X\Validation;
+namespace Solenoid\X\Input;
 
 
 
-use \Attribute;
-
-
-
-#[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
-class Input
+class Value
 {
     private string $error = '';
 
