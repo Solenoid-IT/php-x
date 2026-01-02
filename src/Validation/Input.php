@@ -41,12 +41,17 @@ class Input
 
     public function validate (mixed $value) : bool
     {
+        // (Getting the value)
+        $error_prefix = "$this->type $this->name ::";
+
+
+
         if ( $this->required )
         {// Value not found
             if ( $value === null || $value === '' )
             {// Value not found
-                // (Setting the value)
-                $this->error = "Input ( $this->type $this->name ) :: Value is required";
+                // (Getting the value)
+                $this->error = "$error_prefix Value is required";
 
                 // Returning the value
                 return false;
@@ -62,8 +67,8 @@ class Input
                 case 'int':
                     if ( !filter_var( $value, FILTER_VALIDATE_INT ) )
                     {// (Validation failed)
-                        // (Setting the value)
-                        $this->error = "Input ( $this->type $this->name ) :: " . 'Must be an integer';
+                        // (Getting the value)
+                        $this->error = "$error_prefix Must be an integer";
 
                         // Returning the value
                         return false;
@@ -76,8 +81,8 @@ class Input
 
                     if ( $this->min !== null && $int_value < $this->min )
                     {// (Validation failed)
-                        // (Setting the value)
-                        $this->error = "Input ( $this->type $this->name ) :: " . 'Must be a number >= ' . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
+                        // (Getting the value)
+                        $this->error = "$error_prefix Must be a number >= " . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
 
                         // Returning the value
                         return false;
@@ -85,9 +90,8 @@ class Input
 
                     if ( $this->max !== null && $int_value > $this->max )
                     {// (Validation failed)
-                        // (Setting the value)
-                        $this->error = "Input ( $this->type $this->name ) :: " . 'Must be a number ' . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
-
+                        // (Getting the value)
+                        $this->error = "$error_prefix Must be a number " . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
                         // Returning the value
                         return false;
                     }
@@ -96,8 +100,8 @@ class Input
                 case 'bool':
                     if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
                     {// (Validation failed)
-                        // (Setting the value)
-                        $this->error = "Input ( $this->type $this->name ) :: " . 'Must be a boolean';
+                        // (Getting the value)
+                        $this->error = "$error_prefix Must be a boolean";
 
                         // Returning the value
                         return false;
