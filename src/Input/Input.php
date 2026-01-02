@@ -38,6 +38,12 @@ class Input
         // Returning the value
         return $this->reference->get_error();
     }
+
+    public function get_value () : mixed
+    {
+        // Returning the value
+        return $this->reference->get_value();
+    }
 }
 
 

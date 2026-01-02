@@ -6,9 +6,9 @@ namespace Solenoid\X\Input;
 
 
 
-class BoolValue extends Value
+class StringValue extends Value
 {
-    const TYPE = 'bool';
+    const TYPE = 'string';
 
 
 
@@ -18,7 +18,7 @@ class BoolValue extends Value
         parent::__construct( $name, $required, $description );
     }
 
-    
+
 
     public function validate (mixed $value) : bool
     {
@@ -41,19 +41,8 @@ class BoolValue extends Value
 
 
 
-        if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
-        {// (Validation failed)
-            // (Getting the value)
-            $this->error = "$error_prefix Must be a boolean";
-
-            // Returning the value
-            return false;
-        }
-
-
-
         // (Getting the value)
-        $this->value = (bool) $value;
+        $this->value = (string) $value;
 
 
 

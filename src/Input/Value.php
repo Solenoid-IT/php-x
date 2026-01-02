@@ -9,6 +9,7 @@ namespace Solenoid\X\Input;
 abstract class Value
 {
     protected string $error = '';
+    protected mixed  $value = null;
 
 
 
@@ -24,6 +25,12 @@ abstract class Value
     {
         // Returning the value
         return $this->error;
+    }
+
+    public function get_value () : mixed
+    {
+        // Returning the value
+        return $this->value;
     }
 }
 

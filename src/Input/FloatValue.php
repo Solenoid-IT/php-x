@@ -6,13 +6,13 @@ namespace Solenoid\X\Input;
 
 
 
-class IntValue extends Value
+class FloatValue extends Value
 {
-    const TYPE = 'int';
+    const TYPE = 'float';
 
 
 
-    public function __construct (string $name, bool $required = true, string $description = '', public readonly ?int $min = null, public readonly ?int $max = null)
+    public function __construct (string $name, bool $required = true, string $description = '', public readonly ?float $min = null, public readonly ?float $max = null)
     {
         // (Calling the function)
         parent::__construct( $name, $required, $description );
@@ -41,10 +41,10 @@ class IntValue extends Value
 
 
 
-        if ( !filter_var( $value, FILTER_VALIDATE_INT ) )
+        if ( !filter_var( $value, FILTER_VALIDATE_FLOAT ) )
         {// (Validation failed)
             // (Getting the value)
-            $this->error = "$error_prefix Must be an integer";
+            $this->error = "$error_prefix Must be a float";
 
             // Returning the value
             return false;
@@ -53,7 +53,7 @@ class IntValue extends Value
 
 
         // (Getting the value)
-        $this->value = (int) $value;
+        $this->value = (float) $value;
 
         if ( $this->min !== null && $this->value < $this->min )
         {// (Validation failed)

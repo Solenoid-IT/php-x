@@ -58,6 +58,14 @@ class Validator
         // Returning the value
         return null;
     }
+
+
+
+    public function get_value () : mixed
+    {
+        // Returning the value
+        return $this->input->get_value();
+    }
 }
 
 
