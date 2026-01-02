@@ -83,7 +83,7 @@ class ReadableStream
         {
             case self::TYPE_FILE:
                 // (Opening the stream)
-                $stream = fopen( $this->file_path, 'r' );
+                $stream = fopen( $this->file_path, 'rb' );
             break;
 
             case self::TYPE_STRING:
