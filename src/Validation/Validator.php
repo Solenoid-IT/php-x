@@ -37,6 +37,14 @@ class Validator
 
 
 
+    public function available () : bool
+    {
+        // Returning the value
+        return isset( $this->input );
+    }
+
+
+
     public function check (mixed $value) : string|null
     {
         if ( !$this->input->validate( $value ) )
