@@ -23,7 +23,7 @@ class BoolValue extends Value
     public function validate (mixed $value) : bool
     {
         // (Getting the value)
-        $error_prefix = self::TYPE . ' ' . $this->name . '::';
+        $error_prefix = self::TYPE . ' ' . $this->name . ' ' . '::';
 
 
 

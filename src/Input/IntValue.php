@@ -18,12 +18,12 @@ class IntValue extends Value
         parent::__construct( $name, $required, $description );
     }
 
-    
+
 
     public function validate (mixed $value) : bool
     {
         // (Getting the value)
-        $error_prefix = self::TYPE . ' ' . $this->name . '::';
+        $error_prefix = self::TYPE . ' ' . $this->name . ' ' . '::';
 
 
 
