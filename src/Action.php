@@ -7,6 +7,7 @@ namespace Solenoid\X;
 
 
 use \Solenoid\X\Container;
+use \Solenoid\X\Input\Validator;
 
 
 
@@ -85,9 +86,46 @@ class Action
 
 
 
+        // (Setting the value)
+        $params = [];
+
+
+
+        // (Getting the value)
+        $validator = new Validator( $this->class_path, $this->method );
+
+        if ( $validator->available() )
+        {// Value is true
+            // (Getting the value)
+            $request = $container->make( 'request' );
+
+
+
+            // (Getting the value)
+            $error = $validator->check( $request->buffer() );
+
+            if ( $error )
+            {// (Check failed)
+                // (Getting the value)
+                $response = $container->make( 'response' );
+
+
+
+                // Returning the value
+                return $response->text( 400, $error );
+            }
+            else
+            {// (Check passed)
+                // (Getting the value)
+                $params = [ $validator->get_value() ];
+            }
+        }
+
+
+
         // Returning the value
         #return $this->stopped ? null : $instance->{ $this->method }();
-        return $this->stopped ? null : $container->run_instance_method( $instance, $this->method );
+        return $this->stopped ? null : $container->run_instance_method( $instance, $this->method, $params );
     }
 
 
