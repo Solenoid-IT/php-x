@@ -12,7 +12,7 @@ class StringValue extends Value
 
 
 
-    public function __construct (string $name, bool $required = true, string $description = '')
+    public function __construct (string $name, bool $required = true, string $description = '', public readonly ?string $regex = null)
     {
         // (Calling the function)
         parent::__construct( $name, $required, $description );
@@ -38,6 +38,21 @@ class StringValue extends Value
                 return false;
             }
         }
+
+
+
+        if ( $this->regex !== null )
+        {// Value found
+            if ( !preg_match( $this->regex, $value ) )
+            {// (Match failed)
+                // (Getting the value)
+                $this->error = "$error_prefix Value does not match the required format";
+
+                // Returning the value
+                return false;
+            }
+        }
+            
 
 
 
