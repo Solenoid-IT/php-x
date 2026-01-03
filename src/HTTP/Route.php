@@ -245,38 +245,6 @@ class Route
             if ( isset( $this->target->class ) && isset( $this->target->fn ) )
             {// (Target is a class method)
                 // (Getting the value)
-                $validator = new Validator( $this->target->class, $this->target->fn );
-
-                if ( $validator->available() )
-                {// Value is true
-                    // (Getting the value)
-                    $request = $container->make( 'request' );
-
-
-
-                    // (Getting the value)
-                    $response = $container->make( 'response' );
-
-
-
-                    // (Getting the value)
-                    $error = $validator->check( $request->buffer() );
-
-                    if ( $error )
-                    {// (Check failed)
-                        // Returning the value
-                        return $response->text( 400, $error );
-                    }
-                    else
-                    {// (Check passed)
-                        // Returning the value
-                        #return $response->text( 200, $validator->get_value() );
-                    }
-                }
-
-
-
-                // (Getting the value)
                 #$result = call_user_func_array( [ new $this->target->class(), $this->target->fn ], $this->params );
                 $result = $container->run_class_fn( $this->target->class, $this->target->fn, $this->params );
             }
