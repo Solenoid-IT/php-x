@@ -33,7 +33,7 @@ class Input
 
 
 
-    public function get_error () : string
+    public function get_error () : mixed
     {
         // Returning the value
         return $this->reference->get_error();

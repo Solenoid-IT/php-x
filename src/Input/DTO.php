@@ -6,8 +6,150 @@ namespace Solenoid\X\Input;
 
 
 
-interface DTO
+abstract class DTO
 {
+    protected bool $is_valid = true;
+
+
+
+    public function validate (mixed $data) : bool
+    {
+        // (Setting the value)
+        $this->is_valid = true;
+
+        if ( !is_array( $data ) )
+        {// (Value is not an array)
+            // (Setting the value)
+            $this->is_valid = false;
+
+            // Returning the value
+            return false;
+        }
+
+
+
+        foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
+        {// Processing each entry
+            // (Getting the value)
+            $instance = $property->getValue( $this );
+
+            // (Getting the value)
+            $name = $property->getName();
+
+            // (Getting the value)
+            $raw_value = $data[ $name ] ?? null;
+
+            if ( $instance instanceof Value || $instance instanceof DTO )
+            {// Match OK
+                if ( !$instance->validate( $raw_value ) )
+                {// (Validation failed)
+                    // (Setting the value)
+                    $this->is_valid = false;
+                }
+            }
+        }
+
+
+
+        // Returning the value
+        return $this->is_valid;
+    }
+
+
+
+    public function get_error () : \stdClass|null
+    {
+        // (Getting the value)
+        $error_tree = new \stdClass();
+
+
+
+        // (Setting the value)
+        $has_error = false;
+
+
+
+        foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property)
+        {// Processing each entry
+            // (Getting the value)
+            $name = $property->getName();
+
+
+
+            // (Getting the value)
+            $instance = $property->getValue( $this );
+
+            if ( $instance instanceof Value )
+            {// Match OK
+                // (Getting the value)
+                $err = $instance->get_error();
+
+                if ( $err )
+                {// (Error found)
+                    // (Getting the value)
+                    $error_tree->$name = $err;
+
+                    // (Setting the value)
+                    $has_error = true;
+                }
+            }
+            else
+            if ( $instance instanceof DTO )
+            {// Match OK
+                // (Getting the value)
+                $child_errors = $instance->get_error();
+
+                if ( $child_errors !== null )
+                {// (Error found)
+                    // (Getting the value)
+                    $error_tree->$name = $child_errors;
+
+                    // (Setting the value)
+                    $has_error = true;
+                }
+            }
+        }
+
+
+
+        // Returning the value
+        return $has_error ? $error_tree : null;
+    }
+
+    public function get_value () : \stdClass
+    {
+        // (Getting the value)
+        $value_tree = new \stdClass();
+
+
+        foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
+        {// Processing each entry
+            // (Getting the value)
+            $name = $property->getName();
+
+
+
+            // (Getting the value)
+            $instance = $property->getValue( $this );
+
+            if ( $instance instanceof Value )
+            {// Match OK
+                // (Getting the value)
+                $value_tree->$name = $instance->get_value();
+            }
+            else
+            if ( $instance instanceof DTO )
+            {// Match OK
+                // (Getting the value)
+                $value_tree->$name = $instance->get_value();
+            }
+        }
+
+
+
+        // Returning the value
+        return $value_tree;
+    }
 }
 
 
