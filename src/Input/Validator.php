@@ -45,7 +45,7 @@ class Validator
 
 
 
-    public function check (mixed $value) : string|null
+    public function check (mixed $value) : mixed
     {
         if ( !$this->input->validate( $value ) )
         {// (Validation failed)

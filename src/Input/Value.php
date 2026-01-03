@@ -21,10 +21,10 @@ abstract class Value
 
 
 
-    public function get_error () : string
+    public function get_error () : string|null
     {
         // Returning the value
-        return $this->error;
+        return $this->error === '' ? null : $this->error;
     }
 
     public function get_value () : mixed

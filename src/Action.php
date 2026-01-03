@@ -104,15 +104,23 @@ class Action
             // (Getting the value)
             $error = $validator->check( $request->buffer() );
 
-            if ( $error )
+            if ( $error !== null )
             {// (Check failed)
                 // (Getting the value)
                 $response = $container->make( 'response' );
 
 
 
-                // Returning the value
-                return $response->text( 400, $error );
+                if ( $error instanceof \stdClass )
+                {// (Error of a DTO)
+                    // Returning the value
+                    return $response->json( 400, $error );
+                }
+                else
+                {// (Error of a Value)
+                    // Returning the value
+                    return $response->text( 400, $error );
+                }
             }
             else
             {// (Check passed)
