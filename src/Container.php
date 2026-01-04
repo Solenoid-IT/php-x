@@ -118,16 +118,16 @@ class Container
                 $dependencies[] = $this->make( $type->getName(), $params );
             }
             else
-            if ( isset( $params[ $i ] ) )
-            {// (Param is provided by index)
-                // (Appending the value)
-                $dependencies[] = $params[ $i ];
-            }
-            else
             if ( isset( $params[ $param->getName() ] ) )
             {// (Param is provided by name)
                 // (Appending the value)
                 $dependencies[] = $params[ $param->getName() ];
+            }
+            else
+            if ( isset( $params[ $i ] ) )
+            {// (Param is provided by index)
+                // (Appending the value)
+                $dependencies[] = $params[ $i ];
             }
             else
             if ( $param->isDefaultValueAvailable() )
