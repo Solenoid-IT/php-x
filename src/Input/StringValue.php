@@ -41,6 +41,17 @@ class StringValue extends Value
 
 
 
+        if ( !is_string( $value ) )
+        {// (Type is not a string)
+            // (Getting the value)
+            $this->error = "$error_prefix Value must be a string";
+
+            // Returning the value
+            return false;
+        }
+
+
+
         if ( $this->regex !== null )
         {// Value found
             if ( !preg_match( $this->regex, $value ) )
@@ -57,7 +68,7 @@ class StringValue extends Value
 
 
         // (Getting the value)
-        $this->value = (string) $value;
+        $this->value = $value;
 
 
 
