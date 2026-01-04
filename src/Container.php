@@ -178,7 +178,7 @@ class Container
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param = $this->make( $type->getName(), array_values( $params ) );
+                $param = $this->make( $type->getName(), $params );
             }
 
 
@@ -232,7 +232,7 @@ class Container
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param = $this->make( $type->getName(), array_values( $params ) );
+                $param = $this->make( $type->getName(), $params );
             }
 
 
@@ -292,7 +292,7 @@ class Container
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param_value = $this->make( $type->getName(), array_values( $params ) );
+                $param_value = $this->make( $type->getName(), $params );
             }
 
 
