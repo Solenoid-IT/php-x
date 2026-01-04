@@ -102,7 +102,12 @@ class Action
 
 
             // (Getting the value)
-            $error = $validator->check( $request->buffer() );
+            $input = $validator->get_input_type() === 'DTO' ? $request->json( true ) : $request->buffer();
+
+
+
+            // (Getting the value)
+            $error = $validator->check( $input );
 
             if ( $error !== null )
             {// (Check failed)

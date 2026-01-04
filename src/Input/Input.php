@@ -25,6 +25,14 @@ class Input
 
 
 
+    public function get_type () : string
+    {
+        // Returning the value
+        return $this->reference instanceof DTO ? 'DTO' : 'Value';
+    }
+
+
+
     public function validate (mixed $value) : bool
     {
         // Returning the value

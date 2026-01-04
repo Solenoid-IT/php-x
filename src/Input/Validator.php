@@ -45,6 +45,14 @@ class Validator
 
 
 
+    public function get_input_type () : string
+    {
+        // Returning the value
+        return $this->input->get_type();
+    }
+
+
+
     public function check (mixed $value) : mixed
     {
         if ( !$this->input->validate( $value ) )
