@@ -69,16 +69,8 @@ abstract class DTO
 
 
 
-        // (Setting the value)
-        $has_properties = false;
-
         foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
         {// Processing each entry
-            // (Setting the value)
-            $has_properties = true;
-
-
-
             // (Getting the value)
             $name = $property->getName();
 
@@ -115,17 +107,6 @@ abstract class DTO
                     // (Setting the value)
                     $has_error = true;
                 }
-            }
-        }
-
-
-
-        if ( !$has_properties )
-        {// (There are no properties)
-            if ( !$this->is_valid )
-            {// (Validation failed)
-                // Returning the value
-                return $error_tree;
             }
         }
 
