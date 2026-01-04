@@ -60,6 +60,12 @@ class BoolValue extends Value
         // Returning the value
         return true;
     }
+
+    public function get_value () : bool
+    {
+        // Returning the value
+        return $this->value;
+    }
 }
 
 

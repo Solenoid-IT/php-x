@@ -75,6 +75,12 @@ class StringValue extends Value
         // Returning the value
         return true;
     }
+
+    public function get_value () : string
+    {
+        // Returning the value
+        return $this->value;
+    }
 }
 
 

@@ -77,6 +77,12 @@ class FloatValue extends Value
         // Returning the value
         return true;
     }
+
+    public function get_value () : float
+    {
+        // Returning the value
+        return $this->value;
+    }
 }
 
 

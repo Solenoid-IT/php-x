@@ -77,6 +77,12 @@ class IntValue extends Value
         // Returning the value
         return true;
     }
+
+    public function get_value () : int
+    {
+        // Returning the value
+        return $this->value;
+    }
 }
 
 
