@@ -29,7 +29,7 @@ class Container
         $this->bind( $abstract, $concrete, true );
     }
 
-    public function make (string $abstract)
+    public function make (string $abstract, array $params = [])
     {
         if ( isset( $this->instances[$abstract] ) )
         {// Value found
@@ -48,7 +48,7 @@ class Container
 
 
             // (Getting the value)
-            $object = is_callable( $concrete ) ? $concrete($this) : $this->build( $concrete );
+            $object = is_callable( $concrete ) ? $concrete( $this, $params ) : $this->build( $concrete, $params );
 
             if ( $binding['singleton'] )
             {// Value found
@@ -65,12 +65,12 @@ class Container
 
 
         // Returning the value
-        return $this->build( $abstract );
+        return $this->build( $abstract, $params );
     }
 
 
 
-    protected function build (string $class)
+    protected function build (string $class, array $params = [])
     {
         // (Getting the value)
         $reflection = new \ReflectionClass( $class );
@@ -78,7 +78,7 @@ class Container
         if ( !$reflection->isInstantiable() )
         {// (Class is not instantiable)
             // Throwing an exception
-            throw new \Exception( "Classe non instanziabile: $class" );
+            throw new \Exception( "Class $class is not instantiable" );
         }
 
 
@@ -95,17 +95,33 @@ class Container
 
 
         // (Setting the value)
+        $i = -1;
+
+
+
+        // (Setting the value)
         $dependencies = [];
 
         foreach ( $constructor->getParameters() as $param )
         {// Processing each entry
+            // (Incrementing the value)
+            $i += 1;
+
+
+
             // (Getting the value)
             $type = $param->getType();
 
             if ( $type && !$type->isBuiltin() )
             {// Match OK
                 // (Appending the value)
-                $dependencies[] = $this->make( $type->getName() );
+                $dependencies[] = $this->make( $type->getName(), $params );
+            }
+            else
+            if ( isset( $params[ $i ] ) )
+            {// (Param is provided)
+                // (Appending the value)
+                $dependencies[] = $params[ $i ];
             }
             else
             if ( $param->isDefaultValueAvailable() )
@@ -116,7 +132,7 @@ class Container
             else
             {// (Default value is not available)
                 // Throwing an exception
-                throw new \Exception( "Parametro non risolvibile: {$param->getName()}" );
+                throw new \Exception( "Unable to resolve parameter {$param->getName()}" );
             }
         }
 
@@ -156,7 +172,7 @@ class Container
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param = $this->make( $type->getName() );
+                $param = $this->make( $type->getName(), array_values( $params ) );
             }
 
 
@@ -210,7 +226,7 @@ class Container
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param = $this->make( $type->getName() );
+                $param = $this->make( $type->getName(), array_values( $params ) );
             }
 
 
@@ -270,7 +286,7 @@ class Container
             else
             {// (Param is an instance of a class)
                 // (Getting the value)
-                $param_value = $this->make( $type->getName() );
+                $param_value = $this->make( $type->getName(), array_values( $params ) );
             }
 
 
