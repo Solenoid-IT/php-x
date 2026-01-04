@@ -102,7 +102,12 @@ class Action
 
 
             // (Getting the value)
-            $input = $validator->get_input_type() === 'DTO' ? $request->json( true ) : $request->buffer();
+            $input_type = $validator->get_input_type();
+
+
+
+            // (Getting the value)
+            $input = $input_type === 'DTO' ? $request->json( true ) : $request->buffer();
 
 
 
@@ -129,8 +134,31 @@ class Action
             }
             else
             {// (Check passed)
-                // (Getting the value)
-                $params = [ $validator->get_value() ];
+                switch ( $input_type )
+                {// Processing each type
+                    case 'Value':
+                        // (Getting the value)
+                        $params = [ $validator->get_value() ];
+                    break;
+
+                    case 'DTO':
+                        // (Getting the value)
+                        $dto = $validator->get_value();
+
+
+
+                        // (Getting the value)
+                        $params =
+                        [
+                            get_class( $dto ) => $dto,
+                            'dto'             => $dto
+                        ]
+                        ;
+
+                        // (Getting the value)
+                        $params = array_merge( $params, (array) $dto );
+                    break;
+                }
             }
         }
 
