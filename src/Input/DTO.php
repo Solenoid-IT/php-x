@@ -165,52 +165,18 @@ abstract class DTO
         return $has_error ? $error_tree : null;
     }
 
-    public function get_value () : \stdClass
+    public function get_value () : self
     {
-        // (Getting the value)
-        $value_tree = new \stdClass();
-
-
-
-        /* ahcid to deleted
-
-        foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
-        {// Processing each entry
-            // (Getting the value)
-            $name = $property->getName();
-
-
-
-            // (Getting the value)
-            $instance = $property->getValue( $this );
-
-            if ( $instance instanceof Value )
-            {// Match OK
-                // (Getting the value)
-                $value_tree->$name = $instance->get_value();
-            }
-            else
-            if ( $instance instanceof DTO )
-            {// Match OK
-                // (Getting the value)
-                $value_tree->$name = $instance->get_value();
-            }
-        }
-
-        */
-
-
-
         foreach ( $this->property_tree as $name => $node )
         {// Processing each entry
             // (Getting the value)
-            $value_tree->$name = $node->instance->get_value();
+            $this->$name = $node->instance->get_value();
         }
 
 
 
         // Returning the value
-        return $value_tree;
+        return $this;
     }
 
 
