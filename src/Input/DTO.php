@@ -97,7 +97,7 @@ abstract class DTO
         if ( !isset( $this->property_tree ) )
         {// Value not found
             // Returning the value
-            return 'DTO object is empty';
+            return 'object is required';
         }
 
 
