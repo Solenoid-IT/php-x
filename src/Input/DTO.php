@@ -74,7 +74,7 @@ abstract class DTO
                 if ( $instance instanceof DTO )
                 {// Match OK
                     // (Getting the value)
-                    $node->children = $instance->get_property_tree();
+                    $node->children = isset( $instance->property_tree ) ? $instance->property_tree : new \stdClass();
                 }
 
 
@@ -94,7 +94,7 @@ abstract class DTO
 
     public function get_error () : string|\stdClass|null
     {
-        if ( !isset( $this->property_tree ) )
+        if ( !$this->is_valid )
         {// Value not found
             // Returning the value
             return 'DTO object is empty';
@@ -189,14 +189,6 @@ abstract class DTO
 
         // Returning the value
         return $this;
-    }
-
-
-
-    public function get_property_tree () : \stdClass
-    {
-        // Returning the value
-        return $this->property_tree;
     }
 }
 
