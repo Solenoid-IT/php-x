@@ -38,6 +38,10 @@ abstract class DTO
 
         foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
         {// Processing each entry
+            if ( !$property->isInitialized( $this ) ) continue;
+
+
+
             // (Getting the value)
             $instance = $property->getValue( $this );
 
