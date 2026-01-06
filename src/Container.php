@@ -173,7 +173,7 @@ class Container
             if ( $type->isBuiltin() )
             {// (Param is a primitive type)
                 // (Getting the value)
-                $param = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+                $param = $params[ $params ? ( isset( $params[0] ) ? $i : $param->getName() ) : null ] ?? null;
             }
             else
             {// (Param is an instance of a class)
@@ -227,7 +227,7 @@ class Container
             if ( $type->isBuiltin() )
             {// (Param is a primitive type)
                 // (Getting the value)
-                $param = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+                $param = $params[ $params ? ( isset( $params[0] ) ? $i : $param->getName() ) : null ] ?? null;
             }
             else
             {// (Param is an instance of a class)
@@ -281,7 +281,7 @@ class Container
             if ( $type->isBuiltin() )
             {// (Param is a primitive type)
                 // (Getting the value)
-                $param_value = $params[ $params ? ( $params[0] ? $i : $param->getName() ) : null ] ?? null;
+                $param_value = $params[ $params ? ( isset( $params[0] ) ? $i : $param->getName() ) : null ] ?? null;
 
                 if ( $param_value === null && $param->isDefaultValueAvailable() )
                 {// (Default value is available)
