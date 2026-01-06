@@ -94,7 +94,7 @@ abstract class DTO
 
     public function get_error () : string|\stdClass|null
     {
-        if ( !$this->is_valid )
+        if ( !isset( $this->property_tree ) )
         {// Value not found
             // Returning the value
             return 'DTO object is empty';
