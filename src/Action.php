@@ -121,8 +121,8 @@ class Action
 
 
 
-                if ( $error instanceof \stdClass )
-                {// (Error of a DTO)
+                if ( $error instanceof \stdClass || is_array( $error ) )
+                {// (Error of a DTO or ArrayList)
                     // Returning the value
                     return $response->json( 400, $error );
                 }
