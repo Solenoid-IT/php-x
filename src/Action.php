@@ -158,6 +158,13 @@ class Action
                         // (Getting the value)
                         $params = array_merge( $params, (array) $dto );
                     break;
+
+                    case 'ArrayList':
+                        // (Getting the value)
+                        $params = [ $validator->get_value() ];
+
+                        # ahcid List<DTO> to implementt
+                    break;
                 }
             }
         }
