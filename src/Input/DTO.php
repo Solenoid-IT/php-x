@@ -162,13 +162,19 @@ abstract class DTO
         foreach ( $this->property_tree as $name => $node )
         {// Processing each entry
             // (Getting the value)
-            $error_tree->$name = $node->instance->get_error();
+            $error = $node->instance->get_error();
 
-            if ( !$has_error )
-            {// (Error not found yet)
-                // (Getting the value)
-                $has_error = $error_tree->$name !== null;
-            }
+            if ( $error === null ) continue;
+
+
+
+            // (Getting the value)
+            $error_tree->$name = $error;
+
+
+
+            // (Setting the value)
+            $has_error = true;
         }
 
 
