@@ -69,8 +69,19 @@ class ArrayList
 
 
 
-    public function get_error () : array|null
+    public function get_error () : string|array|null
     {
+        if ( !isset( $this->instances ) )
+        {// Value not found
+            // (Getting the value)
+            $type = $this->reference instanceof DTO ? 'DTO' : 'Value';
+
+            // Returning the value
+            return "list of $type is required";
+        }
+
+
+
         // (Setting the value)
         $has_error = false;
 
