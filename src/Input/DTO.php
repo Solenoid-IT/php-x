@@ -45,11 +45,17 @@ abstract class DTO
             // (Getting the value)
             $instance = $property->getValue( $this );
 
+
+
             // (Getting the value)
             $name = $property->getName();
 
+
+
             // (Getting the value)
             $raw_value = $data[ $name ] ?? null;
+
+
 
             if ( $instance instanceof Value || $instance instanceof DTO )
             {// Match OK
