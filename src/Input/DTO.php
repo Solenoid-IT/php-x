@@ -20,11 +20,6 @@ abstract class DTO
 
 
 
-        // (Getting the value)
-        $this->property_tree = new \stdClass();
-
-
-
         if ( !is_array( $data ) )
         {// (Value is not an array)
             // (Setting the value)
@@ -35,6 +30,9 @@ abstract class DTO
         }
 
 
+
+        // (Getting the value)
+        $this->property_tree = new \stdClass();
 
         foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
         {// Processing each entry
