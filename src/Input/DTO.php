@@ -55,7 +55,7 @@ abstract class DTO
 
 
 
-            if ( $instance instanceof Value || $instance instanceof DTO )
+            if ( $instance instanceof Value || $instance instanceof DTO || $instance instanceof ArrayList )
             {// Match OK
                 if ( !$instance->validate( $raw_value ) )
                 {// (Validation failed)
@@ -71,11 +71,23 @@ abstract class DTO
                 // (Getting the value)
                 $node->instance = $instance;
 
+
+
+                /* ahcid to implementt
+
                 if ( $instance instanceof DTO )
                 {// Match OK
                     // (Getting the value)
                     $node->children = isset( $instance->property_tree ) ? $instance->property_tree : new \stdClass();
                 }
+                else
+                if ( $instance instanceof ArrayList )
+                {// Match OK
+                    // (Getting the value)  
+                    $node->children = array_map( function($inst) { return ( $inst instanceof DTO ) ? $inst->property_tree : null; }, $instance->instances );
+                }
+
+                */
 
 
 

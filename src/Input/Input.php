@@ -13,11 +13,11 @@ use \Attribute;
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
 class Input
 {
-    private Value|DTO $reference;
+    private Value|DTO|ArrayList $reference;
 
 
 
-    public function __construct (Value|DTO $reference)
+    public function __construct (Value|DTO|ArrayList $reference)
     {
         // (Getting the value)
         $this->reference = $reference;
@@ -27,8 +27,31 @@ class Input
 
     public function get_type () : string
     {
+        // (Setting the value)
+        $type = null;
+
+        if ( $this->reference instanceof Value )
+        {// Match OK
+            // (Setting the value)
+            $type = 'Value';
+        }
+        else
+        if ( $this->reference instanceof DTO )
+        {// Match OK
+            // (Setting the value)
+            $type = 'DTO';
+        }
+        else
+        if ( $this->reference instanceof ArrayList )
+        {// Match OK
+            // (Setting the value)
+            $type = 'ArrayList';
+        }
+
+
+
         // Returning the value
-        return $this->reference instanceof DTO ? 'DTO' : 'Value';
+        return $type;
     }
 
 
