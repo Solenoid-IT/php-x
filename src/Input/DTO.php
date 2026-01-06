@@ -13,18 +13,17 @@ abstract class DTO
 
 
 
-    public function __construct ()
-    {
-        // (Setting the value)
-        $this->property_tree = new \stdClass();
-    }
-
-
-
     public function validate (mixed $data) : bool
     {
         // (Setting the value)
         $this->is_valid = true;
+
+
+
+        // (Getting the value)
+        $this->property_tree = new \stdClass();
+
+
 
         if ( !is_array( $data ) )
         {// (Value is not an array)
@@ -36,9 +35,6 @@ abstract class DTO
         }
 
 
-
-        // (Getting the value)
-        $this->property_tree = new \stdClass();
 
         foreach ( ( new \ReflectionClass( $this ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
         {// Processing each entry
