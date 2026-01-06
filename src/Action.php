@@ -107,7 +107,7 @@ class Action
 
 
             // (Getting the value)
-            $input = $input_type === 'DTO' ? $request->json( true ) : $request->buffer();
+            $input = in_array( $input_type, [ 'DTO', 'ArrayList' ] ) ? $request->json( true ) : $request->buffer();
 
 
 
