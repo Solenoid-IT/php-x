@@ -198,18 +198,18 @@ abstract class DTO
     public function get_value () : self
     {
         // (Getting the value)
-        #$object = new ( get_class( $this ) )();
+        $object = new ( get_class( $this ) )();
 
         foreach ( $this->property_tree as $name => $node )
         {// Processing each entry
             // (Getting the value)
-            $this->$name = $node->instance->get_value();
+            $object->$name = $node->instance->get_value();
         }
 
 
 
         // Returning the value
-        return $this;
+        return $object;
     }
 }
 
