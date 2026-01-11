@@ -31,18 +31,26 @@ class Container
 
     public function make (string $abstract, array $params = [])
     {
-        if ( isset( $this->instances[$abstract] ) )
+        if ( isset( $params[ $abstract ] ) )
         {// Value found
             // Returning the value
-            return $this->instances[$abstract];
+            return $params[ $abstract ];
         }
 
 
 
-        if ( isset( $this->bindings[$abstract] ) )
+        if ( isset( $this->instances[ $abstract ] ) )
+        {// Value found
+            // Returning the value
+            return $this->instances[ $abstract ];
+        }
+
+
+
+        if ( isset( $this->bindings[ $abstract ] ) )
         {// Value found
             // (Getting the values)
-            $binding  = $this->bindings[$abstract];
+            $binding  = $this->bindings[ $abstract ];
             $concrete = $binding['concrete'];
 
 
@@ -53,7 +61,7 @@ class Container
             if ( $binding['singleton'] )
             {// Value found
                 // (Getting the value)
-                $this->instances[$abstract] = $object;
+                $this->instances[ $abstract ] = $object;
             }
 
 
