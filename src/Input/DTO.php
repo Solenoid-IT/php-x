@@ -195,10 +195,11 @@ abstract class DTO
         return $has_error ? $error_tree : null;
     }
 
-    public function get_value () : self
+    public function get_value () : \stdClass
     {
         // (Getting the value)
-        $object = new ( get_class( $this ) )();
+        #$object = new ( get_class( $this ) )();
+        $object = new \stdClass();
 
         foreach ( $this->property_tree as $name => $node )
         {// Processing each entry
