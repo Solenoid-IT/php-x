@@ -27,10 +27,10 @@ class BoolValue extends Value
 
 
 
-        if ( $this->required )
-        {// Value not found
-            if ( $value === null || $value === '' )
-            {// Value not found
+        if ( $value === null || $value === '' )
+        {// (Value is not set)
+            if ( $this->required )
+            {// (Value is required)
                 // (Getting the value)
                 $this->error = "$error_prefix Value is required";
 
@@ -38,22 +38,22 @@ class BoolValue extends Value
                 return false;
             }
         }
+        else
+        {// (Value is set)
+            if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
+            {// (Validation failed)
+                // (Getting the value)
+                $this->error = "$error_prefix Must be a boolean";
+
+                // Returning the value
+                return false;
+            }
 
 
 
-        if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
-        {// (Validation failed)
             // (Getting the value)
-            $this->error = "$error_prefix Must be a boolean";
-
-            // Returning the value
-            return false;
+            $this->value = (bool) $value;
         }
-
-
-
-        // (Getting the value)
-        $this->value = (bool) $value;
 
 
 
@@ -61,7 +61,7 @@ class BoolValue extends Value
         return true;
     }
 
-    public function get_value () : bool
+    public function get_value () : bool|null
     {
         // Returning the value
         return $this->value;

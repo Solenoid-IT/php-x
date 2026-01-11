@@ -27,10 +27,15 @@ class FloatValue extends Value
 
 
 
-        if ( $this->required )
-        {// Value not found
-            if ( $value === null || $value === '' )
-            {// Value not found
+        if ( $value === null || $value === '' )
+        {// (Value is not set)
+            // (Setting the value)
+            $this->value = null;
+
+
+
+            if ( $this->required )
+            {// (Value is required)
                 // (Getting the value)
                 $this->error = "$error_prefix Value is required";
 
@@ -38,38 +43,38 @@ class FloatValue extends Value
                 return false;
             }
         }
+        else
+        {// (Value is set)
+            if ( !filter_var( $value, FILTER_VALIDATE_FLOAT ) )
+            {// (Validation failed)
+                // (Getting the value)
+                $this->error = "$error_prefix Must be a float";
+
+                // Returning the value
+                return false;
+            }
 
 
 
-        if ( !filter_var( $value, FILTER_VALIDATE_FLOAT ) )
-        {// (Validation failed)
             // (Getting the value)
-            $this->error = "$error_prefix Must be a float";
+            $this->value = (float) $value;
 
-            // Returning the value
-            return false;
-        }
+            if ( $this->min !== null && $this->value < $this->min )
+            {// (Validation failed)
+                // (Getting the value)
+                $this->error = "$error_prefix Must be a number >= " . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
 
+                // Returning the value
+                return false;
+            }
 
-
-        // (Getting the value)
-        $this->value = (float) $value;
-
-        if ( $this->min !== null && $this->value < $this->min )
-        {// (Validation failed)
-            // (Getting the value)
-            $this->error = "$error_prefix Must be a number >= " . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
-
-            // Returning the value
-            return false;
-        }
-
-        if ( $this->max !== null && $this->value > $this->max )
-        {// (Validation failed)
-            // (Getting the value)
-            $this->error = "$error_prefix Must be a number " . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
-            // Returning the value
-            return false;
+            if ( $this->max !== null && $this->value > $this->max )
+            {// (Validation failed)
+                // (Getting the value)
+                $this->error = "$error_prefix Must be a number " . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
+                // Returning the value
+                return false;
+            }
         }
 
 
@@ -78,7 +83,7 @@ class FloatValue extends Value
         return true;
     }
 
-    public function get_value () : float
+    public function get_value () : float|null
     {
         // Returning the value
         return $this->value;

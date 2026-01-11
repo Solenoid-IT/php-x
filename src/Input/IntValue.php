@@ -27,19 +27,24 @@ class IntValue extends Value
 
 
 
-        if ( $this->required )
-        {// (Value is required)
-            if ( $value === null || $value === '' )
-            {// Value not found
+        if ( $value === null || $value === '' )
+        {// (Value is not set)
+            // (Setting the value)
+            $this->value = null;
+
+
+
+            if ( $this->required )
+            {// (Value is required)
                 // (Getting the value)
                 $this->error = "$error_prefix Value is required";
 
                 // Returning the value
                 return false;
             }
-
-
-
+        }
+        else
+        {// (Value is set)
             if ( !filter_var( $value, FILTER_VALIDATE_INT ) )
             {// (Validation failed)
                 // (Getting the value)
@@ -69,14 +74,6 @@ class IntValue extends Value
                 $this->error = "$error_prefix Must be a number " . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
                 // Returning the value
                 return false;
-            }
-        }
-        else
-        {// (Value is not required)
-            if ( $value === null || $value === '' )
-            {// Value not found
-                // (Setting the value)
-                $this->value = null;
             }
         }
 

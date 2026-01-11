@@ -27,10 +27,10 @@ class StringValue extends Value
 
 
 
-        if ( $this->required )
-        {// Value not found
-            if ( $value === null || $value === '' )
-            {// Value not found
+        if ( $value === null || $value === '' )
+        {// (Value is not set)
+            if ( $this->required )
+            {// (Value is required)
                 // (Getting the value)
                 $this->error = "$error_prefix Value is required";
 
@@ -38,37 +38,37 @@ class StringValue extends Value
                 return false;
             }
         }
-
-
-
-        if ( !is_string( $value ) )
-        {// (Type is not a string)
-            // (Getting the value)
-            $this->error = "$error_prefix Value must be a string";
-
-            // Returning the value
-            return false;
-        }
-
-
-
-        if ( $this->regex !== null )
-        {// Value found
-            if ( !preg_match( $this->regex, $value ) )
-            {// (Match failed)
+        else
+        {// (Value is set)
+            if ( !is_string( $value ) )
+            {// (Type is not a string)
                 // (Getting the value)
-                $this->error = "$error_prefix Value does not match the required format";
+                $this->error = "$error_prefix Value must be a string";
 
                 // Returning the value
                 return false;
             }
+
+
+
+            if ( $this->regex !== null )
+            {// Value found
+                if ( !preg_match( $this->regex, $value ) )
+                {// (Match failed)
+                    // (Getting the value)
+                    $this->error = "$error_prefix Value does not match the required format";
+
+                    // Returning the value
+                    return false;
+                }
+            }
+                
+
+
+
+            // (Getting the value)
+            $this->value = $value;
         }
-            
-
-
-
-        // (Getting the value)
-        $this->value = $value;
 
 
 
