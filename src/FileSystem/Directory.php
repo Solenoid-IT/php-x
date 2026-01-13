@@ -59,6 +59,26 @@ class Directory
         // Returning the value
         return $results;
     }
+
+    public function calc_size () : int
+    {
+        // (Setting the value)
+        $size = 0;
+
+        foreach ( $this->list() as $rel_path )
+        {// Processing each entry
+            // (Getting the value)
+            $path = $this->path . '/' . $rel_path;
+
+            // (Incrementing the value)
+            $size += is_dir( $path ) ? 4096 : filesize( $path );
+        }
+
+
+
+        // Returning the value
+        return $size;
+    }
 }
 
 
