@@ -286,21 +286,40 @@ class Container
             // (Getting the value)
             $type = $param->getType();
 
-            if ( $type->isBuiltin() )
-            {// (Param is a primitive type)
+            if ( $type === null )
+            {// Value not found
                 // (Getting the value)
-                $param_value = $params[ $params ? ( isset( $params[0] ) ? $i : $param->getName() ) : null ] ?? null;
+                $param_name = $param->getName();
 
-                if ( $param_value === null && $param->isDefaultValueAvailable() )
-                {// (Default value is available)
+                if ( isset( $params[ $param_name ] ) )
+                {// (Param is provided by name)
                     // (Getting the value)
-                    $param_value = $param->getDefaultValue();
+                    $param_value = $params[ $param_name ];
+                }
+                else
+                {// (Param not found)
+                    // Continuing the iteration
+                    continue;
                 }
             }
             else
-            {// (Param is an instance of a class)
-                // (Getting the value)
-                $param_value = $this->make( $type->getName(), $params );
+            {// Value found
+                if ( $type->isBuiltin() )
+                {// (Param is a primitive type)
+                    // (Getting the value)
+                    $param_value = $params[ $params ? ( isset( $params[0] ) ? $i : $param->getName() ) : null ] ?? null;
+
+                    if ( $param_value === null && $param->isDefaultValueAvailable() )
+                    {// (Default value is available)
+                        // (Getting the value)
+                        $param_value = $param->getDefaultValue();
+                    }
+                }
+                else
+                {// (Param is an instance of a class)
+                    // (Getting the value)
+                    $param_value = $this->make( $type->getName(), $params );
+                }
             }
 
 
