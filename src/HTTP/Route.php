@@ -256,6 +256,14 @@ class Route
 
 
 
+    public function get_middlewares () : array
+    {
+        // Returning the value
+        return $this->middlewares;
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
