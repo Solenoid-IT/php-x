@@ -23,7 +23,7 @@ class Dispatcher
     public function dispatch ($input, array $middlewares, callable $destination) : mixed
     {
         // Returning the value
-        return ( new Pipeline( $this->container ) )->send( $input )->through( $middlewares )->then( $destination );
+        return ( new Pipeline( $this->container ) )->send( $input )->through( $middlewares )->then( function ($input) use ($destination) { return $destination( $input ); } );
     }
 }
 

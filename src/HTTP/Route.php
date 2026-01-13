@@ -212,6 +212,7 @@ class Route
 
 
 
+    # DEPRECATED
     public function run (Container $container) : mixed
     {
         foreach ( $this->middlewares as $middleware )
