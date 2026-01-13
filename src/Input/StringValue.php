@@ -29,6 +29,11 @@ class StringValue extends Value
 
         if ( $value === null || $value === '' )
         {// (Value is not set)
+            // (Setting the value)
+            $this->value = null;
+
+
+
             if ( $this->required )
             {// (Value is required)
                 // (Getting the value)
@@ -76,7 +81,7 @@ class StringValue extends Value
         return true;
     }
 
-    public function get_value () : string
+    public function get_value () : string|null
     {
         // Returning the value
         return $this->value;
