@@ -13,14 +13,14 @@ use \Attribute;
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
 class Middleware
 {
-    public string $name;
+    public array $pipes;
 
 
 
-    public function __construct (string $name)
+    public function __construct (string|array $pipes)
     {
         // (Getting the value)
-        $this->name = $name;
+        $this->pipes = is_array( $pipes ) ? $pipes : [ $pipes ];
     }
 }
 
