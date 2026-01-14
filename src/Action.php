@@ -7,8 +7,9 @@ namespace Solenoid\X;
 
 
 use \Solenoid\X\Container;
-use \Solenoid\X\Input\Validator;
 use \Solenoid\X\Middleware;
+
+use \Solenoid\X\Input\Validator;
 
 
 
@@ -34,8 +35,8 @@ class Action
 
         if ( !$method )
         {// Value not found
-            // (Getting the value)
-            $this->error = 'RPC :: Action-Method is required';
+            // (Setting the value)
+            $this->error = 'sRPC :: Action-Method is required';
 
             // Returning the value
             return;
@@ -53,8 +54,8 @@ class Action
 
         if ( !class_exists( $this->class_path ) )
         {// (Class not found)
-            // (Getting the value)
-            $this->error = 'RPC :: Action-Class not found';
+            // (Setting the value)
+            $this->error = 'sRPC :: Action-Class not found';
 
             // Returning the value
             return;
@@ -64,8 +65,8 @@ class Action
 
         if ( !method_exists( $this->class_path, $method ) )
         {// (Method not found)
-            // (Getting the value)
-            $this->error = 'RPC :: Action-Method not found';
+            // (Setting the value)
+            $this->error = 'sRPC :: Action-Method not found';
 
             // Returning the value
             return;
