@@ -45,7 +45,7 @@ class IntValue extends Value
         }
         else
         {// (Value is set)
-            if ( $value !== '0' && !filter_var( $value, FILTER_VALIDATE_INT ) )
+            if ( !in_array( $value, [ 0, '0' ] ) && !filter_var( $value, FILTER_VALIDATE_INT ) )
             {// (Validation failed)
                 // (Getting the value)
                 $this->error = "$error_prefix Must be an integer";
