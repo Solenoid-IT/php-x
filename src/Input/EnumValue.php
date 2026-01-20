@@ -77,7 +77,7 @@ class EnumValue extends Value
         return true;
     }
 
-    public function get_value () : array
+    public function get_value () : array|null
     {
         // Returning the value
         return $this->value;
