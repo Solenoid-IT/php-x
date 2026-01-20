@@ -45,17 +45,6 @@ class EnumValue extends Value
         }
         else
         {// (Value is set)
-            if ( !is_array( $value ) )
-            {// Match failed
-                // (Getting the value)
-                $this->error = "$error_prefix Value must be an array";
-
-                // Returning the value
-                return false;
-            }
-
-
-
             if ( !in_array( $value, $this->values ) )
             {// Match failed
                 // (Getting the value)
@@ -77,7 +66,7 @@ class EnumValue extends Value
         return true;
     }
 
-    public function get_value () : array|null
+    public function get_value () : mixed
     {
         // Returning the value
         return $this->value;
