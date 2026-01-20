@@ -52,6 +52,17 @@ class AnyValue extends Value
             {// Processing each entry
                 switch ( $type )
                 {
+                    case 'bool':
+                        if ( is_bool( $value ) )
+                        {// Match failed
+                            // (Setting the value)
+                            $type_match = true;
+
+                            // Breaking the iteration
+                            break 2;
+                        }
+                    break;
+
                     case 'int':
                         if ( is_int( $value ) )
                         {// Match failed
@@ -76,17 +87,6 @@ class AnyValue extends Value
 
                     case 'string':
                         if ( is_string( $value ) )
-                        {// Match failed
-                            // (Setting the value)
-                            $type_match = true;
-
-                            // Breaking the iteration
-                            break 2;
-                        }
-                    break;
-
-                    case 'bool':
-                        if ( is_bool( $value ) )
                         {// Match failed
                             // (Setting the value)
                             $type_match = true;
