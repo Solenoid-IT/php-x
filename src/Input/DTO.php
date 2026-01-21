@@ -211,6 +211,136 @@ abstract class DTO
         // Returning the value
         return $object;
     }
+
+
+
+    public function get (string $key, $default = null) : mixed
+    {
+        // (Getting the value)
+        $parts = explode( '.', $key );
+
+
+
+        // (Getting the value)
+        $current = $this;
+
+
+
+        foreach ( $parts as $part )
+        {// Processing each entry
+            if ( !isset( $current->property_tree->$part ) )
+            {// Value not found
+                // Returning the value
+                return $default;
+            }
+
+
+
+            // (Getting the value)
+            $instance = $current->property_tree->$part->instance;
+
+            if ( count( $parts ) > 1 )
+            {// Match OK
+                // (Shifting the array)
+                array_shift( $parts );
+
+
+
+                // (Getting the value)
+                $next_key = implode( '.', $parts );
+
+
+
+                if ( $instance instanceof self )
+                {// Match OK
+                    // Returning the value
+                    return $instance->get( $next_key );
+                }
+
+
+
+                // Returning the value
+                return $default;
+            }
+
+
+
+            // Returning the value
+            return $instance->get_value();
+        }
+
+
+
+        // Returning the value
+        return $default;
+    }
+
+    public function list (string $prefix = '') : array
+    {
+        // (Getting the value)
+        $list = [];
+
+        if ( !isset( $this->property_tree ) )
+        {// Value not found
+            // Returning the value
+            return $list;
+        }
+
+
+
+        foreach ( $this->property_tree as $name => $node )
+        {// Processing each entry
+            // (Getting the value)
+            $instance = $node->instance;
+
+
+
+            // (Getting the value)
+            $key = $prefix === '' ? $name : "$prefix.$name";
+
+
+
+            if ( $instance instanceof self )
+            {// (Instance is a DTO)
+                // (Merging values)
+                $list = array_merge( $list, $instance->list( $key ) );
+            }
+            else
+            if ( $instance instanceof ArrayList )
+            {// (Instance is an ArrayList)
+                /* ahcid to implementt
+
+                foreach ( $instance->instances as $index => $item )
+                {// Processing each list item
+                    // (Getting the value)
+                    $item_key = $key . '.' . $index;
+
+                    if ( $item instanceof self )
+                    {// (Item is a DTO)
+                        // (Merging values)
+                        $list = array_merge( $list, $item->list( $item_key ) );
+                    }
+                    else
+                    {// (Item is a Value)
+                        // (Getting the value)
+                        $list[ $item_key ] = $item->get_value();
+                    }
+                }
+
+                */
+            }
+            else
+            {// (Instance is a Value)
+                // (Getting the value)
+                $list[ $key ] = $instance->get_value();
+            }
+        }
+
+
+
+        // Returning the value
+        return $list;
+    }
 }
 
 
