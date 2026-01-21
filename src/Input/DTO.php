@@ -254,64 +254,30 @@ abstract class DTO
         return $current;
     }
 
-    public function list (string $prefix = '') : array
+    public function list (mixed $target = null, string $prefix = '') : array
     {
         // (Getting the value)
         $list = [];
 
-        if ( !isset( $this->property_tree ) )
-        {// Value not found
-            // Returning the value
-            return $list;
-        }
 
 
+        // (Getting the value)
+        $current = $target ?? $this;
 
-        foreach ( $this->property_tree as $name => $node )
+        foreach ( $current as $key => $value ) 
         {// Processing each entry
             // (Getting the value)
-            $instance = $node->instance;
+            $full_key = $prefix === '' ? (string) $key : "$prefix.$key";
 
-
-
-            // (Getting the value)
-            $key = $prefix === '' ? $name : "$prefix.$name";
-
-
-
-            if ( $instance instanceof self )
-            {// (Instance is a DTO)
-                // (Merging values)
-                $list = array_merge( $list, $instance->list( $key ) );
-            }
-            else
-            if ( $instance instanceof ArrayList )
-            {// (Instance is an ArrayList)
-                /* ahcid to implementt
-
-                foreach ( $instance->instances as $index => $item )
-                {// Processing each list item
-                    // (Getting the value)
-                    $item_key = $key . '.' . $index;
-
-                    if ( $item instanceof self )
-                    {// (Item is a DTO)
-                        // (Merging values)
-                        $list = array_merge( $list, $item->list( $item_key ) );
-                    }
-                    else
-                    {// (Item is a Value)
-                        // (Getting the value)
-                        $list[ $item_key ] = $item->get_value();
-                    }
-                }
-
-                */
-            }
-            else
-            {// (Instance is a Value)
+            if ( is_array( $value ) || is_object( $value ) ) 
+            {// (Value is a node)
                 // (Getting the value)
-                $list[ $key ] = $instance->get_value();
+                $list = array_merge( $list, $this->list( $value, $full_key ) );
+            } 
+            else 
+            {// (Value is a leaf)
+                // (Getting the value)
+                $list[ $full_key ] = $value;
             }
         }
 
