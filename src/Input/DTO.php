@@ -229,6 +229,28 @@ abstract class DTO
         // Returning the value
         return ( new Collection( $this ) )->compress();
     }
+
+
+
+    public static function get_record (string|self $dto) : Record|null
+    {
+        // (Setting the value)
+        $record = null;
+
+        foreach ( ( new \ReflectionClass( $dto ) )->getAttributes( Record::class ) as $attribute )
+        {// Processing each entry
+            // (Appending the value)
+            $record = $attribute->newInstance();
+
+            // Breaking the iteration
+            break;
+        }
+
+
+
+        // Returning the value
+        return $record;
+    }
 }
 
 
