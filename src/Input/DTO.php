@@ -229,25 +229,6 @@ abstract class DTO
         // Returning the value
         return ( new Collection( $this ) )->compress();
     }
-
-
-
-    public static function get_keys (string|self $dto) : array
-    {
-        // (Setting the value)
-        $keys = [];
-
-        foreach ( ( new \ReflectionClass( $dto ) )->getAttributes( Key::class ) as $attribute )
-        {// Processing each entry
-            // (Appending the value)
-            $keys[] = $attribute->newInstance();
-        }
-
-
-
-        // Returning the value
-        return $keys;
-    }
 }
 
 
