@@ -214,7 +214,7 @@ abstract class DTO
 
 
 
-    public function get (string $key, $default = null) : mixed
+    public function get_OLD (string $key, $default = null) : mixed
     {
         // (Getting the value)
         $parts = explode( '.', $key );
@@ -267,6 +267,66 @@ abstract class DTO
 
             // Returning the value
             return $instance->get_value();
+        }
+
+
+
+        // Returning the value
+        return $default;
+    }
+
+    public function get (string $key, $default = null) : mixed
+    {
+        // (Getting the value)
+        $parts = explode( '.', $key );
+
+
+
+        // (Getting the value)
+        $current_instance = $this;
+
+
+
+        foreach ( $parts as $index => $part ) 
+        {// Processing each entry
+            if ( $current_instance instanceof self ) 
+            {// (Instance is a DTO)
+                if ( !isset( $current_instance->property_tree->$part ) )
+                {// Value not found
+                    // Returning the value
+                    return $default;
+                }
+
+
+
+                // (Getting the value)
+                $current_instance = $current_instance->property_tree->$part->instance;
+            } 
+            else
+            if ( $current_instance instanceof ArrayList ) 
+            {// (Instance is an ArrayList)
+                /* ahcid to implementt
+
+                if ( !isset( $current_instance->instances[ $part ] ) ) return $default;
+                
+                // (Getting the value)
+                $current_instance = $current_instance->instances[ $part ];
+
+                */
+            } 
+            else 
+            {// (Instance is a Value)
+                // Returning the value
+                return $default;
+            }
+
+
+
+            if ( $index === count( $parts ) - 1 ) 
+            {// (Index is the last)
+                // Returning the value
+                return $current_instance->get_value();
+            }
         }
 
 
