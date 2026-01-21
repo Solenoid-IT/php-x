@@ -237,7 +237,7 @@ abstract class DTO
         // (Setting the value)
         $keys = [];
 
-        foreach ( new \ReflectionClass( $dto )->getAttributes( Key::class ) as $attribute )
+        foreach ( ( new \ReflectionClass( $dto ) )->getAttributes( Key::class ) as $attribute )
         {// Processing each entry
             // (Appending the value)
             $keys[] = $attribute->newInstance();
