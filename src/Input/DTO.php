@@ -232,12 +232,12 @@ abstract class DTO
 
 
 
-    public static function get_record (string|self $dto) : Record|null
+    public static function get_fieldset (string|self $dto) : WriteFieldset|null
     {
         // (Setting the value)
         $record = null;
 
-        foreach ( ( new \ReflectionClass( $dto ) )->getAttributes( Record::class ) as $attribute )
+        foreach ( ( new \ReflectionClass( $dto ) )->getAttributes( WriteFieldset::class ) as $attribute )
         {// Processing each entry
             // (Appending the value)
             $record = $attribute->newInstance();

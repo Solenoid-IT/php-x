@@ -11,7 +11,7 @@ use \Attribute;
 
 
 #[ Attribute( Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE ) ]
-class Record
+class WriteFieldset
 {
     public function __construct (public array $fields = []) {}
 }
