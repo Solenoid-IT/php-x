@@ -6,6 +6,10 @@ namespace Solenoid\X\Input;
 
 
 
+use \Solenoid\X\Collection;
+
+
+
 abstract class DTO
 {
     protected bool      $is_valid;
@@ -210,6 +214,20 @@ abstract class DTO
 
         // Returning the value
         return $object;
+    }
+
+
+
+    public function get (string $key, $default = null) : mixed
+    {
+        // Returning the value
+        return ( new Collection( $this ) )->get( $key, $default );
+    }
+
+    public function compress () : array
+    {
+        // Returning the value
+        return ( new Collection( $this ) )->compress();
     }
 }
 
