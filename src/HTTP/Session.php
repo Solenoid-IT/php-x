@@ -33,6 +33,7 @@ class Session
 
     public array   $data;
 
+    public bool    $started;
     public bool    $closed;
 
 
@@ -53,6 +54,7 @@ class Session
 
         $this->id            = null;
 
+        $this->started       = false;
         $this->closed        = false;
 
 
@@ -147,6 +149,11 @@ class Session
         }
 
         */
+
+
+
+        // (Setting the value)
+        $this->started = true;
 
 
 
@@ -384,6 +391,10 @@ class Session
 
     public function __destruct ()
     {
+        if ( !$this->started ) return;
+
+
+
         if ( $this->destroyed_id )
         {// (Resource has been deleted)
             // (Unsetting the cookie)
