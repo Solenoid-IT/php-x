@@ -224,6 +224,86 @@ abstract class DTO
         return ( new Collection( $this ) )->get( $key, $default );
     }
 
+    public function set (string $key, mixed $value) : self
+    {
+        // (Getting the value)
+        $parts = explode( '.', $key );
+
+        if ( count( $parts ) > 1 )
+        {// (Parts are multiple)
+            // (Getting the values)
+            $current_key   = array_shift( $parts );
+            $remaining_key = implode( '.', $parts );
+
+            if ( isset( $this->$current_key ) && $this->$current_key instanceof self )
+            {// Match OK
+                // (Setting the value)
+                $this->$current_key->set( $remaining_key, $value );
+            }
+
+
+
+            // Returning the value
+            return $this;
+        }
+
+
+
+        // (Getting the value)
+        $name = $parts[0];
+
+
+
+        // (Getting the value)
+        $this->$name = $value;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    public function unset (string $key) : self
+    {
+        // (Getting the value)
+        $parts = explode( '.', $key );
+
+        if ( count( $parts ) > 1 )
+        {// (Parts are multiple)
+            // (Getting the values)
+            $current_key   = array_shift( $parts );
+            $remaining_key = implode( '.', $parts );
+
+            if ( isset( $this->$current_key ) && $this->$current_key instanceof self )
+            {// Match OK
+                // (Unsetting the value)
+                $this->$current_key->unset( $remaining_key );
+            }
+
+
+
+            // Returning the value
+            return $this;
+        }
+
+
+
+        // (Getting the value)
+        $name = $parts[0];
+
+
+
+        // (Unsetting the value)
+        unset( $this->$name );
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     public function compress () : array
     {
         // Returning the value
