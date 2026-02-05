@@ -163,6 +163,77 @@ class Dot
 
 
 
+    public function iterate (mixed $target = null, string $prefix = '') : \Generator
+    {
+        // (Getting the value)
+        $current = $target ?? $this;
+
+
+
+        // (Getting the value)
+        $keys = array_keys( is_object( $current ) ? get_object_vars( $current ) : (array) $current );
+
+
+
+        foreach ( $keys as $key ) 
+        {// Processing each entry
+            // (Getting the value)
+            $full_key = $prefix === '' ? (string) $key : "$prefix.$key";
+            
+
+
+            // (Getting the value)
+            $value = is_object( $current ) ? ( $current->$key ?? null ) : ( $current[ $key ] ?? null );
+
+            if ( $value instanceof self || is_object( $value ) || is_array( $value ) ) 
+            {// (Node found)
+                if ( $value instanceof self ) 
+                {// (Target is another Dot instance)
+                    // (Yielding the value)
+                    yield from $value->iterate( null, $full_key );
+                }
+                else
+                {// (Target is a standard object or array)
+                    // (Yielding the value)
+                    yield from $this->iterate( $value, $full_key );
+                }
+
+
+
+                if ( is_object( $current ) )
+                {// Value is true
+                    // (Removing the element)
+                    unset( $current->$key );
+                }
+                else
+                {// Value is false
+                    // (Removing the element)
+                    unset( $current[ $key ] );
+                }
+            } 
+            else 
+            {// (Leaf found)
+                // (Yielding the value)
+                yield [ $full_key, $value ];
+
+
+    
+                if ( is_object( $current ) )
+                {// Value is true
+                    // (Removing the element)
+                    unset( $current->$key );
+                }
+                else
+                {// Value is false
+                    // (Removing the element)
+                    unset( $current[ $key ] );
+                }
+            }
+        }
+    }
+
+
+
     public function __get (string $key)
     {
         // Returning the value
