@@ -17,6 +17,8 @@ class App
     private array $errors        = [];
     private array $conn_profiles = [];
 
+    private ?Error $error = null;
+
 
 
     public readonly string $mode;
@@ -151,6 +153,29 @@ class App
     {
         // (Getting the value)
         $this->conn_profiles[ $type ] = $profiles;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
+    public function get_error () : Error|null
+    {
+        // Returning the value
+        return $this->error;
+    }
+
+    public function set_error (Error $error) : self
+    {
+        if ( $this->error !== null ) return $this;
+
+
+
+        // (Getting the value)
+        $this->error = $error;
 
 
 
