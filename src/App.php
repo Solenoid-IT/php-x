@@ -140,6 +140,14 @@ class App
 
 
 
+        if ( $this->error === null )
+        {// Value not found
+            // (Getting the value)
+            $this->error = $new_error;
+        }
+
+
+
         // Throwing the exception
         throw new RuntimeException( $new_error );
 
