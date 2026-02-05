@@ -107,6 +107,8 @@ class App
         return $this;
     }
 
+
+
     public function spawn_error (int $code, string $description = '') : Error
     {
         // (Getting the value)
@@ -137,8 +139,22 @@ class App
 
 
 
+        if ( $this->error === null )
+        {// Value not found
+            // (Getting the value)
+            $this->error = $new_error;
+        }
+
+
+
         // Returning the value
         return $new_error;
+    }
+
+    public function get_error () : Error|null
+    {
+        // Returning the value
+        return $this->error;
     }
 
 
@@ -153,29 +169,6 @@ class App
     {
         // (Getting the value)
         $this->conn_profiles[ $type ] = $profiles;
-
-
-
-        // Returning the value
-        return $this;
-    }
-
-
-
-    public function get_error () : Error|null
-    {
-        // Returning the value
-        return $this->error;
-    }
-
-    public function set_error (Error $error) : self
-    {
-        if ( $this->error !== null ) return $this;
-
-
-
-        // (Getting the value)
-        $this->error = $error;
 
 
 
