@@ -62,16 +62,16 @@ class Element
 
 
 
-    public function get_relationship (string $name) : self|null
+    public function get_relationship (string $name) : array|null
     {
         // Returning the value
         return $this->relationships->$name ?? null;
     }
 
-    public function set_relationship (string $name, self $value) : self
+    public function set_relationship (string $name, array $elements) : self
     {
         // (Getting the value)
-        $this->relationships->$name = $value;
+        $this->relationships->$name = $elements;
 
 
 
