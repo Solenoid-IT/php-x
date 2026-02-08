@@ -81,6 +81,74 @@ class Element
 
 
 
+    public static function compress (&$element) : void
+    {
+        if ( is_array( $element ) )
+        {// (Value is an array)
+            foreach ( $element as &$item )
+            {// Processing each entry
+                // (Compressing the element)
+                self::compress( $item );
+            }
+
+
+
+            // Returning the value
+            return;
+        }
+
+
+
+        if ( !is_object( $element ) )
+        {// (Value is not an object)
+            // Returning the value
+            return;
+        }
+
+
+
+        if ( isset( $element->attributes ) && is_object( $element->attributes ) )
+        {// Match OK
+            foreach ( get_object_vars( $element->attributes ) as $key => $value )
+            {// Processing each entry
+                // (Getting the value)
+                $element->$key = $value;
+            }
+
+            // (Removing the element)
+            unset( $element->attributes );
+        }
+
+
+
+        if ( isset( $element->relationships ) && is_object( $element->relationships ) )
+        {// Match OK
+            foreach ( get_object_vars( $element->relationships ) as $key => $value )
+            {// Processing each entry
+                // (Compressing the element)
+                self::compress( $value );
+
+
+
+                // (Getting the value)
+                $element->$key = $value;
+            }
+
+
+
+            // (Removing the element)
+            unset( $element->relationships );
+        }
+
+        if ( isset( $element->meta ) )
+        {// Value found
+            // (Removing the element)
+            unset( $element->meta );
+        }
+    }
+
+
+
     public function __get (string $key)
     {
         // Returning the value
