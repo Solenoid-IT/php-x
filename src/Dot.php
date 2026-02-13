@@ -48,7 +48,7 @@ class Dot
         return $current;
     }
 
-    public function set (string $key, mixed $value) : self
+    public function set (string $key, mixed $value) : static
     {
         // (Getting the value)
         $parts = explode( '.', $key );
@@ -59,11 +59,16 @@ class Dot
             $current_key   = array_shift( $parts );
             $remaining_key = implode( '.', $parts );
 
-            if ( isset( $this->$current_key ) && $this->$current_key instanceof self )
-            {// Match OK
-                // (Setting the value)
-                $this->$current_key->set( $remaining_key, $value );
+            if ( !isset( $this->$current_key ) || !( $this->$current_key instanceof static ) )
+            {// (Node missing or invalid)
+                // (Getting the value)
+                $this->$current_key = new static();
             }
+
+
+
+            // (Setting the value)
+            $this->$current_key->set( $remaining_key, $value );
 
 
 
@@ -78,7 +83,7 @@ class Dot
 
 
 
-        // (Getting the value)
+        // (Setting the value)
         $this->$name = $value;
 
 
@@ -87,7 +92,7 @@ class Dot
         return $this;
     }
 
-    public function unset (string $key) : self
+    public function unset (string $key) : static
     {
         // (Getting the value)
         $parts = explode( '.', $key );
@@ -98,7 +103,7 @@ class Dot
             $current_key   = array_shift( $parts );
             $remaining_key = implode( '.', $parts );
 
-            if ( isset( $this->$current_key ) && $this->$current_key instanceof self )
+            if ( isset( $this->$current_key ) && $this->$current_key instanceof static )
             {// Match OK
                 // (Unsetting the value)
                 $this->$current_key->unset( $remaining_key );
