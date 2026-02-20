@@ -45,20 +45,10 @@ class Error extends \Exception
 
 
 
-    public function __toString () : string
+    public function summarize () : string
     {
-        // (Getting the value)
-        $location = "\nThrown in " . $this->getFile() . " on line " . $this->getLine();
-
-
-
-        // (Getting the value)
-        $stack_trace = "\nStack trace:\n" . $this->getTraceAsString();
-
-
-
         // Returning the value
-        return 'Error ' . implode( ' :: ', [ $this->code, $this->type, $this->message ] ) . $location . $stack_trace;
+        return 'Error ::' . implode( ' - ', [ $this->code, $this->type, $this->message, $this->http_code ? 'HTTP ' . $this->http_code : null ] );
     }
 }
 
