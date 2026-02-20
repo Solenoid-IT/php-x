@@ -90,6 +90,12 @@ class App
         return $this;
     }
 
+    public function get_errors () : array
+    {
+        // Returning the value
+        return $this->errors;
+    }
+
 
 
     public function spawn_error (int $code, string $message = '') : Error
