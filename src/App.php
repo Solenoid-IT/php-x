@@ -75,8 +75,14 @@ class App
 
     public function register_errors (array $errors) : self
     {
-        // (Getting the value)
-        $this->errors = $errors;
+        // (Setting the value)
+        $this->errors = [];
+
+        foreach ( $errors as $error )
+        {// Processing each entry
+            // (Getting the value)
+            $this->errors[ $error['code'] ] = $error;
+        }
 
 
 
