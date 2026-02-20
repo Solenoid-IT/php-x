@@ -148,11 +148,6 @@ class App
 
 
 
-        // Throwing the exception
-        throw new RuntimeException( $new_error );
-
-
-
         // Returning the value
         return $new_error;
     }

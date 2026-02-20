@@ -6,13 +6,13 @@ namespace Solenoid\X;
 
 
 
-class Error
+class Error extends \Exception
 {
-    public readonly int    $code;
-    public readonly string $description;
+    public int    $code;
+    public string $description;
 
-    public readonly string $name;
-    public readonly int    $http_code;
+    public string $name;
+    public int    $http_code;
 
 
 
@@ -51,8 +51,18 @@ class Error
 
     public function __toString () : string
     {
+        // (Getting the value)
+        $location = "\nThrown in " . $this->getFile() . " on line " . $this->getLine();
+
+
+
+        // (Getting the value)
+        $stack_trace = "\nStack trace:\n" . $this->getTraceAsString();
+
+
+
         // Returning the value
-        return 'Error ' . implode( ' :: ', [ $this->code, isset( $this->name ) ? $this->name : '', $this->description ] );
+        return 'Error ' . implode( ' :: ', [ $this->code, isset( $this->name ) ? $this->name : '', $this->description ] ) . $location . $stack_trace;
     }
 }
 
