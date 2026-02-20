@@ -8,7 +8,7 @@ namespace Solenoid\X;
 
 class Error extends \Exception
 {
-    public function __construct (int $code = 0, string $message = '', protected ?string $type = null, protected ?int $http_code = 500)
+    public function __construct (int $code = 0, string $message = '', protected ?string $type = null, protected ?int $http_code = 500, protected bool $exposed = false)
     {
         // (Calling the function)
         parent::__construct( $message, $code );
@@ -26,6 +26,14 @@ class Error extends \Exception
     {
         // Returning the value
         return $this->http_code;
+    }
+
+
+
+    public function is_exposed () : bool
+    {
+        // Returning the value
+        return $this->exposed;
     }
 
 

@@ -106,7 +106,7 @@ class App
 
 
         // (Getting the value)
-        $error = new Error( $code, $message, $r['type'], $r['http_code'] );
+        $error = new Error( $code, $message, $r['type'], $r['http_code'], $r['exposed'] === '1' );
 
 
 
