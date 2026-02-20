@@ -36,8 +36,8 @@ class Error extends \Exception
         return
         [
             'code'      => $this->code,
-            'message'   => $this->message,
             'type'      => $this->type,
+            'message'   => $this->message,
             'http_code' => $this->http_code
         ]
         ;
