@@ -49,6 +49,21 @@ class Error extends \Exception
 
 
 
+    public function get_info () : array
+    {
+        // Returning the value
+        return
+        [
+            'code'        => $this->code,
+            'description' => $this->description,
+            'name'        => $this->name ?? null,
+            'http_code'   => $this->http_code ?? null,
+        ]
+        ;
+    }
+
+
+
     public function __toString () : string
     {
         // (Getting the value)
