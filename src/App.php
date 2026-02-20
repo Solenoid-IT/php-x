@@ -7,7 +7,6 @@ namespace Solenoid\X;
 
 
 use \Solenoid\X\Error;
-use \Solenoid\X\RuntimeException;
 
 
 
@@ -76,31 +75,8 @@ class App
 
     public function register_errors (array $errors) : self
     {
-        // (Setting the value)
-        $this->errors = [];
-
-        foreach ( $errors as $record )
-        {// Processing each entry
-            // (Getting the value)
-            $error = new Error( $record['code'] );
-
-            if ( isset( $record['name'] ) )
-            {// Value found
-                // (Setting the name)
-                $error->set_name( $record['name'] );
-            }
-
-            if ( isset( $record['http_code'] ) )
-            {// Value found
-                // (Setting the HTTP code)
-                $error->set_http_code( $record['http_code'] );
-            }
-
-
-
-            // (Getting the value)
-            $this->errors[ $error->code ] = $error;
-        }
+        // (Getting the value)
+        $this->errors = $errors;
 
 
 
@@ -110,12 +86,12 @@ class App
 
 
 
-    public function spawn_error (int $code, string $description = '') : Error
+    public function spawn_error (int $code, string $message = '') : Error
     {
         // (Getting the value)
-        $error = $this->errors[ $code ] ?? null;
+        $r = $this->errors[ $code ];
 
-        if ( !$error )
+        if ( !$r )
         {// Value not found
             // Throwing an exception
             throw new \Exception( "Error code {$code} not found" );
@@ -124,32 +100,20 @@ class App
 
 
         // (Getting the value)
-        $new_error = new Error( $code, $description );
-
-        if ( isset( $error->name ) )
-        {// Value found
-            // (Setting the name)
-            $new_error->set_name( $error->name );
-        }
-
-        if ( isset( $error->http_code ) )
-        {// Value found
-            // (Setting the HTTP code)
-            $new_error->set_http_code( $error->http_code );
-        }
+        $error = new Error( $code, $message, $r['type'], $r['http_code'] );
 
 
 
         if ( $this->error === null )
         {// Value not found
             // (Getting the value)
-            $this->error = $new_error;
+            $this->error = $error;
         }
 
 
 
         // Returning the value
-        return $new_error;
+        return $error;
     }
 
     public function get_error () : Error|null

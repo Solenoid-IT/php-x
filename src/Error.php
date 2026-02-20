@@ -8,43 +8,10 @@ namespace Solenoid\X;
 
 class Error extends \Exception
 {
-    public int    $code;
-    public string $description;
-
-    public string $name;
-    public int    $http_code;
-
-
-
-    public function __construct (int $code, string $description = '')
+    public function __construct (public int $code, public string $message = '', public ?string $type = null, public ?int $http_code = 500)
     {
-        // (Getting the values)
-        $this->code        = $code;
-        $this->description = $description;
-    }
-
-
-
-    public function set_name (string $value) : self
-    {
-        // (Getting the value)
-        $this->name = $value;
-
-
-
-        // Returning the value
-        return $this;
-    }
-
-    public function set_http_code (int $value) : self
-    {
-        // (Getting the value)
-        $this->http_code = $value;
-
-
-
-        // Returning the value
-        return $this;
+        // (Calling the function)
+        parent::__construct( $this->message, $this->code );
     }
 
 
@@ -54,10 +21,10 @@ class Error extends \Exception
         // Returning the value
         return
         [
-            'code'        => $this->code,
-            'description' => $this->description,
-            'name'        => $this->name ?? null,
-            'http_code'   => $this->http_code ?? null,
+            'code'      => $this->code,
+            'message'   => $this->message,
+            'type'      => $this->type,
+            'http_code' => $this->http_code
         ]
         ;
     }
@@ -77,7 +44,7 @@ class Error extends \Exception
 
 
         // Returning the value
-        return 'Error ' . implode( ' :: ', [ $this->code, isset( $this->name ) ? $this->name : '', $this->description ] ) . $location . $stack_trace;
+        return 'Error ' . implode( ' :: ', [ $this->code, $this->type, $this->message ] ) . $location . $stack_trace;
     }
 }
 
