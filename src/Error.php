@@ -8,10 +8,10 @@ namespace Solenoid\X;
 
 class Error extends \Exception
 {
-    public function __construct (public int $code, public string $message = '', public ?string $type = null, public ?int $http_code = 500)
+    public function __construct (int $code = 0, string $message = '', protected ?string $type = null, protected ?int $http_code = 500)
     {
         // (Calling the function)
-        parent::__construct( $this->message, $this->code );
+        parent::__construct( $message, $code );
     }
 
 
