@@ -16,6 +16,20 @@ class Error extends \Exception
 
 
 
+    public function get_type () : string|null
+    {
+        // Returning the value
+        return $this->type;
+    }
+
+    public function get_http_code () : int|null
+    {
+        // Returning the value
+        return $this->http_code;
+    }
+
+
+
     public function get_info () : array
     {
         // Returning the value
