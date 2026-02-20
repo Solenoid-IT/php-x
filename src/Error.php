@@ -45,10 +45,10 @@ class Error extends \Exception
 
 
 
-    public function summarize () : string
+    public function __toString () : string
     {
         // Returning the value
-        return 'Error ::' . implode( ' - ', [ $this->code, $this->type, $this->message, $this->http_code ? 'HTTP ' . $this->http_code : null ] );
+        return parent::__toString() . ' :: Error ::' . implode( ' - ', [ $this->code, $this->type, $this->message, $this->http_code ? 'HTTP ' . $this->http_code : null ] );
     }
 }
 
