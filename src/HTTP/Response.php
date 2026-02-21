@@ -166,10 +166,10 @@ class Response
 
 
 
-    public function error (int $code, string $description = '') : self
+    public function error (int $code, string $message = '') : self
     {
         // (Getting the value)
-        $this->error = $this->app->spawn_error( $code, $description );
+        $this->error = $this->app->spawn_error( $code, $message );
 
 
 
@@ -233,19 +233,11 @@ class Response
     {
         if ( isset( $this->error ) )
         {// Value found
-            // (Getting the value)
-            $new_error = new Error( $this->error->code, $this->error->description );
-
-            if ( isset( $this->error->name ) )
-            {// Value found
-                // (Setting the name)
-                $new_error->set_name( $this->error->name );
+            if ( $this->error->is_exposed() )
+            {// (Error is exposed)
+                // (Preparing the response)
+                $this->json( $this->error->get_http_code() ?? 200, $this->error->get_info() );
             }
-
-
-
-            // (Preparing the response)
-            $this->json( isset( $this->error->http_code ) ? $this->error->http_code : 200, $new_error );
         }
 
 
