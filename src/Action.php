@@ -36,7 +36,8 @@ class Action
         if ( !$method )
         {// Value not found
             // (Setting the value)
-            $this->error = 'sRPC :: Action-Method is required';
+            #$this->error = 'sRPC :: Action-Method is required';
+            $this->error = 'sRPC :: ACTION_NOT_SET';
 
             // Returning the value
             return;
@@ -55,7 +56,8 @@ class Action
         if ( !class_exists( $this->class_path ) )
         {// (Class not found)
             // (Setting the value)
-            $this->error = 'sRPC :: Action-Class not found';
+            #$this->error = 'sRPC :: Action-Class not found';
+            $this->error = 'sRPC :: CLASS_NOT_FOUND';
 
             // Returning the value
             return;
@@ -66,7 +68,8 @@ class Action
         if ( !method_exists( $this->class_path, $method ) )
         {// (Method not found)
             // (Setting the value)
-            $this->error = 'sRPC :: Action-Method not found';
+            #$this->error = 'sRPC :: Action-Method not found';
+            $this->error = 'sRPC :: METHOD_NOT_FOUND';
 
             // Returning the value
             return;
