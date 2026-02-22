@@ -242,8 +242,11 @@ class Response
 
 
 
-        // (Setting the code)
-        http_response_code( $this->code );
+        if ( isset( $this->code ) )
+        {// Value found
+            // (Setting the code)
+            http_response_code( $this->code );
+        }
 
 
 
