@@ -14,7 +14,8 @@ use \Solenoid\X\Error;
 
 class Response
 {
-    private int   $code;
+    private ?int  $code = null;
+
     private array $headers;
     private       $body;
 
@@ -23,10 +24,9 @@ class Response
 
 
 
-    public function __construct (int $code = 200, array $headers = [], string|callable $body = '')
+    public function __construct (array $headers = [], string|callable $body = '')
     {
         // (Getting the values)
-        $this->code    = $code;
         $this->headers = $headers;
         $this->body    = is_string( $body ) ? $body : function () use (&$body) { echo $body; };        
     }
@@ -244,7 +244,7 @@ class Response
 
         if ( isset( $this->code ) )
         {// Value found
-            // (Setting the code)
+            // (Sending the code)
             http_response_code( $this->code );
         }
 
@@ -277,7 +277,7 @@ class Response
 
 
 
-    public function get_code () : int
+    public function get_code () : int|null
     {
         // Returning the value
         return $this->code;
