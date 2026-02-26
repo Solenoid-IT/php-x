@@ -125,7 +125,7 @@ class CodeAnalyzer
 
         // (Adding the visitor)
         $node_traverser->addVisitor( new NameResolver() );
-                
+
         // (Traversing the AST)
         $ast = $node_traverser->traverse( $ast );
 
@@ -137,8 +137,17 @@ class CodeAnalyzer
             $ast,
             function (Node $node)
             {
+                if ( !( $node instanceof Class_ ) ) return false;
+
+
+
+                // (Getting the value)
+                $class_path = isset( $node->namespacedName ) ? $node->namespacedName->toString() : $node->name->toString();
+
+
+
                 // Returning the value
-                return $node instanceof Class_ && $node->name->toString() === $this->class;
+                return $class_path === $this->class;
             }
         )
         ;
