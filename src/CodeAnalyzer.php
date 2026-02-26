@@ -67,6 +67,29 @@ class CodeAnalyzer
                     if ( $prop->hasType() ) return $prop->getType()->getName();
                 }
             }
+
+            if ( $node->var instanceof MethodCall )
+            {// Match OK
+                // (Getting the value)
+                $parent_class = $this->resolve_class( $node->var );
+
+                if ( $parent_class && class_exists( $parent_class ) )
+                {// Match OK
+                    // (Getting the value)
+                    $method_name = $node->var->name->toString();
+
+
+
+                    // (Getting the value)
+                    $return_type = ( new \ReflectionMethod( $parent_class, $method_name ) )->getReturnType();
+
+                    if ( $return_type instanceof \ReflectionNamedType )
+                    {// Match OK
+                        // Returning the value
+                        return $return_type->getName();
+                    }
+                }
+            }
         }
 
 
