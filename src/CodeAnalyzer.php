@@ -31,6 +31,9 @@ class CodeAnalyzer
     private Parser     $parser;
     private NodeFinder $nodeFinder;
 
+    private int        $loop_limit       = 5;
+    private array      $excluded_methods = [];
+
 
 
     private function resolve_class (Node $node) : string|null
@@ -120,19 +123,50 @@ class CodeAnalyzer
 
 
 
+    public function set_loop_limit (int $limit) : self
+    {
+        // (Getting the value)
+        $this->loop_limit = $limit;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    public function set_excluded_methods (array $methods) : self
+    {
+        // (Getting the value)
+        $this->excluded_methods = $methods;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
     public function find (string $fn, ?string $class = null, array &$visited = [], array $context = []) : array
     {
         // (Getting the value)
         $signature = $this->class . '::' . $this->method;
 
-        if ( !isset( $visited[ $signature ] ) ) $visited[ $signature ] = 0;
+        foreach ( $this->excluded_methods as $pattern )
+        {// Processing each entry
+            if ( fnmatch( $pattern, $signature ) ) return [];
+        }
 
-        if ( $visited[ $signature ] > 5 ) return [];
+
+
+        if ( !isset( $visited[ $signature ] ) ) $visited[ $signature ] = 0;
 
 
 
         // (Incrementing the value)
         $visited[ $signature ] += 1;
+
+        if ( $visited[ $signature ] > $this->loop_limit ) return [];
 
 
 
