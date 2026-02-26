@@ -140,12 +140,16 @@ class CodeAnalyzer
 
 
         // (Getting the value)
-        $declaring_class = $reflection->getDeclaringClass()->getName();
+        $declaring_class = $reflection->getDeclaringClass();
+
+        if ( $declaring_class->isInternal() ) return [];
 
 
 
         // (Getting the values)
         $file_path = $reflection->getFileName();
+
+        if ( !$file_path || !file_exists( $file_path ) ) return [];
 
 
 
@@ -187,7 +191,7 @@ class CodeAnalyzer
 
                 // Returning the value
                 #return $class_path === $this->class;
-                return $class_path === $declaring_class;
+                return $class_path === $declaring_class->getName();
             }
         )
         ;
