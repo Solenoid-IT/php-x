@@ -85,8 +85,19 @@ class CodeAnalyzer
 
                     if ( $return_type instanceof \ReflectionNamedType )
                     {// Match OK
+                        // (Getting the value)
+                        $type_name = $return_type->getName();
+
+                        if ( in_array( $type_name, [ 'static', 'self', 'this' ] ) )
+                        {// Match OK
+                            // (Getting the value)
+                            $type_name = $parent_class;
+                        }
+
+
+
                         // Returning the value
-                        return $return_type->getName();
+                        return $type_name;
                     }
                 }
             }
