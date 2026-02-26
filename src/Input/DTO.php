@@ -331,6 +331,34 @@ abstract class DTO
         // Returning the value
         return $record;
     }
+
+
+
+    public static function from_array (array $data) : static
+    {
+        // (Getting the value)
+        $instance = new static();
+
+        foreach ( $instance as $key => $value )
+        {// Processing each entry
+            if ( $value instanceof DTO || $value instanceof ArrayList )
+            {// (Value is a DTO or ArrayList)
+                // (Getting the value)
+                $instance->$key = is_array( $data[ $key ] ?? null ) ? get_class( $instance->$key )::from_array( $data[ $key ] ) : null;
+            }
+            else
+            if ( $value instanceof Value )
+            {// (Value is a Value)
+                // (Getting the value)
+                $instance->$key = $data[ $key ] ?? null;
+            }
+        }
+
+
+
+        // Returning the value
+        return $instance;
+    }
 }
 
 
