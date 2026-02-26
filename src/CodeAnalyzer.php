@@ -125,12 +125,14 @@ class CodeAnalyzer
         // (Getting the value)
         $signature = $this->class . '::' . $this->method;
 
-        if ( in_array( $signature, $visited ) ) return [];
+        if ( !isset( $visited[ $signature ] ) ) $visited[ $signature ] = 0;
+
+        if ( $visited[ $signature ] > 5 ) return [];
 
 
 
-        // (Appending the value)
-        #$visited[] = $signature;
+        // (Incrementing the value)
+        $visited[ $signature ] += 1;
 
 
 
