@@ -1,0 +1,435 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "7a2b186e3c19979822aa2d2b7a1b10fd",
+    "packages": [
+        {
+            "name": "eftec/bladeone",
+            "version": "4.19.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EFTEC/BladeOne.git",
+                "reference": "a22f6471c01c26fea5f6a0d0aca9b5674fc999be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/a22f6471c01c26fea5f6a0d0aca9b5674fc999be",
+                "reference": "a22f6471c01c26fea5f6a0d0aca9b5674fc999be",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5.23"
+            },
+            "suggest": {
+                "eftec/bladeonehtml": "Extension to create forms",
+                "ext-mbstring": "This extension is used if it's active"
+            },
+            "bin": [
+                "lib/bladeonecli"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "eftec\\bladeone\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jorge Patricio Castro Castillo",
+                    "email": "jcastro@eftec.cl"
+                }
+            ],
+            "description": "The standalone version Blade Template Engine from Laravel in a single php file",
+            "homepage": "https://github.com/EFTEC/BladeOne",
+            "keywords": [
+                "blade",
+                "php",
+                "template",
+                "templating",
+                "view"
+            ],
+            "support": {
+                "issues": "https://github.com/EFTEC/BladeOne/issues",
+                "source": "https://github.com/EFTEC/BladeOne/tree/4.19.1"
+            },
+            "time": "2025-09-03T20:50:39+00:00"
+        },
+        {
+            "name": "nikic/php-parser",
+            "version": "v5.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "dca41cd15c2ac9d055ad70dbfd011130757d1f82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/dca41cd15c2ac9d055ad70dbfd011130757d1f82",
+                "reference": "dca41cd15c2ac9d055ad70dbfd011130757d1f82",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^9.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.7.0"
+            },
+            "time": "2025-12-06T11:56:16+00:00"
+        },
+        {
+            "name": "solenoid/html",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solenoid-IT/php-html.git",
+                "reference": "f1d1a450a56c3d12091689ee740c9ddb25614281"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solenoid-IT/php-html/zipball/f1d1a450a56c3d12091689ee740c9ddb25614281",
+                "reference": "f1d1a450a56c3d12091689ee740c9ddb25614281",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solenoid\\HTML\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pier Niccolò Giannelli",
+                    "email": "pierniccologiannelli@gmail.com",
+                    "homepage": "https://www.solenoid.it",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "HTML library",
+            "homepage": "https://github.com/Solenoid-IT/php-html",
+            "keywords": [
+                "builder",
+                "html"
+            ],
+            "support": {
+                "issues": "https://github.com/Solenoid-IT/php-html/issues",
+                "source": "https://github.com/Solenoid-IT/php-html/tree/v1.0.0"
+            },
+            "time": "2023-12-28T20:25:35+00:00"
+        },
+        {
+            "name": "solenoid/http",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solenoid-IT/php-http.git",
+                "reference": "4d62c782d7faf050cddc2abe977a499f55a9a3d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solenoid-IT/php-http/zipball/4d62c782d7faf050cddc2abe977a499f55a9a3d2",
+                "reference": "4d62c782d7faf050cddc2abe977a499f55a9a3d2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solenoid\\HTTP\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pier Niccolò Giannelli",
+                    "email": "pierniccologiannelli@gmail.com",
+                    "homepage": "https://www.solenoid.it",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "HTTP library",
+            "homepage": "https://github.com/Solenoid-IT/php-http",
+            "keywords": [
+                "curl",
+                "http",
+                "request",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/Solenoid-IT/php-http/issues",
+                "source": "https://github.com/Solenoid-IT/php-http/tree/v1.0.0"
+            },
+            "time": "2025-03-21T04:07:53+00:00"
+        },
+        {
+            "name": "solenoid/log",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solenoid-IT/php-log.git",
+                "reference": "ce358b16ebf7ee2bb7708c47591cbb0ed4733073"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solenoid-IT/php-log/zipball/ce358b16ebf7ee2bb7708c47591cbb0ed4733073",
+                "reference": "ce358b16ebf7ee2bb7708c47591cbb0ed4733073",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3",
+                "solenoid/system": "^1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solenoid\\Log\\": "src",
+                    "Solenoid\\System\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pier Niccolò Giannelli",
+                    "email": "pierniccologiannelli@gmail.com",
+                    "homepage": "https://www.solenoid.it",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "Logging library",
+            "homepage": "https://github.com/Solenoid-IT/php-log",
+            "keywords": [
+                "log",
+                "logging"
+            ],
+            "support": {
+                "issues": "https://github.com/Solenoid-IT/php-log/issues",
+                "source": "https://github.com/Solenoid-IT/php-log/tree/v1.0.0"
+            },
+            "time": "2025-01-29T21:31:19+00:00"
+        },
+        {
+            "name": "solenoid/perf",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solenoid-IT/php-perf.git",
+                "reference": "b7aeb66f53cbe65e3981c4673d8c060a2b7dc701"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solenoid-IT/php-perf/zipball/b7aeb66f53cbe65e3981c4673d8c060a2b7dc701",
+                "reference": "b7aeb66f53cbe65e3981c4673d8c060a2b7dc701",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solenoid\\Perf\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pier Niccolò Giannelli",
+                    "email": "pierniccologiannelli@gmail.com",
+                    "homepage": "https://www.solenoid.it",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "Performance analysis library",
+            "homepage": "https://github.com/Solenoid-IT/php-perf",
+            "keywords": [
+                "analyzer",
+                "performance"
+            ],
+            "support": {
+                "issues": "https://github.com/Solenoid-IT/php-perf/issues",
+                "source": "https://github.com/Solenoid-IT/php-perf/tree/v1.0.0"
+            },
+            "time": "2023-12-08T13:51:30+00:00"
+        },
+        {
+            "name": "solenoid/system",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solenoid-IT/php-system.git",
+                "reference": "82f98364cf886f0a7cb948a20e104088a7d6389a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solenoid-IT/php-system/zipball/82f98364cf886f0a7cb948a20e104088a7d6389a",
+                "reference": "82f98364cf886f0a7cb948a20e104088a7d6389a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solenoid\\System\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pier Niccolò Giannelli",
+                    "email": "pierniccologiannelli@gmail.com",
+                    "homepage": "https://www.solenoid.it",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "System library",
+            "homepage": "https://github.com/Solenoid-IT/php-system",
+            "keywords": [
+                "async",
+                "filesystem",
+                "os",
+                "parallelism",
+                "process",
+                "stream",
+                "system"
+            ],
+            "support": {
+                "issues": "https://github.com/Solenoid-IT/php-system/issues",
+                "source": "https://github.com/Solenoid-IT/php-system/tree/v1.0.0"
+            },
+            "time": "2024-12-21T12:55:52+00:00"
+        },
+        {
+            "name": "solenoid/tasker-lib",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Solenoid-IT/php-tasker-lib.git",
+                "reference": "d58dbb2054d3b8b64b23c05bddb7eb8aec6e0aba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Solenoid-IT/php-tasker-lib/zipball/d58dbb2054d3b8b64b23c05bddb7eb8aec6e0aba",
+                "reference": "d58dbb2054d3b8b64b23c05bddb7eb8aec6e0aba",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.3",
+                "solenoid/log": "^1.0.0",
+                "solenoid/perf": "^1.0.0",
+                "solenoid/system": "^1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Solenoid\\Log\\": "src",
+                    "Solenoid\\Perf\\": "src",
+                    "Solenoid\\Tasker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pier Niccolò Giannelli",
+                    "email": "pierniccologiannelli@gmail.com",
+                    "homepage": "https://www.solenoid.it",
+                    "role": "Full Stack Web Developer"
+                }
+            ],
+            "description": "Tasker CLI framework library",
+            "homepage": "https://github.com/Solenoid-IT/php-tasker-lib",
+            "keywords": [
+                "cli",
+                "framework",
+                "tasker"
+            ],
+            "support": {
+                "issues": "https://github.com/Solenoid-IT/php-tasker-lib/issues",
+                "source": "https://github.com/Solenoid-IT/php-tasker-lib/tree/v1.0.0"
+            },
+            "time": "2023-12-08T13:55:16+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.3"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

@@ -20,7 +20,8 @@
         "solenoid/tasker-lib": "^1.0.0",
         "solenoid/system": "^1.0.0",
         "solenoid/perf": "^1.0.0",
-        "solenoid/html": "^1.0.0"
+        "solenoid/html": "^1.0.0",
+        "nikic/php-parser": "^5.7"
     },
     "autoload": {
         "psr-4": {
