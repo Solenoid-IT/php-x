@@ -18,15 +18,50 @@ function print_message (string $message) : void
 
 
 
+class Level1
+{
+    public function execute (string $message) : void
+    {
+        // (Printing the message)
+        print_message( $message );
+    }
+}
+
+class Level2
+{
+    public function execute (string $message) : void
+    {
+        // (Printing the message)
+        ( new Level1() )->execute( $message );
+    }
+}
+
+class Level3
+{
+    public function execute (string $message) : void
+    {
+        // (Printing the message)
+        ( new Level2() )->execute( $message );
+    }
+}
+
+
+
 class Test
 {
     public function execute () : void
     {
         // (Printing the message)
-        print_message( 'Hello World!' );
+        print_message( 'Hello from level 0' );
 
-        // (Printing the message)
-        print_message( 'Hello Again!' );
+        // (Printing the value)
+        ( new Level1() )->execute( 'Hello from level 1' );
+
+        // (Printing the value)
+        ( new Level2() )->execute( 'Hello from level 2' );
+
+        // (Printing the value)
+        ( new Level3() )->execute( 'Hello from level 3' );
     }
 
 
