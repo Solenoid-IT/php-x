@@ -139,6 +139,11 @@ class CodeAnalyzer
 
 
 
+        // (Getting the value)
+        $declaring_class = $reflection->getDeclaringClass()->getName();
+
+
+
         // (Getting the values)
         $file_path = $reflection->getFileName();
 
@@ -169,7 +174,7 @@ class CodeAnalyzer
         $class_node = $this->nodeFinder->findFirst
         (
             $ast,
-            function (Node $node)
+            function (Node $node) use ($declaring_class)
             {
                 if ( !( $node instanceof Class_ ) ) return false;
 
@@ -181,7 +186,8 @@ class CodeAnalyzer
 
 
                 // Returning the value
-                return $class_path === $this->class;
+                #return $class_path === $this->class;
+                return $class_path === $declaring_class;
             }
         )
         ;
