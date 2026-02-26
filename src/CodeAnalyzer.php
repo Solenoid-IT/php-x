@@ -123,10 +123,10 @@ class CodeAnalyzer
 
 
 
-    public function set_loop_limit (int $limit) : self
+    public function limit (int $num_loops) : self
     {
         // (Getting the value)
-        $this->loop_limit = $limit;
+        $this->loop_limit = $num_loops;
 
 
 
@@ -134,7 +134,7 @@ class CodeAnalyzer
         return $this;
     }
 
-    public function set_excluded_methods (array $methods) : self
+    public function exclude (array $methods) : self
     {
         // (Getting the value)
         $this->excluded_methods = $methods;
