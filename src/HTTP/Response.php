@@ -27,6 +27,7 @@ class Response
     public function __construct (?int $code = null, array $headers = [], string|callable $body = '')
     {
         // (Getting the values)
+        $this->code    = $code;
         $this->headers = $headers;
         $this->body    = is_string( $body ) ? $body : function () use (&$body) { echo $body; };        
     }
