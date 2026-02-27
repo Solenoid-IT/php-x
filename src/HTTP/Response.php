@@ -24,7 +24,7 @@ class Response
 
 
 
-    public function __construct (array $headers = [], string|callable $body = '')
+    public function __construct (?int $code = null, array $headers = [], string|callable $body = '')
     {
         // (Getting the values)
         $this->headers = $headers;
