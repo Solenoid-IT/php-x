@@ -53,6 +53,28 @@ class Error extends \Exception
 
 
 
+    public function get_line (string $fn = 'error') : string|null
+    {
+        // (Getting the value)
+        $steps = parent::getTrace();
+
+        foreach ( $steps as $index => $step )
+        {// Processing each entry
+            if ( isset( $step['function'] ) && $step['function'] === $fn )
+            {// Match OK
+                // Returning the value
+                return ( isset( $step['file'] ) ? $step['file'] : null ) . ':' . ( isset( $step['line'] ) ? $step['line'] : null );
+            }
+        }
+        
+
+
+        // Returning the value
+        return null;
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
