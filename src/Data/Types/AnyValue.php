@@ -6,6 +6,13 @@ namespace Solenoid\X\Data\Types;
 
 
 
+use \Attribute;
+
+use \Solenoid\X\Data\Types\Value;
+
+
+
+#[ Attribute( Attribute::TARGET_PROPERTY ) ]
 class AnyValue extends Value
 {
     const TYPE = 'mixed';
@@ -23,7 +30,7 @@ class AnyValue extends Value
     public function validate (mixed $value) : bool
     {
         // (Getting the value)
-        $error_prefix = self::TYPE . ' ' . $this->name . ' ' . '::';
+        $error_prefix = $this->name ? ( self::TYPE . ' ' . $this->name . ' ' ) . ':: ' : '';
 
 
 
@@ -37,7 +44,7 @@ class AnyValue extends Value
             if ( $this->required )
             {// (Value is required)
                 // (Getting the value)
-                $this->error = "$error_prefix Value is required";
+                $this->error = "{$error_prefix}Value is required";
 
                 // Returning the value
                 return false;
@@ -127,7 +134,7 @@ class AnyValue extends Value
                 if ( !$type_match )
                 {// (Type does not match)
                     // (Getting the value)
-                    $this->error = "$error_prefix Value type does not match the expected types";
+                    $this->error = "{$error_prefix}Value type does not match the expected types";
 
                     // Returning the value
                     return false;

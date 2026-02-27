@@ -19,7 +19,7 @@ abstract class DTO
 
 
 
-    public function validate (mixed $data) : bool
+    public function validate_OLD (mixed $data) : bool
     {
         // (Setting the value)
         $this->is_valid = true;
@@ -360,6 +360,300 @@ abstract class DTO
 
         // Returning the value
         return $instance;
+    }
+
+
+
+    public static function analyze (array $data, bool $include_input = false) : Analysis
+    {
+        // (Setting the values)
+        $valid  = true;
+        $input  = [];
+        $errors = [];
+
+
+
+        // (Setting the value)
+        $map =
+        [
+            'integer' => 'int',
+            'boolean' => 'bool',
+            'double'  => 'float'
+        ]
+        ;
+
+
+
+        foreach ( ( new \ReflectionClass( static::class ) )->getProperties( \ReflectionProperty::IS_PUBLIC ) as $property )
+        {// Processing each entry
+            // (Getting the values)
+            $name        = $property->getName();
+            $type        = $property->getType();
+            $type_name   = $type instanceof \ReflectionNamedType ? $type->getName() : 'mixed';
+            $is_required = !$property->hasDefaultValue();
+
+            if ( $is_required )
+            {// Value is true
+                // (Getting the value)
+                $constructor = ( new \ReflectionClass( static::class ) )->getConstructor();
+
+                if ( $constructor )
+                {// Value found
+                    foreach ( $constructor->getParameters() as $param )
+                    {// Processing each entry
+                        if ( $param->getName() !== $name ) continue;
+
+
+
+                        if ( $param->isDefaultValueAvailable() )
+                        {// Match OK
+                            // (Setting the value)
+                            $is_required = false;
+
+
+
+                            // (Getting the value)
+                            $default_value = $param->getDefaultValue();
+
+
+
+                            // Breaking the iteration
+                            break;
+                        }
+                    }
+                }
+            }
+
+
+
+            if ( !array_key_exists( $name, $data ) )
+            {// Value not found
+                if ( $is_required )
+                {// Value is true
+                    // (Getting the value)
+                    $errors[ $name ] = "$type_name $name :: Param is required";
+
+
+
+                    // (Setting the value)
+                    $valid = false;
+                }
+                else
+                {// Value is false
+                    if ( $include_input )
+                    {// Value is true
+                        // (Getting the value)
+                        $input[ $name ] = $default_value ?? $property->getDefaultValue();
+                    }
+                }
+
+
+
+                // Continuing the iteration
+                continue;
+            }
+
+
+
+            // (Getting the value)
+            $value = $data[ $name ];
+
+
+
+            if ( class_exists( $type_name ) && is_subclass_of( $type_name, self::class ) )
+            {// Match OK
+                if ( is_array( $value ) )
+                {// Match OK
+                    // (Getting the value)
+                    $sub_analysis = $type_name::analyze( $value, $include_input );
+
+                    if ( !$sub_analysis->valid )
+                    {// (Validation failed)
+                        // (Setting the value)
+                        $valid = false;
+
+
+
+                        // (Getting the value)
+                        $errors[ $name ] = $sub_analysis->errors;
+                    }
+
+
+
+                    if ( $include_input )
+                    {// Value is true
+                        // (Getting the value)
+                        $input[ $name ] = $sub_analysis->input;
+                    }
+                }
+                else
+                if ( $value === null && $type->allowsNull() )
+                {// Match OK
+                    if ( $include_input )
+                    {// Value is true
+                        // (Setting the value)
+                        $input[ $name ] = null;
+                    }
+                }
+                else
+                {// Match failed
+                    // (Getting the value)
+                    $errors[ $name ] = "$type_name $name :: Expected array for sub-DTO instead of " . gettype( $value );
+
+
+
+                    // (Setting the value)
+                    $valid = false;
+                }
+
+
+
+                // Continuing the iteration
+                continue;
+            }
+
+
+
+            if ( $type_name !== 'mixed' )
+            {// Match OK
+                // (Getting the value)
+                $current_type = gettype( $value );
+
+
+
+                // (Getting the value)
+                $normalized_type = $map[ $current_type ] ?? $current_type;
+
+
+
+                // (Getting the value)
+                $type_match  = ( $normalized_type === $type_name );
+                $class_match = ( $current_type === 'object' && $value instanceof $type_name );
+                $null_match  = ( $type->allowsNull() && $value === null );
+
+                if ( !$type_match && !$class_match && !$null_match )
+                {// Match failed
+                    // (Getting the value)
+                    $errors[ $name ] = "$type_name $name :: Expected type '$type_name' instead of '$normalized_type'";
+
+
+
+                    // (Setting the value)
+                    $valid = false;
+
+
+
+                    // Continuing the iteration
+                    continue;
+                }
+            }
+
+
+
+            foreach ( $property->getAttributes( Value::class, \ReflectionAttribute::IS_INSTANCEOF ) as $attribute )
+            {// Processing each entry
+                // (Getting the value)
+                $validator = $attribute->newInstance();
+
+                if ( !$validator->validate( $value ) )
+                {// (Validation failed)
+                    // (Getting the value)
+                    $errors[ $name ] = "$type_name $name :: " . $validator->get_error();
+
+
+
+                    // (Setting the value)
+                    $valid = false;
+
+
+
+                    // Continuing the iteration
+                    continue;
+                }
+
+
+
+                // Breaking the iteration
+                break;
+            }
+
+
+
+            // (Setting the value)
+            $validator = null;
+
+            foreach ( $property->getAttributes( ArrayList::class, \ReflectionAttribute::IS_INSTANCEOF ) as $attribute )
+            {// Processing each entry
+                // (Getting the value)
+                $validator = $attribute->newInstance();
+
+                if ( !$validator->validate( $value ) )
+                {// (Validation failed)
+                    // (Getting the value)
+                    $errors[ $name ] = /*"$type_name $name :: " . */$validator->get_error();
+
+
+
+                    // (Setting the value)
+                    $valid = false;
+
+
+
+                    // Continuing the iteration
+                    continue;
+                }
+
+
+
+                // Breaking the iteration
+                break;
+            }
+
+
+
+            if ( $validator && $validator->is_valid() )
+            {// Value found
+                // (Getting the value)
+                $value = $validator->get_value();
+            }
+
+
+
+            if ( $include_input )
+            {// Value is true
+                // (Getting the value)
+                $input[ $name ] = $value;
+            }
+        }
+
+
+
+        if ( $include_input )
+        {// Value is true
+            // (Getting the value)
+            $input = $valid ? new static( ...$input ) : $input;
+        }
+
+
+
+        // Returning the value
+        return new Analysis( $valid, $input, $errors );
+    }
+
+    public static function import (array $data, ?array &$errors = null) : static|null
+    {
+        // (Getting the value)
+        $analysis = static::analyze( $data, true );
+
+
+
+        // (Getting the value)
+        $errors = $analysis->errors;
+
+
+
+        // Returning the value
+        return $analysis->valid ? $analysis->input : null;
     }
 }
 

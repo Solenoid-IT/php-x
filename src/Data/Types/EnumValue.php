@@ -6,6 +6,13 @@ namespace Solenoid\X\Data\Types;
 
 
 
+use \Attribute;
+
+use \Solenoid\X\Data\Types\Value;
+
+
+
+#[ Attribute( Attribute::TARGET_PROPERTY ) ]
 class EnumValue extends Value
 {
     const TYPE = 'array';
@@ -23,7 +30,7 @@ class EnumValue extends Value
     public function validate (mixed $value) : bool
     {
         // (Getting the value)
-        $error_prefix = self::TYPE . ' ' . $this->name . ' ' . '::';
+        $error_prefix = $this->name ? ( self::TYPE . ' ' . $this->name . ' ' ) . ':: ' : '';
 
 
 
@@ -37,7 +44,7 @@ class EnumValue extends Value
             if ( $this->required )
             {// (Value is required)
                 // (Getting the value)
-                $this->error = "$error_prefix Value is required";
+                $this->error = "{$error_prefix}Value is required";
 
                 // Returning the value
                 return false;
@@ -48,7 +55,7 @@ class EnumValue extends Value
             if ( !in_array( $value, $this->values ) )
             {// Match failed
                 // (Getting the value)
-                $this->error = "$error_prefix Value is not in the allowed set";
+                $this->error = "{$error_prefix}Value is not in the allowed set";
 
                 // Returning the value
                 return false;

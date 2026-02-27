@@ -6,6 +6,13 @@ namespace Solenoid\X\Data\Types;
 
 
 
+use \Attribute;
+
+use \Solenoid\X\Data\Types\Value;
+
+
+
+#[ Attribute( Attribute::TARGET_PROPERTY ) ]
 class BoolValue extends Value
 {
     const TYPE = 'bool';
@@ -23,7 +30,7 @@ class BoolValue extends Value
     public function validate (mixed $value) : bool
     {
         // (Getting the value)
-        $error_prefix = self::TYPE . ' ' . $this->name . ' ' . '::';
+        $error_prefix = $this->name ? ( self::TYPE . ' ' . $this->name . ' ' ) . ':: ' : '';
 
 
 
@@ -32,7 +39,7 @@ class BoolValue extends Value
             if ( $this->required )
             {// (Value is required)
                 // (Getting the value)
-                $this->error = "$error_prefix Value is required";
+                $this->error = "{$error_prefix}Value is required";
 
                 // Returning the value
                 return false;
@@ -43,7 +50,7 @@ class BoolValue extends Value
             if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
             {// (Validation failed)
                 // (Getting the value)
-                $this->error = "$error_prefix Must be a boolean";
+                $this->error = "{$error_prefix}Must be a boolean";
 
                 // Returning the value
                 return false;

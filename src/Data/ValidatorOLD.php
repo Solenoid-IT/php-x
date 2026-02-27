@@ -6,7 +6,7 @@ namespace Solenoid\X\Data;
 
 
 
-class Validator
+class ValidatorOLD
 {
     private Input $input;
 

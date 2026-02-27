@@ -6,6 +6,13 @@ namespace Solenoid\X\Data\Types;
 
 
 
+use \Attribute;
+
+use \Solenoid\X\Data\Types\Value;
+
+
+
+#[ Attribute( Attribute::TARGET_PROPERTY ) ]
 class IntValue extends Value
 {
     const TYPE = 'int';
@@ -23,7 +30,7 @@ class IntValue extends Value
     public function validate (mixed $value) : bool
     {
         // (Getting the value)
-        $error_prefix = self::TYPE . ' ' . $this->name . ' ' . '::';
+        $error_prefix = $this->name ? ( self::TYPE . ' ' . $this->name . ' ' ) . ':: ' : '';
 
 
 
@@ -37,7 +44,7 @@ class IntValue extends Value
             if ( $this->required )
             {// (Value is required)
                 // (Getting the value)
-                $this->error = "$error_prefix Value is required";
+                $this->error = "{$error_prefix}Value is required";
 
                 // Returning the value
                 return false;
@@ -48,7 +55,7 @@ class IntValue extends Value
             if ( !in_array( $value, [ 0, '0' ] ) && !filter_var( $value, FILTER_VALIDATE_INT ) )
             {// (Validation failed)
                 // (Getting the value)
-                $this->error = "$error_prefix Must be an integer";
+                $this->error = "{$error_prefix}Must be an integer";
 
                 // Returning the value
                 return false;
@@ -62,7 +69,7 @@ class IntValue extends Value
             if ( $this->min !== null && $this->value < $this->min )
             {// (Validation failed)
                 // (Getting the value)
-                $this->error = "$error_prefix Must be a number >= " . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
+                $this->error = "{$error_prefix}Must be a number >= " . $this->min . ( $this->max === null ? '' : ' and <= ' . $this->max );
 
                 // Returning the value
                 return false;
@@ -71,7 +78,7 @@ class IntValue extends Value
             if ( $this->max !== null && $this->value > $this->max )
             {// (Validation failed)
                 // (Getting the value)
-                $this->error = "$error_prefix Must be a number " . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
+                $this->error = "{$error_prefix}Must be a number " . ( $this->min === null ? '' : '>= ' . $this->min . ' and ' ) . '<= ' . $this->max;
                 // Returning the value
                 return false;
             }
