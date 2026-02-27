@@ -2,23 +2,23 @@
 
 
 
-namespace Solenoid\X\Input;
+namespace Solenoid\X\Data\Types;
 
 
 
-class EnumValue extends Value
+class BoolValue extends Value
 {
-    const TYPE = 'array';
+    const TYPE = 'bool';
 
 
 
-    public function __construct (string $name, bool $required = true, string $description = '', public array $values = [])
+    public function __construct (string $name, bool $required = true, string $description = '')
     {
         // (Calling the function)
         parent::__construct( $name, $required, $description );
     }
 
-
+    
 
     public function validate (mixed $value) : bool
     {
@@ -29,11 +29,6 @@ class EnumValue extends Value
 
         if ( $value === null || $value === '' )
         {// (Value is not set)
-            // (Setting the value)
-            $this->value = null;
-
-
-
             if ( $this->required )
             {// (Value is required)
                 // (Getting the value)
@@ -45,10 +40,10 @@ class EnumValue extends Value
         }
         else
         {// (Value is set)
-            if ( !in_array( $value, $this->values ) )
-            {// Match failed
+            if ( !is_bool( $value ) && !in_array( $value, [ 0, 1, '0', '1', 'false', 'true' ] ) )
+            {// (Validation failed)
                 // (Getting the value)
-                $this->error = "$error_prefix Value is not in the allowed set";
+                $this->error = "$error_prefix Must be a boolean";
 
                 // Returning the value
                 return false;
@@ -57,7 +52,7 @@ class EnumValue extends Value
 
 
             // (Getting the value)
-            $this->value = $value;
+            $this->value = (bool) $value;
         }
 
 
@@ -66,7 +61,7 @@ class EnumValue extends Value
         return true;
     }
 
-    public function get_value () : mixed
+    public function get_value () : bool|null
     {
         // Returning the value
         return $this->value;

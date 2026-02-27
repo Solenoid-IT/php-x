@@ -2,17 +2,17 @@
 
 
 
-namespace Solenoid\X\Input;
+namespace Solenoid\X\Data\Types;
 
 
 
-class FloatValue extends Value
+class IntValue extends Value
 {
-    const TYPE = 'float';
+    const TYPE = 'int';
 
 
 
-    public function __construct (string $name, bool $required = true, string $description = '', public readonly ?float $min = null, public readonly ?float $max = null)
+    public function __construct (string $name, bool $required = true, string $description = '', public readonly ?int $min = null, public readonly ?int $max = null)
     {
         // (Calling the function)
         parent::__construct( $name, $required, $description );
@@ -45,10 +45,10 @@ class FloatValue extends Value
         }
         else
         {// (Value is set)
-            if ( !filter_var( $value, FILTER_VALIDATE_FLOAT ) )
+            if ( !in_array( $value, [ 0, '0' ] ) && !filter_var( $value, FILTER_VALIDATE_INT ) )
             {// (Validation failed)
                 // (Getting the value)
-                $this->error = "$error_prefix Must be a float";
+                $this->error = "$error_prefix Must be an integer";
 
                 // Returning the value
                 return false;
@@ -57,7 +57,7 @@ class FloatValue extends Value
 
 
             // (Getting the value)
-            $this->value = (float) $value;
+            $this->value = (int) $value;
 
             if ( $this->min !== null && $this->value < $this->min )
             {// (Validation failed)
@@ -83,7 +83,7 @@ class FloatValue extends Value
         return true;
     }
 
-    public function get_value () : float|null
+    public function get_value () : int|null
     {
         // Returning the value
         return $this->value;

@@ -2,7 +2,7 @@
 
 
 
-namespace Solenoid\X\Input;
+namespace Solenoid\X\Data;
 
 
 

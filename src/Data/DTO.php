@@ -2,11 +2,13 @@
 
 
 
-namespace Solenoid\X\Input;
+namespace Solenoid\X\Data;
 
 
 
 use \Solenoid\X\Collection;
+
+use \Solenoid\X\Data\Types\Value;
 
 
 

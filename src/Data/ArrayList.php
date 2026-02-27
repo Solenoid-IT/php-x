@@ -2,7 +2,11 @@
 
 
 
-namespace Solenoid\X\Input;
+namespace Solenoid\X\Data;
+
+
+
+use \Solenoid\X\Data\Types\Value;
 
 
 

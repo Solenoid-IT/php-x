@@ -2,22 +2,24 @@
 
 
 
-namespace Solenoid\X\Input;
+namespace Solenoid\X\Data;
 
 
 
 use \Attribute;
 
+use \Solenoid\X\Data\Types\Value;
+
 
 
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
-class Input
+class Output
 {
-    private Value|DTO|ArrayList|ReadableStream $reference;
+    private Value|DTO|ArrayList $reference;
 
 
 
-    public function __construct (Value|DTO|ArrayList|ReadableStream $reference)
+    public function __construct (Value|DTO|ArrayList $reference)
     {
         // (Getting the value)
         $this->reference = $reference;
@@ -46,12 +48,6 @@ class Input
         {// Match OK
             // (Setting the value)
             $type = 'ArrayList';
-        }
-        else
-        if ( $this->reference instanceof ReadableStream )
-        {// Match OK
-            // (Setting the value)
-            $type = 'ReadableStream';
         }
 
 
