@@ -15,11 +15,11 @@ use \Solenoid\X\Data\Types\Value;
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
 class Input
 {
-    private Value|DTO|ArrayList|ReadableStream $reference;
+    private Value|string|ArrayList|ReadableStream $reference;
 
 
 
-    public function __construct (Value|DTO|ArrayList|ReadableStream $reference)
+    public function __construct (Value|string|ArrayList|ReadableStream $reference)
     {
         // (Getting the value)
         $this->reference = $reference;
@@ -38,7 +38,7 @@ class Input
             $type = 'Value';
         }
         else
-        if ( $this->reference instanceof DTO )
+        if ( is_string( $this->reference ) && is_subclass_of( $this->reference, DTO::class ) )
         {// Match OK
             // (Setting the value)
             $type = 'DTO';
@@ -82,6 +82,14 @@ class Input
     {
         // Returning the value
         return $this->reference->get_value();
+    }
+
+
+
+    public function get_reference () : Value|string|ArrayList|ReadableStream
+    {
+        // Returning the value
+        return $this->reference;
     }
 }
 
