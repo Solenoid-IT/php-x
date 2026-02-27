@@ -7,7 +7,7 @@ namespace Solenoid\X;
 
 
 use \Solenoid\X\Error;
-use \Solenoid\X\Input\Validator;
+use \Solenoid\X\Data\Validator;
 
 
 
