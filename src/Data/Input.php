@@ -15,40 +15,10 @@ use \Solenoid\X\Data\Types\Value;
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
 class Input
 {
-    private Value|string|ArrayList|ReadableStream $reference;
-
-
-
-    public function __construct (Value|string|ArrayList|ReadableStream $reference)
+    public function __construct (private Value|string|ArrayList|ReadableStream $reference)
     {
         // (Getting the value)
         $this->reference = $reference;
-    }
-
-
-
-    public static function value (Value $value) : self
-    {
-        // Returning the value
-        return new self( $value );
-    }
-
-    public static function dto (string $dto_subclass) : self
-    {
-        // Returning the value
-        return new self( $dto_subclass );
-    }
-
-    public static function array_list (ArrayList $array_list) : self
-    {
-        // Returning the value
-        return new self( $array_list );
-    }
-
-    public static function readable_stream (ReadableStream $readable_stream) : self
-    {
-        // Returning the value
-        return new self( $readable_stream );
     }
 
 
@@ -112,10 +82,18 @@ class Input
 
 
 
-    public function get_reference () : Value|string|ArrayList|ReadableStream
+    public function import_dto (array $data, ?array &$errors = null) : DTO|null
     {
+        if ( !( is_string( $this->reference ) && is_subclass_of( $this->reference, DTO::class ) ) )
+        {// Match failed
+            // Returning the value
+            return null;
+        }
+
+
+
         // Returning the value
-        return $this->reference;
+        return $this->reference::import( $data, $errors );
     }
 
 

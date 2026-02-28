@@ -8,8 +8,7 @@ namespace Solenoid\X;
 
 use \Solenoid\X\Error;
 
-use \Solenoid\X\Data\Validator;
-use \Solenoid\X\Data\DTO;
+use \Solenoid\X\Data\Input;
 
 
 
@@ -187,6 +186,8 @@ class App
 
 
 
+            /* ahcid to deleted
+
             // (Getting the value)
             $validator = new Validator( $class, $method );
 
@@ -308,6 +309,110 @@ class App
                         // (Getting the value)
                         $params = array_merge( $params, (array) $dto );
                     break;
+                }
+            }
+
+            */
+
+
+
+            // (Getting the value)
+            $input = Input::read( $class, $method );
+
+            if ( $input )
+            {// Value found
+                // (Getting the value)
+                $request = $this->container->make( 'request' );
+
+
+
+                // (Getting the value)
+                $input_type = $input->get_type();
+
+
+
+                // (Getting the value)
+                $input_data = in_array( $input_type, [ 'DTO', 'ArrayList' ] ) ? $request->json( true ) : $request->buffer();
+
+
+
+                // (Getting the value)
+                $response = $this->container->make( 'response' );
+
+
+
+                if ( $input->get_type() === 'DTO' )
+                {// (Input is a DTO)
+                    // (Getting the value)
+                    $dto = $input->import_dto( $input_data, $errors );
+
+                    if ( !$dto )
+                    {// (Import failed)
+                        // Returning the value
+                        return $response->json( 400, $errors );
+                    }
+
+
+
+                    // (Getting the value)
+                    $params =
+                    [
+                        get_class( $dto ) => $dto,
+                        'dto'             => $dto
+                    ]
+                    ;
+
+                    // (Getting the value)
+                    $params = array_merge( $params, (array) $dto );
+                }
+                else
+                {// (Input is a Value, ArrayList or ReadableStream)
+                    // (Setting the value)
+                    $error = null;
+
+                    if ( !$input->validate( $input_data ) )
+                    {// (Validation failed)
+                        // (Getting the value)
+                        $error = $input->get_error();
+                    }
+
+
+
+                    if ( $error === null )
+                    {// (Error not found)
+                        switch ( $input_type )
+                        {
+                            case 'Value':
+                                // (Getting the value)
+                                $params = [ $input->get_value() ];
+                            break;
+
+                            case 'ArrayList':
+                                // (Getting the value)
+                                $params = [ $input->get_value() ];
+
+                                # ahcid List<DTO> to implementt
+                            break;
+
+                            case 'ReadableStream':
+                                // (Getting the value)
+                                $params = [ $request->body ];
+                            break;
+                        }
+                    }
+                    else
+                    {// (Error found)
+                        if ( is_array( $error ) )
+                        {// (Error of an ArrayList)
+                            // Returning the value
+                            return $response->json( 400, $error );
+                        }
+                        else
+                        {// (Error of a Value or a ReadableStream)
+                            // Returning the value
+                            return $response->text( 400, $error );
+                        }
+                    }
                 }
             }
 
