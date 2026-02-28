@@ -6,7 +6,7 @@ include_once ( __DIR__ . '/../vendor/autoload.php' );
 
 
 
-use \Solenoid\X\RateLimiter;
+use \Solenoid\X\Security\RateLimiter;
 
 use \Predis\Client;
 
