@@ -16,7 +16,7 @@ class RateLimiter
 
 
 
-    public function pass (string $subject) : bool
+    public function pass (string $key) : bool
     {
         // (Getting the value)
         $time = microtime( true );
@@ -24,7 +24,7 @@ class RateLimiter
 
 
         // (Getting the value)
-        $key = "{$this->key_prefix}:$subject";
+        $key = $this->key_prefix ? "{$this->key_prefix}:$key" : $key;
 
 
 
