@@ -12,7 +12,7 @@ use \Predis\Client;
 
 class RateLimiter
 {
-    public function __construct (private Client $client, private int $max_qty = 50, private int $time_window = 60, private string $key_prefix = 'rate_limit') {}
+    public function __construct (private Client $client, private int $max_rate = 50, private int $time_limit = 60, private string $key_prefix = 'rate_limit') {}
 
 
 
@@ -34,7 +34,7 @@ class RateLimiter
 
 
         // (Getting the value)
-        $pipe->zRemRangeByScore( $key, 0, $time - $this->time_window );
+        $pipe->zRemRangeByScore( $key, 0, $time - $this->time_limit );
 
         // (Adding the value)
         $pipe->zAdd( $key, $time, $time );
@@ -43,7 +43,7 @@ class RateLimiter
         $pipe->zCard($key);
 
         // (Setting the TTL)
-        $pipe->expire( $key, $this->time_window + 1 );
+        $pipe->expire( $key, $this->time_limit + 1 );
 
 
 
@@ -53,12 +53,12 @@ class RateLimiter
 
 
         // (Getting the value)
-        $qty = $responses[2];
+        $rate = $responses[2];
 
 
 
         // Returning the value
-        return $qty <= $this->max_qty;
+        return $rate <= $this->max_rate;
     }
 }
 
