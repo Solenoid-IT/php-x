@@ -27,6 +27,32 @@ class Input
 
 
 
+    public static function value (Value $value) : self
+    {
+        // Returning the value
+        return new self( $value );
+    }
+
+    public static function dto (string $dto_subclass) : self
+    {
+        // Returning the value
+        return new self( $dto_subclass );
+    }
+
+    public static function array_list (ArrayList $array_list) : self
+    {
+        // Returning the value
+        return new self( $array_list );
+    }
+
+    public static function readable_stream (ReadableStream $readable_stream) : self
+    {
+        // Returning the value
+        return new self( $readable_stream );
+    }
+
+
+
     public function get_type () : string
     {
         // (Setting the value)
