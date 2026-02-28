@@ -114,7 +114,7 @@ class App
 
 
         // (Getting the value)
-        $error = new Error( $code, $message, $r['type'], $r['http_code'], $r['exposed'] === '1' );
+        $error = new Error( $code, $message, $r['type'], $r['http_code'], $r['exposed'] === '1', $r['notifiable'] === '1' );
 
 
 
