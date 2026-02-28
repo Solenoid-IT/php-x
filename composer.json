@@ -21,7 +21,8 @@
         "solenoid/system": "^1.0.0",
         "solenoid/perf": "^1.0.0",
         "solenoid/html": "^1.0.0",
-        "nikic/php-parser": "^5.7"
+        "nikic/php-parser": "^5.7",
+        "predis/predis": "^3.3"
     },
     "autoload": {
         "psr-4": {
