@@ -12,7 +12,7 @@ use \Solenoid\X\Data\Types\Value;
 
 
 
-#[ Attribute( Attribute::TARGET_PROPERTY ) ]
+#[ Attribute( Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER ) ]
 class StringValue extends Value
 {
     const TYPE = 'string';

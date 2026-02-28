@@ -119,4 +119,32 @@ print_r( $dto_2 ?? $errors );
 
 
 
+class UpsertDTO extends DTO
+{
+    public function __construct
+    (
+        #[ IntValue( '', false, 'ID of the user', 1 ) ]
+        public ?int $id = null,
+
+        #[ StringValue( '', true, 'Name of the user', '/^[\w\ ]+$/' ) ]
+        public string $name
+    )
+    {}
+}
+
+$dto_3 = UpsertDTO::import
+(
+    [
+        #'id'   => 1,
+        'name' => 'John Doe'
+    ],
+
+    $errors
+)
+;
+
+print_r($errors);
+
+
+
 ?>
