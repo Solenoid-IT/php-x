@@ -74,6 +74,14 @@ class Validator
         // Returning the value
         return $this->input->get_value();
     }
+
+
+
+    public function get_input () : Input
+    {
+        // Returning the value
+        return $this->input;
+    }
 }
 
 

@@ -91,6 +91,22 @@ class Input
         // Returning the value
         return $this->reference;
     }
+
+
+
+    public static function read (string $class, string $method) : self|null
+    {
+        foreach ( ( new \ReflectionMethod( $class, $method ) )->getAttributes( self::class ) as $attribute )
+        {// Processing each entry
+            // Returning the value
+            return $attribute->newInstance();
+        }
+
+
+
+        // Returning the value
+        return null;
+    }
 }
 
 

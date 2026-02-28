@@ -7,7 +7,9 @@ namespace Solenoid\X;
 
 
 use \Solenoid\X\Error;
+
 use \Solenoid\X\Data\Validator;
+use \Solenoid\X\Data\DTO;
 
 
 
@@ -206,60 +208,106 @@ class App
 
 
                 // (Getting the value)
-                $error = $validator->check( $input );
-
-                if ( $error !== null )
-                {// (Check failed)
-                    // (Getting the value)
-                    $response = $this->container->make( 'response' );
+                $response = $this->container->make( 'response' );
 
 
 
-                    if ( $error instanceof \stdClass || is_array( $error ) )
-                    {// (Error of a DTO or ArrayList)
-                        // Returning the value
-                        return $response->json( 400, $error );
-                    }
-                    else
-                    {// (Error of a Value)
-                        // Returning the value
-                        return $response->text( 400, $error );
-                    }
-                }
-                else
-                {// (Check passed)
-                    switch ( $input_type )
-                    {// Processing each type
-                        case 'Value':
-                            // (Getting the value)
-                            $params = [ $validator->get_value() ];
-                        break;
+                switch ( $input_type )
+                {
+                    case 'Value':
+                    case 'ArrayList':
+                        // (Getting the value)
+                        $error = $validator->check( $input );
 
-                        case 'DTO':
-                            // (Getting the value)
-                            $dto = $validator->get_value();
+                        if ( $error !== null )
+                        {// (Check failed)
+                            if ( $error instanceof \stdClass || is_array( $error ) )
+                            {// (Error of a DTO or ArrayList)
+                                // Returning the value
+                                return $response->json( 400, $error );
+                            }
+                            else
+                            {// (Error of a Value)
+                                // Returning the value
+                                return $response->text( 400, $error );
+                            }
+                        }
+                        else
+                        {// (Check passed)
+                            switch ( $input_type )
+                            {// Processing each type
+                                case 'Value':
+                                    // (Getting the value)
+                                    $params = [ $validator->get_value() ];
+                                break;
+
+                                case 'DTO':
+                                    // (Getting the value)
+                                    $dto = $validator->get_value();
 
 
 
-                            // (Getting the value)
-                            $params =
-                            [
-                                get_class( $dto ) => $dto,
-                                'dto'             => $dto
-                            ]
-                            ;
+                                    // (Getting the value)
+                                    $params =
+                                    [
+                                        get_class( $dto ) => $dto,
+                                        'dto'             => $dto
+                                    ]
+                                    ;
 
-                            // (Getting the value)
-                            $params = array_merge( $params, (array) $dto );
-                        break;
+                                    // (Getting the value)
+                                    $params = array_merge( $params, (array) $dto );
+                                break;
 
-                        case 'ArrayList':
-                            // (Getting the value)
-                            $params = [ $validator->get_value() ];
+                                case 'ArrayList':
+                                    // (Getting the value)
+                                    $params = [ $validator->get_value() ];
 
-                            # ahcid List<DTO> to implementt
-                        break;
-                    }
+                                    # ahcid List<DTO> to implementt
+                                break;
+                            }
+                        }
+                    break;
+
+                    case 'DTO':
+                        // (Getting the value)
+                        $dto_subclass = $validator->get_input()->get_reference();
+
+                        if ( !is_string( $dto_subclass ) || !is_subclass_of( $dto_subclass, DTO::class ) )
+                        {// Match failed
+                            // Throwing the exception
+                            throw new \Exception( 'Invalid DTO input' );
+                        }
+
+
+
+                        // (Setting the value)
+                        $errors = [];
+
+
+
+                        // (Getting the value)
+                        $dto = $dto_subclass::import( $input, $errors );
+
+                        if ( !$dto )
+                        {// (Import failed)
+                            // Returning the value
+                            return $response->json( 400, $errors );
+                        }
+
+
+
+                        // (Getting the value)
+                        $params =
+                        [
+                            get_class( $dto ) => $dto,
+                            'dto'             => $dto
+                        ]
+                        ;
+
+                        // (Getting the value)
+                        $params = array_merge( $params, (array) $dto );
+                    break;
                 }
             }
 
