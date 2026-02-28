@@ -60,6 +60,16 @@ class RateLimiter
         // Returning the value
         return $rate <= $this->max_rate;
     }
+
+    public function reset (string $subject) : bool
+    {
+        $key = "{$this->key_prefix}:$subject";
+
+
+
+        // Returning the value
+        return (bool) $this->client->del( [ $key ] );
+    }
 }
 
 
