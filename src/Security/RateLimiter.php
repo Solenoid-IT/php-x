@@ -28,27 +28,25 @@ class RateLimiter
 
 
 
-        // (Getting the value)
-        $pipe = $this->client->multi();
+        // (Defining the transaction)
+        $responses = $this->client->transaction
+        (
+            function ($builder) use ($key, $time)
+            {
+                // (Getting the value)
+                $builder->zRemRangeByScore( $key, 0, $time - $this->time_limit );
 
+                // (Adding the value)
+                $builder->zAdd( $key, $time, $time );
 
+                // (Count requests)
+                $builder->zCard( $key );
 
-        // (Getting the value)
-        $pipe->zRemRangeByScore( $key, 0, $time - $this->time_limit );
-
-        // (Adding the value)
-        $pipe->zAdd( $key, $time, $time );
-
-        // (Count requests)
-        $pipe->zCard($key);
-
-        // (Setting the TTL)
-        $pipe->expire( $key, $this->time_limit + 1 );
-
-
-
-        // (Executing the command)
-        $responses = $pipe->exec();
+                // (Setting the TTL)
+                $builder->expire( $key, $this->time_limit + 1 );
+            }
+        )
+        ;
 
 
 
