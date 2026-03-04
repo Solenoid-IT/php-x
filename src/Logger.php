@@ -69,7 +69,7 @@ class Logger
 
 
 
-    public function log (int|string $level, string $message) : self
+    public function push (int|string $level, string $message) : self
     {
         // (Getting the value)
         $level = is_string( $level ) ? self::MAP[ $level ] : $level;
