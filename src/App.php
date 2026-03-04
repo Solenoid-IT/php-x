@@ -16,8 +16,7 @@ class App
 {
     private Container $container;
 
-    private array $errors        = [];
-    private array $conn_profiles = [];
+    private array $errors = [];
 
     private ?Error $error = null;
 
@@ -134,25 +133,6 @@ class App
     {
         // Returning the value
         return $this->error;
-    }
-
-
-
-    public function get_conn_profile (string $type, string $id) : array|null
-    {
-        // Returning the value
-        return $this->conn_profiles[ $type ][ $id ];
-    }
-
-    public function set_conn_profiles (string $type, array $profiles) : self
-    {
-        // (Getting the value)
-        $this->conn_profiles[ $type ] = $profiles;
-
-
-
-        // Returning the value
-        return $this;
     }
 
 
