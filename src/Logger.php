@@ -8,7 +8,7 @@ namespace Solenoid\X;
 
 use \Monolog\Logger as Monolog;
 use \Monolog\Handler\RotatingFileHandler;
-use \Monolog\Processor\IntrospectionProcessor;
+#use \Monolog\Processor\IntrospectionProcessor;
 
 
 
@@ -64,7 +64,7 @@ class Logger
 
 
         // (Setting the processor)
-        $this->monolog->pushProcessor( new IntrospectionProcessor() );
+        #$this->monolog->pushProcessor( new IntrospectionProcessor() );
     }
 
 
