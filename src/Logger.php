@@ -51,7 +51,7 @@ class Logger
 
 
 
-    public function __construct (public readonly string $file_path, private int $max_files = 7, private string $channel = 'main')
+    public function __construct (public readonly string $file_path, private int $max_files = 7, private string $channel = 'main', private bool $pid = false)
     {
         // (Getting the value)
         $this->monolog = new Monolog( $channel );
@@ -73,6 +73,19 @@ class Logger
     {
         // (Getting the value)
         $level = is_string( $level ) ? self::MAP[ $level ] : $level;
+
+
+
+        if ( $this->pid )
+        {// Value found
+            // (Getting the value)
+            $pid = getmypid();
+
+
+
+            // (Getting the value)
+            $message = "[PID: $pid] {$message}";
+        }
 
 
 
