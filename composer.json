@@ -22,7 +22,8 @@
         "solenoid/perf": "^1.0.0",
         "solenoid/html": "^1.0.0",
         "nikic/php-parser": "^5.7",
-        "predis/predis": "^3.3"
+        "predis/predis": "^3.3",
+        "monolog/monolog": "^3.10"
     },
     "autoload": {
         "psr-4": {
