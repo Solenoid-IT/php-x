@@ -63,8 +63,13 @@ class Logger
 
 
 
+        // (Getting the value)
+        $pid = $this->pid ? '(' . getmypid() . ') ' : '';
+
+
+
         // (Setting the formatter)
-        $handler->setFormatter( new LineFormatter( "[%datetime%] %channel%.%level_name%: %message%\n", "Y-m-d\TH:i:s.uP", true, true ) );
+        $handler->setFormatter( new LineFormatter( "%datetime% %channel% %level_name% $pid:: %message%\n", 'c', true, true ) );
 
 
 
@@ -78,19 +83,6 @@ class Logger
     {
         // (Getting the value)
         $level = is_string( $level ) ? self::MAP[ $level ] : $level;
-
-
-
-        if ( $this->pid )
-        {// Value found
-            // (Getting the value)
-            $pid = getmypid();
-
-
-
-            // (Getting the value)
-            $message = "($pid) :: {$message}";
-        }
 
 
 
