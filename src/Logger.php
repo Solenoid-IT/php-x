@@ -87,7 +87,7 @@ class Logger
 
 
         // (Logging the message)
-        $this->monolog->log( $level, $message );
+        $this->monolog->log( $level, str_replace( [ "\r", "\n", "\t" ], [ '\\r', '\\n', '\\t' ], $message ) );
 
 
 
