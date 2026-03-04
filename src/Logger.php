@@ -8,7 +8,7 @@ namespace Solenoid\X;
 
 use \Monolog\Logger as Monolog;
 use \Monolog\Handler\RotatingFileHandler;
-#use \Monolog\Processor\IntrospectionProcessor;
+use \Monolog\Formatter\LineFormatter;
 
 
 
@@ -58,13 +58,18 @@ class Logger
 
 
 
+        // (Getting the value)
+        $handler = new RotatingFileHandler( $file_path, $max_files );
+
+
+
+        // (Setting the formatter)
+        $handler->setFormatter( new LineFormatter( "[%datetime%] %channel%.%level_name%: %message%\n", "Y-m-d\TH:i:s.uP", true, true ) );
+
+
+
         // (Setting the handler)
-        $this->monolog->pushHandler( new RotatingFileHandler( $file_path, $max_files ) );
-
-
-
-        // (Setting the processor)
-        #$this->monolog->pushProcessor( new IntrospectionProcessor() );
+        $this->monolog->pushHandler( $handler );
     }
 
 
@@ -84,7 +89,7 @@ class Logger
 
 
             // (Getting the value)
-            $message = "[PID: $pid] {$message}";
+            $message = "($pid) :: {$message}";
         }
 
 
