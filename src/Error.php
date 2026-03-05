@@ -81,10 +81,24 @@ class Error extends \Exception
 
 
 
+    public function summarize () : string
+    {
+        // Returning the value
+        return implode( ' - ', [ $this->code, $this->type, $this->message, $this->http_code ? 'HTTP ' . $this->http_code : null ] );
+    }
+
+    public function describe () : string
+    {
+        // Returning the value
+        return parent::__toString();
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
-        return parent::__toString() . ' :: Error :: ' . implode( ' - ', [ $this->code, $this->type, $this->message, $this->http_code ? 'HTTP ' . $this->http_code : null ] );
+        return $this->describe() . ' :: Error :: ' . $this->summarize();
     }
 }
 
