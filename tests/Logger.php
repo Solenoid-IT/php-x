@@ -9,7 +9,7 @@ use \Solenoid\X\Logger;
 
 
 
-$logger = new Logger( __DIR__ . '/../log/test.log', pid: true );
+$logger = ( new Logger( __DIR__ . '/../log/test.log', pid: true ) )->set_duration( '5s' )->set_size( '32M' )->rotate();
 $logger->push( "Test\n1\n2\n3", 'D' );
 
 
