@@ -51,7 +51,7 @@ class Logger
 
 
 
-    public function __construct (public readonly string $file_path, private int $max_files = 7, private string $channel = 'main', private bool $pid = false)
+    public function __construct (public readonly string $file_path, private int $max_files = 4, private string $channel = 'main', private bool $pid = false)
     {
         // (Getting the value)
         $this->monolog = new Monolog( $channel );
@@ -70,6 +70,42 @@ class Logger
 
         // (Setting the formatter)
         $handler->setFormatter( new LineFormatter( "%datetime% %channel% %level_name% $pid:: %message%\n", 'c', true, true ) );
+
+
+
+        // (Getting the value)
+        $start_of_week = new \DateTime();
+
+        if ( $start_of_week->format( 'N' ) !== '1' )
+        {// Match failed
+            // (Modifying the date)
+            $start_of_week->modify( 'last monday' );
+        }
+
+
+
+        // (Getting the value)
+        $end_of_week = clone $start_of_week;
+        $end_of_week->modify( 'next sunday' );
+
+
+
+        // (Setting the filename format)
+        $handler->setFilenameFormat( '{filename}_{date}', $start_of_week->format('Y-m') . '_' . $start_of_week->format('d') . '-' . $end_of_week->format('d') );
+
+
+
+        // (Getting the value)
+        $last_file_path = $handler->getUrl();
+
+        if ( $last_file_path )
+        {// Value found
+            if ( !file_exists( $this->file_path ) )
+            {// (File not found)
+                // (Making the alias)
+                symlink( $last_file_path, $this->file_path );
+            }
+        }
 
 
 
