@@ -21,8 +21,8 @@ class ClassInspector
 {
     private \ReflectionClass $reflection;
 
-    private array            $methods = [];
-    private array            $data = [];
+    private array $methods = [];
+    private array $data    = [];
 
 
 
@@ -41,7 +41,7 @@ class ClassInspector
 
 
 
-    public function __construct (public readonly string $class, private array $app_errors)
+    public function __construct (public readonly string $class, private array $app_errors = [])
     {
         if ( !class_exists( $class ) )
         {// (Class not found)
