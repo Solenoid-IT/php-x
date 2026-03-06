@@ -8,11 +8,26 @@ namespace Solenoid\X\Data;
 
 class ClassScanner
 {
-    private string $basedir;
+    public readonly string $basedir;
 
 
 
-    public function __construct (public readonly string $path, private array $app_errors = [], private string $root_namespace = 'App\\Endpoints') {}
+    public function __construct (string $path, private array $app_errors = [], private string $root_namespace = 'App\\Endpoints')
+    {
+        // (Getting the value)
+        $basedir = realpath( $path );
+
+        if ( !$basedir || !is_dir( $basedir ) )
+        {// (Directory not found)
+            // Throwing the exception
+            throw new \Exception( "Directory '{$path}' not found" );
+        }
+
+
+
+        // (Getting the value)
+        $this->basedir = $basedir;
+    }
 
 
 
@@ -82,26 +97,10 @@ class ClassScanner
 
 
 
-    public function scan (string $path) : array
+    public function scan () : array
     {
-        // (Getting the value)
-        $basedir = realpath( $path );
-
-        if ( !$basedir || !is_dir( $basedir ) )
-        {// (Directory not found)
-            // Throwing the exception
-            throw new \Exception( "Directory '{$path}' not found" );
-        }
-
-
-
-        // (Getting the value)
-        $this->basedir = $basedir;
-
-
-
         // Returning the value
-        return $this->recursive_scan( $basedir );
+        return $this->recursive_scan( $this->basedir );
     }
 }
 
