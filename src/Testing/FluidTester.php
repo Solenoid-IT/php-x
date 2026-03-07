@@ -29,7 +29,7 @@ class FluidTester
 
 
         // Printing the value
-        echo "📁 Testing endpoint {$class}\n";
+        echo "📁 Testing class {$class}\n";
         echo str_repeat( '-', 50 ) . "\n";
         
         if ( isset( $endpoint['methods'] ) && is_array( $endpoint['methods'] ) )
@@ -304,7 +304,7 @@ class FluidTester
         return 'test_value';
     }
 
-    private function make_http_request (string $method, string $url, array $data) : array
+    private function make_http_request (string $method, string $path, array $data) : array
     {
         // (Getting the value)
         $ch = curl_init();
@@ -312,7 +312,7 @@ class FluidTester
 
 
         // (Getting the value)
-        $full_url = "http://localhost$url";
+        $full_url = "http://localhost/$path";
 
 
 
