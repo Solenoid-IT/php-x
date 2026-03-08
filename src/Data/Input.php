@@ -124,12 +124,13 @@ class Input
         else
         if ( is_string( $this->reference ) && is_subclass_of( $this->reference, DTO::class ) )
         {// (Reference is a 'DTO')
-            #return $this->reference::generate();
+            // Returning the value
+            return $this->reference::generate();
         }
         else
         if ( $this->reference instanceof ArrayList )
         {// (Reference is an 'ArrayList')
-            #return $this->reference->generate();
+            #return $this->reference->generate();# 'ahcid to implementt'
         }
 
 
