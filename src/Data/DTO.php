@@ -655,6 +655,172 @@ abstract class DTO
         // Returning the value
         return $analysis->valid ? $analysis->input : null;
     }
+
+    public static function generate () : static
+    {
+        // (Getting the value)
+        $constructor = ( new \ReflectionClass( static::class ) )->getConstructor();
+
+        if ( !$constructor )
+        {// Value not found
+            // Returning the value
+            return new static();
+        }
+
+
+
+        // (Getting the value)
+        $parameters = [];
+
+        foreach ( $constructor->getParameters() as $param )
+        {// Processing each entry
+            // (Getting the values)
+            $param_name = $param->getName();
+            $param_type = $param->getType();
+
+
+
+            // (Setting the value)
+            $value_generated = false;
+
+
+
+            // (Getting the value)
+            $property = ( new \ReflectionClass( static::class ) )->getProperty( $param_name );
+
+            foreach ( $property->getAttributes( Value::class, \ReflectionAttribute::IS_INSTANCEOF ) as $attribute )
+            {// Processing each entry
+                // (Getting the value instance)
+                $value_instance = $attribute->newInstance();
+
+                // (Generating the value)
+                $parameters[ $param_name ] = $value_instance->generate();
+
+
+
+                // (Setting the value)
+                $value_generated = true;
+
+
+
+                // Breaking the iteration
+                break;
+            }
+
+
+
+            if ( !$value_generated )
+            {// (Value has not been generated)
+                foreach ( $property->getAttributes( ArrayList::class ) as $attribute )
+                {// Processing each entry
+                    // (Getting the value)
+                    $arraylist_instance = $attribute->newInstance();
+
+
+
+                    // (Generating the value)
+                    #$parameters[ $param_name ] = $arraylist_instance->generate();# 'ahcid to implementt'
+
+
+
+                    // (Setting the value)
+                    $value_generated = true;
+
+
+
+                    // Breaking the iteration
+                    break;
+                }
+            }
+
+
+
+            if ( $value_generated ) continue;
+
+
+
+            if ( $param_type instanceof \ReflectionNamedType )
+            {// (Parameter has a named type)
+                // (Getting the value)
+                $type_name = $param_type->getName();
+
+                if ( class_exists( $type_name ) && is_subclass_of( $type_name, self::class ) )
+                {// (Parameter is a DTO subclass)
+                    // (Getting the value)
+                    $parameters[ $param_name ] = $type_name::generate();
+
+
+
+                    // (Setting the value)
+                    $value_generated = true;
+                }
+            }
+
+
+
+            if ( $value_generated ) continue;
+
+
+
+            if ( $param->isDefaultValueAvailable() )
+            {// (Parameter has default value)
+                // (Getting the value)
+                $parameters[ $param_name ] = $param->getDefaultValue();
+            }
+            else
+            {// (No default value and no generator found)
+                // (Generating a basic value based on type)
+                if ( $param_type instanceof \ReflectionNamedType )
+                {// (Parameter has named type)
+                    // (Getting the value)
+                    $type_name = $param_type->getName();
+
+                    switch ( $type_name )
+                    {
+                        case 'string':
+                            // (Getting the value)
+                            $parameters[ $param_name ] = 'gs_' . rand( 1000, 9999 );
+                        break;
+
+                        case 'int':
+                            // (Getting the value)
+                            $parameters[ $param_name ] = rand( 1, 100 );
+                        break;
+
+                        case 'float':
+                            // (Getting the value)
+                            $parameters[ $param_name ] = (float) ( rand( 1, 100 ) / rand( 1, 10 ) );
+                        break;
+
+                        case 'bool':
+                            // (Getting the value)
+                            $parameters[ $param_name ] = (bool) rand( 0, 1 );
+                        break;
+
+                        case 'array':
+                            // (Getting the value)
+                            $parameters[ $param_name ] = [];
+                        break;
+
+                        default:
+                            // (Getting the value)
+                            $parameters[ $param_name ] = null;
+                        break;
+                    }
+                }
+                else
+                {// (Mixed or union type)
+                    // (Setting the value)
+                    $parameters[ $param_name ] = null;
+                }
+            }
+        }
+
+
+
+        // Returning the value
+        return new static( ...$parameters );
+    }
 }
 
 
