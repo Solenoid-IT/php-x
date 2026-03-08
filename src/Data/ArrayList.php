@@ -253,6 +253,46 @@ class ArrayList
         // Returning the value
         return $this->is_valid;
     }
+
+
+    public function generate () : array
+    {
+        // (Getting the values)
+        $min = $this->min_size ?? 0;
+        $max = $this->max_size ?? ( $min + 5 );
+
+        if ( $max < $min ) $max = $min;
+
+
+
+        // (Getting the value)
+        $size = rand( $min, $max );
+
+
+
+        // (Setting the value)
+        $result = [];
+
+        for ( $i = 0; $i < $size; $i++ )
+        {// Processing each entry
+            if ( $this->reference instanceof Value )
+            {// (Reference is a 'Value')
+                // (Appending the value)
+                $result[] = $this->reference->generate();
+            }
+            else
+            if ( is_string( $this->reference ) && is_subclass_of( $this->reference, DTO::class ) )
+            {// (Reference is a 'DTO')
+                // (Appending the value)
+                $result[] = ( $this->reference )::generate();
+            }
+        }
+
+
+
+        // Returning the value
+        return $result;
+    }
 }
 
 
