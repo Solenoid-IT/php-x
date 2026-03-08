@@ -17,7 +17,7 @@ use \Solenoid\X\CodeAnalyzer;
 
 
 
-class ClassInspector
+class ClassReader
 {
     private \ReflectionClass $reflection;
 
@@ -41,23 +41,18 @@ class ClassInspector
 
 
 
-    public function __construct (public readonly string $class, private array $app_errors = [])
+    public function __construct (public readonly string $class)
     {
         if ( !class_exists( $class ) )
         {// (Class not found)
             // Throwing the exception
-            throw new \Exception( "Class '{$this->class}' does not exist" );
+            throw new \Exception( "Class '$class' does not exist" );
         }
 
         
 
         // (Getting the value)
         $this->reflection = new \ReflectionClass( $this->class );
-        
-
-
-        // (Analyzing class methods)
-        $this->analyze_methods();
     }
 
 
@@ -70,7 +65,7 @@ class ClassInspector
 
 
 
-            // (Analyzing the method)
+            // (Getting the value)
             $method_data = $this->analyze_method( $method );
 
             if ( $method_data )
@@ -162,33 +157,19 @@ class ClassInspector
             // (Getting the value)
             $code = $result->args[0]->value->value;
 
-            if ( !isset( $this->app_errors[ $code ] ) || !$this->app_errors[ $code ]['exposed'] ) continue;
 
 
-
-            // (Getting the value)
-            $errors[ $code ] = $this->app_errors[ $code ];
-
-
-
-            // (Removing the element)
-            unset( $errors[ $code ]['exposed'] );
-
-
-
-            // (Getting the values)
-            $errors[ $code ]['code']       = (int) $errors[ $code ]['code'];
-            $errors[ $code ]['http_code']  = (int) $errors[ $code ]['http_code'];
-            $errors[ $code ]['notifiable'] = $errors[ $code ]['notifiable'] === '1';
+            // (Appending the value)
+            $errors[] = $code;
         }
 
 
 
         // Returning the value
-        return $errors;
+        return array_unique( $errors );
     }
 
-    private function parse_io (mixed $reference, ?string $name = null): array
+    private function parse_io (mixed $reference, ?string $name = null) : array
     {
         // (Getting the value)
         $reflection = is_object( $reference ) ? new \ReflectionObject( $reference ) : new \ReflectionClass( $reference );
@@ -392,6 +373,19 @@ class ClassInspector
     {
         // Returning the value
         return isset( $this->data[ $name ] );
+    }
+
+
+
+    public function read () : self
+    {
+        // (Analyzing class methods)
+        $this->analyze_methods();
+
+
+
+        // Returning the value
+        return $this;
     }
 
 

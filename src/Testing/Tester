@@ -1,0 +1,345 @@
+<?php
+
+
+
+namespace App\Tasks;
+
+
+
+class Test
+{
+    private array $results = [];
+    private int $totalTests = 0;
+    private int $passedTests = 0;
+    private int $failedTests = 0;
+
+
+
+    public function run ()
+    {
+        /*
+        echo "=== AUTOMATED API TESTING ===\n\n";
+
+
+
+        // (Getting the value)
+        $apidoc = json_decode( file_get_contents( storage() . '/apidoc.json' ), true );
+
+        if ( !$apidoc )
+        {// Value not found
+            echo "❌ Errore: impossibile leggere apidoc.json\n";
+            return;
+        }
+
+        foreach ( $apidoc['endpoints'] as $path => $endpoint )
+        {// Processing each entry
+            // Printing the value
+            echo "📁 Testing endpoint {$path}\n";
+            echo str_repeat('-', 50) . "\n";
+            
+            if ( isset( $endpoint['tree'] ) )
+            {// Value found
+                // (Testing the endpoint tree)
+                $this->testEndpointTree( $path, $endpoint['tree'] );
+            }
+            
+            echo "\n";
+        }
+        
+        // (Printing final summary)
+        $this->printSummary();
+
+        */
+
+
+
+        $inspector = new \App\ClassReader( \App\Endpoints\User\FirewallRule::class, app()->get_errors() );
+        print_r( $inspector->get_methods()[0] );
+    }
+
+    private function testEndpointTree(string $basePath, array $tree)
+    {
+        foreach ($tree as $item) {
+            if ($item['type'] === 'file' && isset($item['methods'])) {
+                $this->testEndpointFile($basePath, $item);
+            } elseif ($item['type'] === 'folder' && isset($item['content'])) {
+                echo "  📂 {$item['name']}/\n";
+                $this->testEndpointTree($basePath, $item['content']);
+            }
+        }
+    }
+
+    private function testEndpointFile(string $basePath, array $file)
+    {
+        $fileName = basename($file['name'], '.php');
+        echo "  📄 {$fileName}:\n";
+        
+        foreach ($file['methods'] as $method) {
+            $this->testEndpointMethod($basePath, $fileName, $method);
+        }
+    }
+
+    private function testEndpointMethod(string $basePath, string $fileName, array $method)
+    {
+        $this->totalTests++;
+        $methodName = $method['name'];
+        
+        // (Build sRPC URL: /api/token?m=FirewallRule.list)
+        $className = basename($fileName, '.php');
+        $rpcMethod = $className . '.' . $methodName;
+        $url = "/" . $basePath . "?m=" . $rpcMethod;
+        
+        echo "    🔧 {$methodName}: ";
+        
+        try {
+            // (Preparing test data)
+            $testData = $this->prepareTestData($method['input'] ?? null);
+            
+            // (Making sRPC request)
+            $response = $this->makeHttpRequest('RUN', $url, $testData);
+            
+            // (Validating response)
+            $result = $this->validateResponse($response, $method);
+            
+            if ($result['success']) {
+                echo "✅ PASS";
+                $this->passedTests++;
+            } else {
+                echo "❌ FAIL - " . $result['message'];
+                $this->failedTests++;
+            }
+            
+            if ($result['details']) {
+                echo " (" . $result['details'] . ")";
+            }
+            
+        } catch (\Exception $e) {
+            echo "❌ ERROR - " . $e->getMessage();
+            $this->failedTests++;
+        }
+        
+        echo "\n";
+        
+        // (Store detailed result)
+        $this->results[] = [
+            'endpoint' => $url,
+            'method' => $methodName,
+            'status' => $result['success'] ?? false,
+            'message' => $result['message'] ?? $e->getMessage() ?? '',
+            'timestamp' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    private function prepareTestData(?array $inputSpec): array
+    {
+        if (!$inputSpec) {
+            return [];
+        }
+
+        $data = [];
+        
+        switch ($inputSpec['type']) {
+            case 'Value':
+                // (Preparing single value based on type)
+                $fieldName = $this->getFieldNameFromSpec($inputSpec);
+                $data[$fieldName] = $this->generateValueFromSpec($inputSpec);
+                break;
+                
+            case 'DTO':
+                // (Preparing DTO with properties)
+                if (isset($inputSpec['properties'])) {
+                    foreach ($inputSpec['properties'] as $property) {
+                        $data[$property['name'] ?? 'unknown'] = $this->generateValueFromProperty($property);
+                    }
+                }
+                break;
+                
+            case 'ArrayList':
+                // (Preparing array of values)
+                $data = [1]; // Default test value for ArrayList
+                break;
+        }
+        
+        return $data;
+    }
+
+    private function generateValueFromSpec(array $spec): mixed
+    {
+        $className = $spec['short_name'] ?? '';
+        
+        switch ($className) {
+            case 'IntValue':
+                return 1; // Default test integer
+            case 'StringValue':
+                return 'test'; // Default test string
+            case 'BoolValue':
+                return true; // Default test boolean
+            default:
+                return null;
+        }
+    }
+
+    private function getFieldNameFromSpec(array $spec): string
+    {
+        // (Extract field name from properties)
+        if (isset($spec['properties'])) {
+            foreach ($spec['properties'] as $property) {
+                if ($property['name'] === 'name' && isset($property['value'])) {
+                    return $property['value'];
+                }
+            }
+        }
+        
+        // (Fallback to generic name based on type)
+        $className = $spec['short_name'] ?? '';
+        switch ($className) {
+            case 'IntValue':
+                return 'id';
+            case 'StringValue':
+                return 'value';
+            case 'BoolValue':
+                return 'flag';
+            default:
+                return 'data';
+        }
+    }
+
+    private function generateValueFromProperty(array $property): mixed
+    {
+        $type = $property['class'] ?? '';
+        $name = $property['name'] ?? '';
+        
+        // (Generate appropriate test values based on property type and name)
+        if (strpos($type, 'IntValue') !== false) {
+            return ($name === 'id') ? 1 : rand(1, 100);
+        } elseif (strpos($type, 'StringValue') !== false) {
+            if ($name === 'email') return 'test@example.com';
+            if ($name === 'name') return 'Test Name';
+            return 'test_' . $name;
+        } elseif (strpos($type, 'BoolValue') !== false) {
+            return true;
+        }
+        
+        return 'test_value';
+    }
+
+    private function makeHttpRequest(string $method, string $url, array $data): array
+    {
+        // (Preparing cURL request for sRPC)
+        $ch = curl_init();
+        
+        $fullUrl = 'http://localhost' . $url;
+        
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $fullUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_CUSTOMREQUEST => $method
+        ]);
+        
+        // (For sRPC, send data as JSON body)
+        if (!empty($data)) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Personal-Token: test_token_123456789' // Authentication header for /api/token
+            ]);
+        } else {
+            // (Even for methods without input, send empty JSON)
+            curl_setopt($ch, CURLOPT_POSTFIELDS, '{}');
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Accept: application/json',
+                'Personal-Token: test_token_123456789' // Authentication header for /api/token
+            ]);
+        }
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        
+        curl_close($ch);
+        
+        if ($error) {
+            throw new \Exception("cURL Error: " . $error);
+        }
+        
+        return [
+            'http_code' => $httpCode,
+            'body' => $response,
+            'data' => json_decode($response, true)
+        ];
+    }
+
+    private function validateResponse(array $response, array $methodSpec): array
+    {
+        $httpCode = $response['http_code'];
+        $body = $response['body'];
+        $data = $response['data'];
+        
+        // (Check for successful response codes)
+        if ($httpCode >= 200 && $httpCode < 300) {
+            return [
+                'success' => true,
+                'message' => 'HTTP ' . $httpCode,
+                'details' => 'Response OK'
+            ];
+        }
+        
+        // (Check if error code matches expected errors)
+        if (isset($methodSpec['errors']) && !empty($methodSpec['errors'])) {
+            foreach ($methodSpec['errors'] as $errorCode => $errorSpec) {
+                if ($httpCode == $errorSpec['http_code']) {
+                    return [
+                        'success' => true,
+                        'message' => 'Expected error ' . $errorCode,
+                        'details' => 'HTTP ' . $httpCode
+                    ];
+                }
+            }
+        }
+        
+        return [
+            'success' => false,
+            'message' => 'Unexpected HTTP ' . $httpCode,
+            'details' => substr($body, 0, 100)
+        ];
+    }
+
+    private function printSummary()
+    {
+        echo "=== SUMMARY ===\n";
+        echo "Total tests: {$this->totalTests}\n";
+        echo "✅ Passed: {$this->passedTests}\n";
+        echo "❌ Failed: {$this->failedTests}\n";
+        
+        $successRate = $this->totalTests > 0 ? round(($this->passedTests / $this->totalTests) * 100, 2) : 0;
+        echo "📊 Success rate: {$successRate}%\n\n";
+        
+        // (Save detailed results to file)
+        $this->saveResultsToFile();
+    }
+
+    private function saveResultsToFile()
+    {
+        $resultFile = storage() . '/test_results_' . date('Y-m-d_H-i-s') . '.json';
+        
+        $summary = [
+            'timestamp' => date('Y-m-d H:i:s'),
+            'total_tests' => $this->totalTests,
+            'passed_tests' => $this->passedTests,
+            'failed_tests' => $this->failedTests,
+            'success_rate' => $this->totalTests > 0 ? round(($this->passedTests / $this->totalTests) * 100, 2) : 0,
+            'details' => $this->results
+        ];
+        
+        file_put_contents($resultFile, json_encode($summary, JSON_PRETTY_PRINT));
+        echo "📄 Detailed results saved to: " . basename($resultFile) . "\n";
+    }
+}
+
+
+
+?>

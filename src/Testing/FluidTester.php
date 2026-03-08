@@ -6,7 +6,7 @@ namespace Solenoid\X\Testing;
 
 
 
-use \Solenoid\X\Data\ClassScanner;
+use \Solenoid\X\Data\EndpointReader;
 
 
 
@@ -23,7 +23,7 @@ class FluidTester
     public function __construct (public readonly string $path, private string $token, array $app_errors = [], string $root_namespace = 'App\\Endpoints')
     {
         // (Getting the value)
-        $this->endpoints = ( new ClassScanner( $path, $app_errors, $root_namespace ) )->scan();
+        $this->endpoints = ( new EndpointReader( $path, $root_namespace ) )->read();
     }
 
 

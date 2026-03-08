@@ -6,13 +6,13 @@ namespace Solenoid\X\Data;
 
 
 
-class ClassScanner
+class EndpointReader
 {
     public readonly string $basedir;
 
 
 
-    public function __construct (string $path, private array $app_errors = [], private string $root_namespace = 'App\\Endpoints')
+    public function __construct (string $path, private string $prefix = 'App\\Endpoints')
     {
         // (Getting the value)
         $basedir = realpath( $path );
@@ -65,7 +65,7 @@ class ClassScanner
                 if ( class_exists( $class ) )
                 {// (Class found)
                     // (Getting the value)
-                    $methods = ( new ClassInspector( $class, $this->app_errors ) )->get_methods();
+                    $methods = ( new ClassReader( $class ) )->read()->get_methods();
 
                     if ( !empty( $methods ) )
                     {// Value is not empty
@@ -92,12 +92,12 @@ class ClassScanner
     private function get_class_by_file (string $path) : string
     {
         // Returning the value
-        return $this->root_namespace . '\\' . str_replace( '/', '\\', preg_replace( '/\.php$/', '', substr( $path, strlen( $this->basedir ) + 1 ) ) );
+        return $this->prefix . '\\' . str_replace( '/', '\\', preg_replace( '/\.php$/', '', substr( $path, strlen( $this->basedir ) + 1 ) ) );
     }
 
 
 
-    public function scan () : array
+    public function read () : array
     {
         // Returning the value
         return $this->recursive_scan( $this->basedir );
