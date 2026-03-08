@@ -166,7 +166,7 @@ class ClassReader
 
 
         // Returning the value
-        return array_unique( $errors );
+        return array_values( array_unique( $errors ) );
     }
 
     private function parse_io (mixed $reference, ?string $name = null) : array
