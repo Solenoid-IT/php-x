@@ -9,6 +9,7 @@ namespace Solenoid\X\Data\Types;
 use \Attribute;
 
 use \Solenoid\X\Data\Types\Value;
+use \Solenoid\X\Data\Generators\StringGenerator;
 
 
 
@@ -92,6 +93,14 @@ class StringValue extends Value
     {
         // Returning the value
         return $this->value;
+    }
+
+
+
+    public function generate () : string|null
+    {
+        // Returning the value
+        return ( new StringGenerator( $this ) )->generate();
     }
 }
 

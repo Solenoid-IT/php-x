@@ -32,6 +32,10 @@ abstract class Value
         // Returning the value
         return $this->value;
     }
+
+
+
+    abstract public function generate () : mixed;
 }
 
 

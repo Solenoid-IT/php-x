@@ -9,6 +9,7 @@ namespace Solenoid\X\Data\Types;
 use \Attribute;
 
 use \Solenoid\X\Data\Types\Value;
+use \Solenoid\X\Data\Generators\IntGenerator;
 
 
 
@@ -94,6 +95,14 @@ class IntValue extends Value
     {
         // Returning the value
         return $this->value;
+    }
+
+
+
+    public function generate () : int|null
+    {
+        // Returning the value
+        return ( new IntGenerator( $this ) )->generate();
     }
 }
 

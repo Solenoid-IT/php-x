@@ -9,6 +9,7 @@ namespace Solenoid\X\Data\Types;
 use \Attribute;
 
 use \Solenoid\X\Data\Types\Value;
+use \Solenoid\X\Data\Generators\EnumGenerator;
 
 
 
@@ -77,6 +78,14 @@ class EnumValue extends Value
     {
         // Returning the value
         return $this->value;
+    }
+
+
+
+    public function generate () : mixed
+    {
+        // Returning the value
+        return ( new EnumGenerator( $this ) )->generate();
     }
 }
 
