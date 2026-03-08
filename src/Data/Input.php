@@ -130,7 +130,8 @@ class Input
         else
         if ( $this->reference instanceof ArrayList )
         {// (Reference is an 'ArrayList')
-            #return $this->reference->generate();# 'ahcid to implementt'
+            // Returning the value
+            return $this->reference->generate();
         }
 
 

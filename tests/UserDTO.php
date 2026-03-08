@@ -147,4 +147,13 @@ print_r($errors);
 
 
 
+/*
+
+$dto_4 = UserDTO::generate();
+print_r( $dto_4 );
+
+*/
+
+
+
 ?>
