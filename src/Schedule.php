@@ -2,7 +2,7 @@
 
 
 
-namespace App\Attributes;
+namespace Solenoid\X;
 
 
 
