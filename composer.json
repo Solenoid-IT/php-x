@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.0",
         "eftec/bladeone": "^4.9",
         "solenoid/http": "^1.0.0",
         "solenoid/tasker-lib": "^1.0.0",
