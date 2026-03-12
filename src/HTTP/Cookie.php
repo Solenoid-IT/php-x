@@ -8,35 +8,24 @@ namespace Solenoid\X\HTTP;
 
 class Cookie
 {
-    public readonly string       $name;
-
-    public readonly string     $domain;
-    public readonly string       $path;
-
-    public readonly bool       $secure;
-    public readonly bool    $http_only;
-
-    public readonly string  $same_site;
+    private string $header = '';
 
 
 
-    public function __construct (string $name, string $domain = '', string $path = '/', bool $secure = false, bool $http_only = false, string $same_site = 'Lax')
-    {
-        // (Getting the values)
-        $this->name      = $name;
-
-        $this->domain    = $domain;
-        $this->path      = $path;
-
-        $this->secure    = $secure;
-        $this->http_only = $http_only;
-
-        $this->same_site = $same_site;
-    }
+    public function __construct
+    (
+        public readonly string $name,
+        public readonly string $domain = '',
+        public readonly string $path = '/',
+        public readonly bool $secure = false,
+        public readonly bool $http_only = false,
+        public readonly string $same_site = 'Lax'
+    )
+    {}
 
 
 
-    public function set (string $value, ?int $expiration_timestamp = null) : bool
+    public function set (string $value, ?int $expiration_timestamp = null) : self
     {
         // (Getting the value)
         $components =
@@ -58,14 +47,28 @@ class Cookie
 
 
         // (Getting the value)
-        $header = "Set-Cookie: {$this->name}=$value; $components";
+        $this->header = "Set-Cookie: {$this->name}=$value; $components";
 
 
 
-        // (Setting the header)
-        header( $header, false );
+        // Returning the value
+        return $this;
+    }
 
-        if ( !in_array( $header, headers_list() ) )
+    public function unset () : self
+    {
+        // Returning the value
+        return $this->set( '', -1 );
+    }
+
+
+
+    public function send () : bool
+    {
+        // (Sending the header)
+        header( $this->header, false );
+
+        if ( !in_array( $this->header, headers_list() ) )
         {// (Unable to send the header)
             // Returning the value
             return false;
@@ -77,24 +80,12 @@ class Cookie
         return true;
     }
 
-    public function unset () : bool
+
+
+    public function __toString () : string
     {
         // Returning the value
-        return $this->set( '', -1 );
-    }
-
-
-
-    public static function get (string $name) : string|null
-    {
-        // Returning the value
-        return $_COOKIE[ $name ] ?? null;
-    }
-
-    public static function delete (string $name, string $domain = '', string $path = '/') : bool
-    {
-        // Returning the value
-        return ( new self( $name, $domain, $path ) )->set( '', -1 );
+        return $this->header;
     }
 }
 

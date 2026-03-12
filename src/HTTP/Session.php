@@ -140,18 +140,6 @@ class Session
 
 
 
-        /*
-
-        if ( $this->generated_id )
-        {// Value found
-            // (Setting the cookie)
-            $this->cookie->set( $this->id, $this->persistent ? $this->expiration_timestamp : null );
-        }
-
-        */
-
-
-
         // (Setting the value)
         $this->started = true;
 
@@ -197,11 +185,6 @@ class Session
 
 
 
-        // (Setting the cookie)
-        #$this->cookie->set( $this->id, $this->persistent ? $this->expiration_timestamp : null );
-
-
-
         // Returning the value
         return $this;
     }
@@ -232,11 +215,6 @@ class Session
 
 
 
-        // (Setting the cookie)
-        #$this->cookie->set( $this->id, $this->persistent ? $this->expiration_timestamp : null );
-
-
-
         // Returning the value
         return $this;
     }
@@ -258,11 +236,6 @@ class Session
             // Returning the value
             return false;
         }
-
-
-
-        // (Unsetting the cookie)
-        #$this->cookie->unset();
 
 
 
@@ -405,6 +378,11 @@ class Session
             // (Setting the cookie)
             $this->cookie->set( $this->id, $this->persistent ? $this->expiration_timestamp : null );
         }
+
+
+
+        // (Sending the cookie)
+        $this->cookie->send();
 
 
 
