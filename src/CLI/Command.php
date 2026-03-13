@@ -20,7 +20,7 @@ class Command
 
 
 
-    public function __construct (array $argv, string $prefix = '/App/Tasks')
+    public function __construct (array $argv, public readonly string $prefix = '\\App\\Tasks')
     {
         if ( count( $argv ) < 2 )
         {// (There are not enough arguments)
@@ -38,7 +38,7 @@ class Command
 
 
         // (Getting the value)
-        $this->class = str_replace( '/', '\\', "$prefix/$class" );
+        $this->class = $this->prefix . '\\' . str_replace( '/', '\\', $class );
 
 
 
