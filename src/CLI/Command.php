@@ -15,6 +15,8 @@ class Command
 {
     private array $callbacks = [];
 
+    private $acquire_mutex = null;
+
 
 
     public readonly string $file_path;
@@ -68,16 +70,25 @@ class Command
         // (Getting the value)
         $mutex = Mutex::find( $this->class, $this->method );
 
-        if ( $mutex )
-        {// Value found
-            // (Emitting the event)
-            $this->emit( 'mutex-lock' );
-        }
+        if ( $mutex ) $this->emit( 'mutex-lock' );
 
 
 
         try
         {
+            if ( $mutex )
+            {// Value found
+                if ( $this->acquire_mutex )
+                {// Value found
+                    // (Getting the value)
+                    $pid = ( $this->acquire_mutex )();
+
+                    if ( $pid ) return 'mutex:locked';
+                }
+            }
+
+
+
             // (Calling the function)
             return $container->run_class_fn( $this->class, $this->method, $this->args );
         }
@@ -88,11 +99,7 @@ class Command
         }
         finally
         {
-            if ( $mutex )
-            {// Value found
-                // (Emitting the event)
-                $this->emit( 'mutex-unlock' );
-            }
+            if ( $mutex ) $this->emit( 'mutex-unlock' );
         }
     }
 
@@ -171,6 +178,19 @@ class Command
     {
         // (Appending the value)
         $this->callbacks[ $event ][] = $callback;
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+
+
+    public function set_mutex_reader (callable $function) : self
+    {
+        // (Getting the value)
+        $this->acquire_mutex = $function;
 
 
 
