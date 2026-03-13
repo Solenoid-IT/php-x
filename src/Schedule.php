@@ -204,7 +204,13 @@ class Schedule
 
 
 
-    public static function scan (string $directory, string $namespace_prefix) : array
+    /**
+     * Scans the specified directory for PHP files, looking for methods with the Schedule attribute, and returns an array of schedules with their associated class, method, and command.
+     * @param string $directory The directory to scan for PHP files.
+     * @param string $namespace_prefix The namespace prefix to use when constructing class names from file
+     * @return array An array of schedules, each containing 'action' and 'schedule' keys.
+     */
+    public static function scan (string $directory, string $namespace_prefix = 'App\\Tasks\\Scheduled') : array
     {
         // (Setting the value)
         $schedules = [];
@@ -234,18 +240,11 @@ class Schedule
             {// Processing each entry
                 foreach ( $method->getAttributes( self::class ) as $attribute )
                 {// Processing each entry
-                    // (Getting the value)
-                    $instance = $attribute->newInstance();
-
-
-
                     // (Appending the value)
                     $schedules[] =
                     [
-                        'class'    => $class,
-                        'method'   => $method->getName(),
-                        'schedule' => $instance,
-                        'command'  => str_replace( '\\', '/', $class ) . '.' . $method->getName()
+                        'action'   => new Action( $class, $method->getName() ),
+                        'schedule' => $attribute->newInstance()
                     ]
                     ;
                 }
