@@ -16,7 +16,7 @@ $time = time();
 $datetime = date( 'c', $time );
 $schedule = new Schedule( 'EVERY 5 SECOND' );
 
-echo "Testing time '$datetime' with schedule '{$schedule->interval} -> " . ( $schedule->check( $time ) ? 'true' : 'false' ) . "\n";
+echo "\nTesting time '$datetime' with schedule '{$schedule->interval} -> " . ( $schedule->check( $time ) ? 'true' : 'false' ) . "\n\n";
 
 
 
