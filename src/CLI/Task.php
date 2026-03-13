@@ -9,6 +9,7 @@ namespace Solenoid\X\CLI;
 class Task
 {
     private array $schedules = [];
+    private bool  $mutex = false;
 
 
 
@@ -40,6 +41,34 @@ class Task
     {
         // Returning the value
         return $this->schedules;
+    }
+
+
+
+    /**
+     * Returns whether this task is configured to use a mutex, which prevents multiple instances of the same task from running simultaneously.
+     * @return bool True if mutex is enabled, false otherwise.
+     */
+    public function get_mutex () : bool
+    {
+        // Returning the value
+        return $this->mutex;
+    }
+
+    /**
+     * Enables or disables the mutex for this task. When enabled, only one instance of the task can run at a time, preventing overlapping executions.
+     * @param bool $enabled Set to true to enable mutex, or false to disable it
+     * @return self Returns the current Task instance for method chaining.
+     */
+    public function set_mutex (bool $enabled = true) : self
+    {
+        // (Getting the value)
+        $this->mutex = $enabled;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
@@ -82,6 +111,17 @@ class Task
                 {// Processing each entry
                     // (Adding the schedule)
                     $task->add_schedule( $attribute->newInstance() );
+                }
+
+                foreach ( $method->getAttributes( Mutex::class ) as $attribute )
+                {// Processing each entry
+                    // (Enabling the mutex)
+                    $task->set_mutex( true );
+
+
+
+                    // Breaking the iteration
+                    break;
                 }
 
 
