@@ -13,6 +13,10 @@ use \Solenoid\X\Stream\ReadableStream;
 
 class Command
 {
+    private array $callbacks = [];
+
+
+
     public readonly string $file_path;
     public readonly string $class;
     public readonly string $method;
@@ -61,8 +65,35 @@ class Command
 
     public function run (Container $container) : mixed
     {
-        // (Calling the function)
-        return $container->run_class_fn( $this->class, $this->method, $this->args );
+        // (Getting the value)
+        $mutex = Mutex::find( $this->class, $this->method );
+
+        if ( $mutex )
+        {// Value found
+            // (Emitting the event)
+            $this->emit( 'mutex-lock' );
+        }
+
+
+
+        try
+        {
+            // (Calling the function)
+            return $container->run_class_fn( $this->class, $this->method, $this->args );
+        }
+        catch (\Throwable $e)
+        {
+            // Throwing the exception
+            throw $e;
+        }
+        finally
+        {
+            if ( $mutex )
+            {// Value found
+                // (Emitting the event)
+                $this->emit( 'mutex-unlock' );
+            }
+        }
     }
 
 
@@ -115,6 +146,36 @@ class Command
     {
         // Returning the value
         return json_decode( $this->buffer(), $associative );
+    }
+
+
+
+    public function emit (string $event, ...$args) : self
+    {
+        // (Getting the value)
+        $callbacks = $this->callbacks[ $event ] ?? [];
+
+        foreach ( $callbacks as $callback )
+        {// Processing each entry
+            // (Calling the function)
+            $callback( ...$args );
+        }
+
+
+
+        // Returning the value
+        return $this;
+    }
+
+    public function on (string $event, callable $callback) : self
+    {
+        // (Appending the value)
+        $this->callbacks[ $event ][] = $callback;
+
+
+
+        // Returning the value
+        return $this;
     }
 
 
