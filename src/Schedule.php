@@ -65,12 +65,16 @@ class Schedule
 
 
 
-    public function __construct (public string $interval) {}
+    public function __construct (public string $interval, public bool $enabled = true) {}
 
 
 
     public function check (int $reference_timestamp) : bool
     {
+        if ( !$this->enabled ) return false;
+
+
+
         // (Getting the values)
         $parts         = explode(' AT ', strtoupper($this->interval));
         $interval_part = strtolower(str_replace('EVERY ', '', $parts[0]));
