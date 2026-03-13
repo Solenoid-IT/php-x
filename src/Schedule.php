@@ -185,10 +185,16 @@ class Schedule
         // (Getting the value)
         $interval_seconds = self::calc_seconds( $interval_part );
 
-
-
-        // (Getting the value)
-        $tolerance = min( 60, $interval_seconds );
+        if ( $interval_seconds <= 60 )
+        {// Match OK
+            // (Setting the value)
+            $tolerance = 1;
+        }
+        else
+        {// Match failed
+            // (Getting the value)
+            $tolerance = min( 60, $interval_seconds );
+        }
 
 
 
