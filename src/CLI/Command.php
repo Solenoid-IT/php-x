@@ -20,7 +20,7 @@ class Command
 
 
 
-    public function __construct (array $argv, public readonly string $prefix = '\\App\\Tasks')
+    public function __construct (array $argv, string $prefix = '\\App\\Tasks')
     {
         if ( count( $argv ) < 2 )
         {// (There are not enough arguments)
@@ -38,7 +38,18 @@ class Command
 
 
         // (Getting the value)
-        $this->class = $this->prefix . '\\' . str_replace( '/', '\\', $class );
+        $class = str_replace( '/', '\\', $class );
+
+        if ( str_starts_with( $class, $prefix ) )
+        {// Match OK
+            // (Getting the value)
+            $class = substr( $class, strlen( $prefix ) );
+        }
+
+
+
+        // (Getting the value)
+        $this->class = $prefix . '\\' . $class;
 
 
 
