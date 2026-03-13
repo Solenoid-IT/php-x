@@ -99,6 +99,18 @@ class Task
 
 
 
+    /**
+     * Formats the task as a string in the format "My/Custom/Class.method".
+     * @return string The formatted task string.
+     */
+    public function format () : string
+    {
+        // Returning the value
+        return str_replace( '\\', '/', $this->class ) . '.' . $this->method;
+    }
+
+
+
     public function __toString () : string
     {
         // Returning the value
