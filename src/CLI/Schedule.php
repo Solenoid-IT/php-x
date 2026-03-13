@@ -2,13 +2,11 @@
 
 
 
-namespace Solenoid\X;
+namespace Solenoid\X\CLI;
 
 
 
 use \Attribute;
-
-use \Solenoid\X\CLI\Action;
 
 
 
@@ -202,61 +200,6 @@ class Schedule
 
         // Returning the value
         return $reference_timestamp >= $last_slot_start && $reference_timestamp < $last_slot_start + $tolerance;
-    }
-
-
-
-    /**
-     * Scans the specified directory for PHP files, looking for methods with the Schedule attribute, and returns an array of schedules with their associated class, method, and command.
-     * @param string $directory The directory to scan for PHP files.
-     * @param string $namespace_prefix The namespace prefix to use when constructing class names from file
-     * @return array An array of schedules, each containing 'action' and 'schedule' keys.
-     */
-    public static function scan (string $directory, string $namespace_prefix = 'App\\Tasks\\Scheduled') : array
-    {
-        // (Setting the value)
-        $schedules = [];
-
-        foreach ( new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $directory ) ) as $file )
-        {// Processing each entry
-            if ( $file->isDir() || $file->getExtension() !== 'php' ) continue;
-
-
-
-            // (Getting the value)
-            $relative_path = str_replace( [ $directory, '.php', '/' ], [ '', '', '\\' ], $file->getRealPath() );
-
-
-
-            // (Getting the value)
-            $class = rtrim( $namespace_prefix, '\\' ) . '\\' . ltrim( $relative_path, '\\' );
-
-            if ( !class_exists( $class ) ) continue;
-
-
-
-            // (Getting the value)
-            $reflection = new \ReflectionClass( $class );
-            
-            foreach ( $reflection->getMethods() as $method )
-            {// Processing each entry
-                foreach ( $method->getAttributes( self::class ) as $attribute )
-                {// Processing each entry
-                    // (Appending the value)
-                    $schedules[] =
-                    [
-                        'action'   => new Action( $class, $method->getName() ),
-                        'schedule' => $attribute->newInstance()
-                    ]
-                    ;
-                }
-            }
-        }
-
-
-
-        // Returning the value
-        return $schedules;
     }
 }
 
