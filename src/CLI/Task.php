@@ -16,6 +16,11 @@ class Task
 
 
 
+    /**
+     * Adds a schedule to this task.
+     * @param Schedule $schedule The schedule to add.
+     * @return self Returns the current Task instance for method chaining.
+     */
     public function add_schedule (Schedule $schedule) : self
     {
         // (Appending the value)
@@ -27,6 +32,10 @@ class Task
         return $this;
     }
 
+    /**
+     * Returns an array of schedules associated with this task.
+     * @return array<Schedule> An array of schedules.
+     */
     public function list_schedules () : array
     {
         // Returning the value

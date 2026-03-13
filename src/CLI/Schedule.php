@@ -69,6 +69,11 @@ class Schedule
 
 
 
+    /**
+     * Checks if the schedule matches the given timestamp.
+     * @param int $reference_timestamp The timestamp to check against.
+     * @return bool True if the schedule matches, false otherwise.
+     */
     public function check (int $reference_timestamp) : bool
     {
         if ( !$this->enabled ) return false;
