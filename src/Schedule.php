@@ -8,6 +8,8 @@ namespace Solenoid\X;
 
 use \Attribute;
 
+use \Solenoid\X\CLI\Action;
+
 
 
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
