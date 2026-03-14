@@ -190,8 +190,15 @@ class Task
 
     public function __toString () : string
     {
+        // (Getting the value)
+        $class = $this->class;
+
+        if ( str_starts_with( $class, '\\' ) ) $class = substr( $class, 1 );
+
+
+
         // Returning the value
-        return $this->class . '::' . $this->method . '()';
+        return $class . '::' . $this->method . '()';
     }
 }
 
