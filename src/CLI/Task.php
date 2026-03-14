@@ -6,6 +6,10 @@ namespace Solenoid\X\CLI;
 
 
 
+use \Solenoid\X\Container;
+
+
+
 class Task
 {
     private array $schedules = [];
@@ -147,6 +151,39 @@ class Task
     {
         // Returning the value
         return str_replace( '\\', '/', $this->class ) . '.' . $this->method;
+    }
+
+
+
+    /**
+     * Scans the method associated with this task for a Mutex attribute and returns an instance of the Mutex if found, or null if not found.
+     * @return Mutex|null An instance of the Mutex if found, or null if not found
+     */
+    public function mutex () : Mutex|null
+    {
+        foreach ( new \ReflectionMethod( $this->class, $this->method ) as $attribute )
+        {// Processing each entry
+            // Returning the value
+            return $attribute->newInstance();
+        }
+
+
+
+        // Returning the value
+        return null;
+    }
+
+
+
+    /**
+     * Executes the task by invoking the specified method on the associated class, passing any provided arguments. If a mutex is configured for the task, it will attempt to acquire the mutex before execution and release it afterward to prevent concurrent runs.
+     * @param Container $container The dependency injection container to use for resolving class dependencies.
+     * @param array $args An array of arguments to pass to the method when executing the task.
+     * @return mixed The result of the method execution.
+     */
+    public function run (Container $container, array $args = []) : mixed
+    {
+        return $container->run_class_fn( $this->class, $this->method, $args );
     }
 
 

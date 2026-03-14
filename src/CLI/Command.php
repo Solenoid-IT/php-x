@@ -13,16 +13,14 @@ use \Solenoid\X\Stream\ReadableStream;
 
 class Command
 {
-    private array $callbacks = [];
-
-    private $acquire_mutex = null;
+    private array $handlers = [];
 
 
 
     public readonly string $file_path;
-    public readonly string $class;
-    public readonly string $method;
     public readonly array  $args;
+
+    public Task $task;
 
 
 
@@ -55,42 +53,42 @@ class Command
 
 
         // (Getting the value)
-        $this->class = $prefix . '\\' . $class;
-
-
-
-        // (Getting the value)
-        $this->method = $method ?? 'run';
+        $this->task = new Task( $prefix . '\\' . $class, $method ?? 'run' );
     }
 
 
 
     public function run (Container $container) : mixed
     {
+        // (Setting the value)
+        $mutex_locked = false;
+
+
+
         // (Getting the value)
-        $mutex = Mutex::find( $this->class, $this->method );
+        $mutex = $this->task->mutex();
 
-        if ( $mutex ) $this->emit( 'mutex-lock' );
-
-
-
-        try
-        {
-            if ( $mutex )
-            {// Value found
-                if ( $this->acquire_mutex )
-                {// Value found
-                    // (Getting the value)
-                    $pid = ( $this->acquire_mutex )();
-
-                    if ( $pid ) return 'mutex:locked';
-                }
-            }
+        if ( $mutex )
+        {// Value found
+            if ( $this->handlers['mutex-pid']() ) return 'mutex:locked';
 
 
 
             // (Calling the function)
-            return $container->run_class_fn( $this->class, $this->method, $this->args );
+            $this->handlers['mutex-lock']();
+
+
+
+            // (Setting the value)
+            $mutex_locked = true;
+        }
+        
+
+
+        try
+        {
+            // Returning the value
+            return $this->task->run( $container, $this->args );
         }
         catch (\Throwable $e)
         {
@@ -99,7 +97,7 @@ class Command
         }
         finally
         {
-            if ( $mutex ) $this->emit( 'mutex-unlock' );
+            if ( $mutex && $mutex_locked ) $this->handlers['mutex-unlock']();
         }
     }
 
@@ -157,48 +155,10 @@ class Command
 
 
 
-    public function task () : Task
+    public function set_handlers (array $handlers) : self
     {
         // (Getting the value)
-        return new Task( $this->class, $this->method );
-    }
-
-
-
-    public function emit (string $event, ...$args) : self
-    {
-        // (Getting the value)
-        $callbacks = $this->callbacks[ $event ] ?? [];
-
-        foreach ( $callbacks as $callback )
-        {// Processing each entry
-            // (Calling the function)
-            $callback( ...$args );
-        }
-
-
-
-        // Returning the value
-        return $this;
-    }
-
-    public function on (string $event, callable $callback) : self
-    {
-        // (Appending the value)
-        $this->callbacks[ $event ][] = $callback;
-
-
-
-        // Returning the value
-        return $this;
-    }
-
-
-
-    public function set_mutex_reader (callable $function) : self
-    {
-        // (Getting the value)
-        $this->acquire_mutex = $function;
+        $this->handlers = $handlers;
 
 
 
@@ -211,7 +171,7 @@ class Command
     public function __toString () : string
     {
         // Returning the value
-        return "{$this->class}::{$this->method}()";
+        return (string) $this->task;
     }
 }
 
