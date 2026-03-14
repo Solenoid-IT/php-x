@@ -13,6 +13,10 @@ use \Attribute;
 #[ Attribute( Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE ) ]
 class Schedule
 {
+    const TOLERANCE = 10;# '10 seconds'
+
+
+
     private static function calc_seconds (string $interval_part) : int
     {
         if ( preg_match( '/(\d+)?\s*(second|seconds|minute|minutes|hour|hours|day|days|week|weeks)/', $interval_part, $matches ) )
@@ -193,7 +197,7 @@ class Schedule
         if ( $interval_seconds <= 60 )
         {// Match OK
             // (Setting the value)
-            $tolerance = 1;
+            $tolerance = self::TOLERANCE;
         }
         else
         {// Match failed
