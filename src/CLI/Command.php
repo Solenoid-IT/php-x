@@ -170,8 +170,15 @@ class Command
 
     public function __toString () : string
     {
+        // (Getting the value)
+        $method = (string) $this->task;
+
+        if ( str_starts_with( $method, '\\' ) ) $method = substr( $method, 1 );
+
+
+
         // Returning the value
-        return preg_replace( '/^[\\]/', '', (string) $this->task );
+        return $method;
     }
 }
 
