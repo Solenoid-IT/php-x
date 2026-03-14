@@ -161,7 +161,7 @@ class Task
      */
     public function mutex () : Mutex|null
     {
-        foreach ( new \ReflectionMethod( $this->class, $this->method ) as $attribute )
+        foreach ( ( new \ReflectionMethod( $this->class, $this->method ) )->getAttributes( Mutex::class ) as $attribute )
         {// Processing each entry
             // Returning the value
             return $attribute->newInstance();
