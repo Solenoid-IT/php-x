@@ -71,7 +71,7 @@ class Command
 
         if ( $mutex )
         {// Value found
-            if ( $this->handlers['mutex-pid']() ) throw new MutexException();
+            if ( $pid = $this->handlers['mutex-pid']() ) throw new MutexException( "Task is locked into PID $pid" );
 
 
 
