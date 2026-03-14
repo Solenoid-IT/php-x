@@ -106,7 +106,7 @@ class Task
 
 
 
-            foreach ( new \ReflectionClass( $class ) as $method )
+            foreach ( ( new \ReflectionClass( $class ) )->getMethods() as $method )
             {// Processing each entry
                 // (Getting the value)
                 $task = new Task( $class, $method->getName() );
