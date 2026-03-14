@@ -157,6 +157,14 @@ class Command
 
 
 
+    public function task () : Task
+    {
+        // (Getting the value)
+        return new Task( $this->class, $this->method );
+    }
+
+
+
     public function emit (string $event, ...$args) : self
     {
         // (Getting the value)
