@@ -171,7 +171,7 @@ class Command
     public function __toString () : string
     {
         // Returning the value
-        return (string) $this->task;
+        return preg_replace( '/^\\/', '', (string) $this->task );
     }
 }
 
