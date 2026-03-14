@@ -44,7 +44,7 @@ class Command
         // (Getting the value)
         $class = str_replace( '/', '\\', $class );
 
-        if ( str_starts_with( $class, $prefix ) )
+        if ( str_starts_with( "\\$class", $prefix ) )
         {// Match OK
             // (Getting the value)
             $class = substr( $class, strlen( $prefix ) );
