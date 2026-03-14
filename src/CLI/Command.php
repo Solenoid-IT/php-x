@@ -8,6 +8,7 @@ namespace Solenoid\X\CLI;
 
 use \Solenoid\X\Container;
 use \Solenoid\X\Stream\ReadableStream;
+use \Solenoid\X\CLI\Exceptions\MutexException;
 
 
 
@@ -70,7 +71,7 @@ class Command
 
         if ( $mutex )
         {// Value found
-            if ( $this->handlers['mutex-pid']() ) return 'mutex:locked';
+            if ( $this->handlers['mutex-pid']() ) throw new MutexException();
 
 
 
