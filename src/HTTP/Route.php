@@ -16,6 +16,8 @@ class Route
     private static array $routes = [];
     private static $fallback_route;
 
+    private static array $groups = [];
+
 
 
     private array $middlewares = [];
@@ -55,6 +57,25 @@ class Route
 
 
 
+        if ( self::$groups  )
+        {// Value is not empty
+            // (Setting the value)
+            $middlewares = [];
+
+            foreach ( self::$groups as $group_middlewares )
+            {// Processing each entry
+                // (Getting the value)
+                $middlewares = array_merge( $middlewares, $group_middlewares );
+            }
+            
+
+
+            // (Setting the middlewares)
+            $route->via( $middlewares );
+        }
+
+
+
         // (Getting the value)
         self::$routes[ $route->method ][ $route->path ] = $route;
 
@@ -84,6 +105,24 @@ class Route
 
         // Returning the value
         return $this;
+    }
+
+
+
+    public static function group (array $middlewares, callable $builder) : void
+    {
+        // (Appending the value)
+        self::$groups[] = $middlewares;
+
+
+
+        // (Calling the function)
+        $builder();
+
+
+
+        // (Removing last element from array)
+        array_pop( self::$groups );
     }
 
 
