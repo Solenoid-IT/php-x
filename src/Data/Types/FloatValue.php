@@ -53,7 +53,7 @@ class FloatValue extends Value
         }
         else
         {// (Value is set)
-            if ( !filter_var( $value, FILTER_VALIDATE_FLOAT ) )
+            if ( filter_var( $value, FILTER_VALIDATE_FLOAT ) === false && !is_int( $value ) )
             {// (Validation failed)
                 // (Getting the value)
                 $this->error = "{$error_prefix}Must be a float";

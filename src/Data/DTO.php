@@ -367,6 +367,8 @@ abstract class DTO
             // (Getting the value)
             $value = $data[ $name ];
 
+            if ( $type_name === 'float' && is_int( $value ) ) $value = (float) $value;
+
 
 
             if ( class_exists( $type_name ) && is_subclass_of( $type_name, self::class ) )
