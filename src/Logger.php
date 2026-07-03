@@ -138,6 +138,10 @@ class Logger
             {// (Directory found)
                 foreach ( scandir( $this->archive_folder_path ) as $file_name )
                 {// Processing each entry
+                    if ( in_array( $file_name, [ '.', '..' ] ) ) continue;
+
+
+
                     // (Getting the value)
                     $file_path = $this->archive_folder_path . '/' . $file_name;
 
